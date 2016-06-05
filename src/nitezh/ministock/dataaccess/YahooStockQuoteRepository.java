@@ -24,21 +24,52 @@
 
 package nitezh.ministock.dataaccess;
 
+import android.util.Xml;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.lang.reflect.Array;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import nitezh.ministock.utils.Cache;
-import nitezh.ministock.domain.StockQuote;
 import nitezh.ministock.utils.UrlDataTools;
+import nitezh.ministock.domain.StockQuote;
+
 
 
 public class YahooStockQuoteRepository {
 
     private static final String BASE_URL = "http://download.finance.yahoo.com/d/quotes.csv";
+    private static final String ISIN_URL = "http://query.yahooapis.com:80/v1/public/yql?q=select+*+from+yahoo.finance.isin+where+symbol+in+(\"ISIN\")&env=store://datatables.org/alltableswithkeys";
     private static final String FORMAT = "sd1t1l1c1p2xvn";
     private static final int COUNT_FIELDS = 9;
     private final FxChangeRepository fxChangeRepository;
@@ -52,7 +83,7 @@ public class YahooStockQuoteRepository {
         HashMap<String, String> fxChanges = this.fxChangeRepository.getChanges(cache, symbols);
         JSONArray jsonArray;
         JSONObject quoteJson;
-
+        //for(String mbISIN : symbols) mbISIN = ISINtoSymbol(mbISIN);
         try {
             jsonArray = this.retrieveQuotesAsJson(cache, symbols);
             if (jsonArray != null) {
@@ -87,6 +118,7 @@ public class YahooStockQuoteRepository {
                 sQuery.append(s);
             }
         }
+
         return String.format("%s?f=%s&s=%s", BASE_URL, FORMAT, sQuery);
     }
 
@@ -108,7 +140,8 @@ public class YahooStockQuoteRepository {
     }
 
     public JSONArray retrieveQuotesAsJson(Cache cache, List<String> symbols) throws JSONException {
-        String csvText = getQuotesCsv(cache, symbols);
+
+        String csvText = getQuotesCsv(cache,symbols);
         if (isDataInvalid(csvText)) {
             return null;
         }
@@ -133,4 +166,49 @@ public class YahooStockQuoteRepository {
 
         return quotes;
     }
+
+    public String ISINtoSymbol(String ISIN){
+
+        String Symbol= null;
+        String apiLink = ISIN_URL.replace("ISIN",ISIN);
+
+        try{
+          //  System.out.println(URLEncoder.encode(apiLink,"utf-8"));
+            URL query = new URL(apiLink);
+
+          //  System.out.println(URLEncoder.encode(apiLink,"utf-8"));
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document retrievedXML = builder.parse(new InputSource(query.openStream()));
+
+            retrievedXML.getDocumentElement().normalize();
+            NodeList nodeList = retrievedXML.getElementsByTagName("Isin");
+
+          //  System.out.println(getElementValue(nodeList.item(0)));
+            Symbol =getElementValue(nodeList.item(0));
+
+        }
+        catch(Exception e){
+         //   System.out.println(e.toString());
+            return ISIN;}
+
+       // System.out.println(Symbol);
+        return Symbol;
+    }
+    public final String getElementValue( Node elem ) {
+        Node child;
+        if( elem != null){
+            if (elem.hasChildNodes()){
+                for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
+                    if( child.getNodeType() == Node.TEXT_NODE  ){
+                        return child.getNodeValue();
+                    }
+                }
+            }
+        }
+        return "failed";
+    }
+
+
+
 }
