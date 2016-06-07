@@ -386,7 +386,14 @@ public class WidgetView {
         int colour;
         if (widget.getStorage().getBoolean("visual_stockboard",false))
             colour = WidgetColors.SAME;
-            colour = WidgetColors.GAIN;
+        else {
+            if (parsedValue < 0) {
+                colour = WidgetColors.LOSS;
+            } else if (parsedValue == 0) {
+                colour = WidgetColors.SAME;
+            } else {
+                colour = WidgetColors.GAIN;
+            }
         }
         return colour;
     }
