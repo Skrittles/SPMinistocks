@@ -35,47 +35,47 @@
                 android:key="stock_setup"
                 android:summary="Setup the stocks for this widget"
                 android:title="Stocks setup">
-            <Preference
+            <nitezh.ministock.domain.CustomPreference
                     android:defaultValue="^DJI"
                     android:key="Stock1"
                     android:summary="Set symbol"
                     android:title="Stock 1"/>
-            <Preference
-                    android:key="Stock2"
-                    android:summary="Set symbol"
-                    android:title="Stock 2"/>
-            <Preference
-                    android:key="Stock3"
-                    android:summary="Set symbol"
-                    android:title="Stock 3"/>
-            <Preference
-                    android:key="Stock4"
-                    android:summary="Set symbol"
-                    android:title="Stock 4"/>
-            <Preference
-                    android:key="Stock5"
-                    android:summary="Set symbol"
-                    android:title="Stock 5"/>
-            <Preference
-                    android:key="Stock6"
-                    android:summary="Set symbol"
-                    android:title="Stock 6"/>
-            <Preference
-                    android:key="Stock7"
-                    android:summary="Set symbol"
-                    android:title="Stock 7"/>
-            <Preference
-                    android:key="Stock8"
-                    android:summary="Set symbol"
-                    android:title="Stock 8"/>
-            <Preference
-                    android:key="Stock9"
-                    android:summary="Set symbol"
-                    android:title="Stock 9"/>
-            <Preference
-                    android:key="Stock10"
-                    android:summary="Set symbol"
-                    android:title="Stock 10"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock2"
+                android:summary="Set symbol"
+                android:title="Stock 2"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock3"
+                android:summary="Set symbol"
+                android:title="Stock 3"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock4"
+                android:summary="Set symbol"
+                android:title="Stock 4"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock5"
+                android:summary="Set symbol"
+                android:title="Stock 5"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock6"
+                android:summary="Set symbol"
+                android:title="Stock 6"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock7"
+                android:summary="Set symbol"
+                android:title="Stock 7"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock8"
+                android:summary="Set symbol"
+                android:title="Stock 8"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock9"
+                android:summary="Set symbol"
+                android:title="Stock 9"/>
+            <nitezh.ministock.domain.CustomPreference
+                android:key="Stock10"
+                android:summary="Set symbol"
+                android:title="Stock 10"/>
         </PreferenceScreen>
         <PreferenceScreen
                 android:key="advanced"
@@ -329,4 +329,4 @@
         </PreferenceScreen>
     </PreferenceCategory>
 
-</PreferenceScreen><!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks.git/branches/Visual-Stockboard-Testpatch-1/res/xml/preferences.xml -->
+</PreferenceScreen><!-- From: file:/C:/Users/Tim%20Greiner/Documents/Uni/SoftwareProjekt/ministocks-master/ministocks-master/res/xml/preferences.xml -->

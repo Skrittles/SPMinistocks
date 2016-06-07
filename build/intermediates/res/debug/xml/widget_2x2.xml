@@ -29,4 +29,4 @@
                     android:initialLayout="@layout/widget_2x2"
                     android:configure="nitezh.ministock.activities.configure.ConfigureActivity2x2">
 </appwidget-provider>
-<!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks.git/branches/Visual-Stockboard-Testpatch-1/res/xml/widget_2x2.xml -->
+<!-- From: file:/C:/Users/Tim%20Greiner/Documents/Uni/SoftwareProjekt/ministocks-master/ministocks-master/res/xml/widget_2x2.xml -->

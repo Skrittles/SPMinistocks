@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks.git/branches/Visual-Stockboard-Testpatch-1/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/Tim%20Greiner/Documents/Uni/SoftwareProjekt/ministocks-master/ministocks-master/res/values/strings.xml -->
     <eat-comment/>
     <string-array name="background_entries">
         <item>Solid</item>
@@ -69,7 +69,7 @@
     <string name="prefs_name">nitezh.ministock_preferences</string>
     <string name="symbolNotFound">Symbol \'%s\' is not found. Press to add it anyway.
     </string>
-    <!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks.git/branches/Visual-Stockboard-Testpatch-1/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Tim%20Greiner/Documents/Uni/SoftwareProjekt/ministocks-master/ministocks-master/res/values/styles.xml -->
     <eat-comment/>
     <style name="StockChange" parent="StockDatum">
         <item name="android:layout_width">9dp</item>
