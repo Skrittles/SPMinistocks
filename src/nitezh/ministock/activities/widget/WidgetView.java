@@ -101,35 +101,53 @@ public class WidgetView {
         RemoteViews views;
         if (widget.getSize() == 1) {
             if (useLargeFont) {
-                views = new RemoteViews(packageName, R.layout.widget_1x4_large);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_1x4_large);
             } else {
-                views = new RemoteViews(packageName, R.layout.widget_1x4);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_1x4);
             }
         } else if (widget.getSize() == 2) {
             if (useLargeFont) {
-                views = new RemoteViews(packageName, R.layout.widget_2x2_large);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_2x2_large);
             } else {
-                views = new RemoteViews(packageName, R.layout.widget_2x2);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_2x2);
             }
         } else if (widget.getSize() == 3) {
             if (useLargeFont) {
                 if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widgettest);
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x4_large);
 
                 //Loads graphic overlay if "Visual Stockboard" is activated in the options
             } else {
                 if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widgettest);
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x4);
             }
         } else {
             if (useLargeFont) {
-                views = new RemoteViews(packageName, R.layout.widget_1x2_large);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_1x2_large);
             } else {
-                views = new RemoteViews(packageName, R.layout.widget_1x2);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_1x2);
             }
         }
         views.setImageViewResource(R.id.widget_bg,
@@ -214,7 +232,6 @@ public class WidgetView {
         StockQuote quote = this.quotes.get(symbol);
         if (quote == null || quote.getPrice() == null || quote.getPercent() == null) {
             widgetRow.setHasNoData(true);
-            //Forces stock symbols for narrow widgets and visual stockboard
             if (this.widget.isNarrow() || this.widget.isVisual()) {
                 widgetRow.setPrice("no");
                 widgetRow.setPriceColor(Color.GRAY);
@@ -229,17 +246,13 @@ public class WidgetView {
             return widgetRow;
         }
 
-
         // Set default values
         PortfolioStock portfolioStock = this.portfolioStocks.get(symbol);
         WidgetStock widgetStock = new WidgetStock(quote, portfolioStock);
         widgetRow.setPrice(widgetStock.getPrice());
         widgetRow.setStockInfo(widgetStock.getDailyPercent());
         widgetRow.setStockInfoColor(WidgetColors.NA);
-
-
-        //Forces stock symbols for narrow widgets and visual stockboard
-        if (!widget.isNarrow() && !widget.isVisual()) {
+        if (!widget.isNarrow()) {
             widgetRow.setSymbol(widgetStock.getDisplayName());
             widgetRow.setVolume(widgetStock.getVolume());
             widgetRow.setVolumeColor(WidgetColors.VOLUME);
@@ -342,7 +355,7 @@ public class WidgetView {
         }
 
         // Set the value and colour for the change values
-        if (!widget.isNarrow() || widget.isVisual()) {
+        if (!widget.isNarrow()) {
             if (stockInfoExtra != null) {
                 if (plChange) {
                     widgetRow.setStockInfoExtra(CurrencyTools.addCurrencyToSymbol(stockInfoExtra, symbol));
@@ -371,11 +384,8 @@ public class WidgetView {
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
-        if (parsedValue < 0) {
-            colour = WidgetColors.LOSS;
-        } else if (parsedValue == 0) {
+        if (widget.getStorage().getBoolean("visual_stockboard",false))
             colour = WidgetColors.SAME;
-        } else {
             colour = WidgetColors.GAIN;
         }
         return colour;
@@ -439,11 +449,6 @@ public class WidgetView {
         this.remoteViews.setTextColor(ReflectionTools.getField("text" + row + col), color);
     }
 
-    public void setVisualStockboardColor(double priceChange){
-
-
-    }
-
     public void applyPendingChanges() {
         int widgetDisplay = this.getNextView(this.updateMode);
         this.clear();
@@ -457,8 +462,6 @@ public class WidgetView {
             // Get the info for this quote
             lineNo++;
             WidgetRow rowInfo = getRowInfo(symbol, ViewType.values()[widgetDisplay]);
-            //System.out.println(rowInfo.getStockInfo());
-            //setVisualStockboardColor( Double.parseDouble(rowInfo.getStockInfo()) );
 
             // Values
             setStockRowItemText(lineNo, 1, rowInfo.getSymbol());
