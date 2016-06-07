@@ -28,4 +28,4 @@
             android:hint="Search symbols"
             android:searchSuggestAuthority="nitezh.ministocks.stocksymbols"
             android:searchSuggestIntentAction="android.intent.action.VIEW">
-</searchable><!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks.git/branches/Visual-Stockboard-Testpatch-1/res/xml/searchable.xml -->
+</searchable><!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks/res/xml/searchable.xml -->

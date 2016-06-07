@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\Silja\Documents\SS2016\SWP\SPMinistocks.git\branches\Visual-Stockboard-Testpatch-1\assets"/></dataSet><dataSet config="debug"><source path="C:\Users\Silja\Documents\SS2016\SWP\SPMinistocks.git\branches\Visual-Stockboard-Testpatch-1\build-types\debug\assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="C:\Users\Silja\Documents\SS2016\SWP\SPMinistocks\assets"/></dataSet><dataSet config="debug"><source path="C:\Users\Silja\Documents\SS2016\SWP\SPMinistocks\build-types\debug\assets"/></dataSet></merger>
