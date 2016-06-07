@@ -33,7 +33,6 @@ import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
@@ -41,7 +40,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
@@ -214,7 +212,6 @@ public class WidgetView {
         StockQuote quote = this.quotes.get(symbol);
         if (quote == null || quote.getPrice() == null || quote.getPercent() == null) {
             widgetRow.setHasNoData(true);
-            //Forces stock symbols for narrow widgets and visual stockboard
             if (this.widget.isNarrow() || this.widget.isVisual()) {
                 widgetRow.setPrice("no");
                 widgetRow.setPriceColor(Color.GRAY);
@@ -229,17 +226,13 @@ public class WidgetView {
             return widgetRow;
         }
 
-
         // Set default values
         PortfolioStock portfolioStock = this.portfolioStocks.get(symbol);
         WidgetStock widgetStock = new WidgetStock(quote, portfolioStock);
         widgetRow.setPrice(widgetStock.getPrice());
         widgetRow.setStockInfo(widgetStock.getDailyPercent());
         widgetRow.setStockInfoColor(WidgetColors.NA);
-
-
-        //Forces stock symbols for narrow widgets and visual stockboard
-        if (!widget.isNarrow() && !widget.isVisual()) {
+        if (!widget.isNarrow()) {
             widgetRow.setSymbol(widgetStock.getDisplayName());
             widgetRow.setVolume(widgetStock.getVolume());
             widgetRow.setVolumeColor(WidgetColors.VOLUME);
@@ -342,7 +335,7 @@ public class WidgetView {
         }
 
         // Set the value and colour for the change values
-        if (!widget.isNarrow() || widget.isVisual()) {
+        if (!widget.isNarrow()) {
             if (stockInfoExtra != null) {
                 if (plChange) {
                     widgetRow.setStockInfoExtra(CurrencyTools.addCurrencyToSymbol(stockInfoExtra, symbol));
@@ -439,11 +432,6 @@ public class WidgetView {
         this.remoteViews.setTextColor(ReflectionTools.getField("text" + row + col), color);
     }
 
-    public void setVisualStockboardColor(double priceChange){
-
-
-    }
-
     public void applyPendingChanges() {
         int widgetDisplay = this.getNextView(this.updateMode);
         this.clear();
@@ -457,8 +445,6 @@ public class WidgetView {
             // Get the info for this quote
             lineNo++;
             WidgetRow rowInfo = getRowInfo(symbol, ViewType.values()[widgetDisplay]);
-            //System.out.println(rowInfo.getStockInfo());
-            //setVisualStockboardColor( Double.parseDouble(rowInfo.getStockInfo()) );
 
             // Values
             setStockRowItemText(lineNo, 1, rowInfo.getSymbol());
