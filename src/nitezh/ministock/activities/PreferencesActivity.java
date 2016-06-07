@@ -26,8 +26,13 @@ package nitezh.ministock.activities;
 
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -37,6 +42,11 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.view.DragEvent;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -44,6 +54,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import nitezh.ministock.domain.CustomPreference;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.DialogTools;
 import nitezh.ministock.utils.StorageCache;
@@ -72,7 +83,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     public static int mAppWidgetId = 0;
     // Private
     private static boolean mPendingUpdate = false;
-    private static String mSymbolSearchKey = "";
+    public static String mSymbolSearchKey = "";
     private final String CHANGE_LOG = "• Experimental Backup and Restore option added.<br /><br /><i>If you appreciate this app please rate it 5 stars in the Android market!</i>";
     // Fields for time pickers
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
@@ -88,6 +99,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     @Override
     public void onNewIntent(Intent intent) {
+        System.out.println("ACTION" + intent.getAction());
+        System.out.println("DATA" + intent.getDataString());
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             setPreference(mSymbolSearchKey, intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -340,7 +353,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     void setTimePickerPreference(int hourOfDay, int minute) {
         // Set the preference value
-        SharedPreferences preferences = getPreferenceScreen().getSharedPreferences();
+        SharedPreferences preferences = getPreferenceManager().getSharedPreferences();
         Editor editor = preferences.edit();
         editor.putString(mTimePickerKey, String.valueOf(hourOfDay) + ":" + String.valueOf(minute));
         editor.apply();
@@ -349,7 +362,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         updateSummaries(getPreferenceScreen().getSharedPreferences(), mTimePickerKey);
     }
 
-    void setPreference(String key, String value, String summary) {
+   public void setPreference(String key, String value, String summary) {
         // Return if no key
         if (key.equals("")) {
             return;
@@ -396,21 +409,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
-        // Hook up the symbol search for the stock preferences
-        for (int i = 1; i < 11; i++) {
-            String key = "Stock" + i;
-            findPreference(key).setOnPreferenceClickListener(new OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    mSymbolSearchKey = preference.getKey();
 
-                    // Start search with current value as query
-                    String query = preference.getSharedPreferences().getString(mSymbolSearchKey, "");
-                    startSearch(query, false, null, false);
-                    return true;
-                }
-            });
-        }
         // Hook up the help preferences
         Preference help_usage = findPreference("help_usage");
         help_usage.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -458,6 +457,24 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
+
+        // Hook up the symbol search for the stock preferences
+        for (int i = 1; i < 11; i++) {
+            String key = "Stock" + i;
+            findPreference(key).setOnPreferenceClickListener(new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    mSymbolSearchKey = preference.getKey();
+
+                    // Start search with current value as query
+                    String query = preference.getSharedPreferences().getString(mSymbolSearchKey, "");
+                    startSearch(query, false, null, false);
+                    return true;
+                }
+            });
+        }
+
 
         /*
         // Hook the Backup portfolio option to the backup portfolio method
@@ -755,3 +772,4 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 "Rate it!", "Close", callable, null);
     }
 }
+
