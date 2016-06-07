@@ -50,7 +50,7 @@ import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
 
 public class PortfolioStockRepository {
-    public static final String PORTFOLIO_JSON = "portfolio_backup.txt";
+    public static final String PORTFOLIO_JSON = "portfolioJson";
     public static final String WIDGET_JSON = "widgetJson";
     public HashMap<String, StockQuote> stocksQuotes = new HashMap<>();
 
@@ -220,58 +220,6 @@ public class PortfolioStockRepository {
 
     public void backupPortfolio(Context context) {
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
-        
-        // String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
-
-        Collection<StockQuote> c = stocksQuotes.values();
-
-        Iterator<StockQuote> it = c.iterator();
-
-        List<String> symbols = new ArrayList<String>();
-
-        while (it.hasNext()) {
-
-            StockQuote stockQuote = it.next();
-
-            symbols.add(stockQuote.getSymbol());
-
-        }
-
-        // transform symbols to a List of portfolioStocks.
-        List<PortfolioStock> portstocks = new ArrayList<PortfolioStock>();
-
-        Iterator<String> stocks = symbols.iterator();
-
-        while (stocks.hasNext()) {
-
-            String symbol = stocks.next();
-
-            portstocks.add(getStock(symbol));
-
-        }
-
-        Iterator<PortfolioStock> it2 = portstocks.iterator();
-
-        List<String> portfolio = new ArrayList<String>();
-
-        int i = 1;
-
-        while (it2.hasNext()) {
-
-            PortfolioStock stokss = it2.next();
-
-            portfolio.add(
-                    "\nStock" + i  + ": " + stokss.getSymbol() + "," + stokss.getPrice() + "," + stokss.getDate() + ","
-                                + stokss.getQuantity() + "," + stokss.getHighLimit() + "," + stokss.getLowLimit() + ","
-                                + stokss.getCustomName() + "\n"
-            );
-
-            i++;
-
-        }
-
-        String rawJson = portfolio.toString();
-        
         UserData.writeInternalStorage(context, rawJson, PORTFOLIO_JSON);
         DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
                 "Your portfolio settings have been backed up to internal mAppStorage.");
@@ -280,12 +228,6 @@ public class PortfolioStockRepository {
     public void restorePortfolio(Context context) {
         mDirtyPortfolioStockMap = true;
         String rawJson = UserData.readInternalStorage(context, PORTFOLIO_JSON);
-        
-        //Build Array with portfolio fields
-        String delims = "[:,\n]+";
-        String[] tokens = rawJson.split(delims);
-        
-        
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
         DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
                 "Your portfolio settings have been restored from internal mAppStorage.");

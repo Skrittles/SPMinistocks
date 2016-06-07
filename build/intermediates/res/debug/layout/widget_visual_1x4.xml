@@ -1,0 +1,28 @@
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="0dp"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/widget_bg"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:adjustViewBounds="false"
+        android:scaleType="fitXY"
+        android:src="@+drawable/ministock_bg_transparent68"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="0dp"
+        android:orientation="horizontal">
+
+        <include layout="@layout/widget_visual_layout_1x4"/>
+
+    </LinearLayout>
+</RelativeLayout>
+<!-- From: file:/C:/Users/Silja/Documents/SS2016/SWP/SPMinistocks.git/branches/Visual-Stockboard-Testpatch-1/res/layout/widget_visual_1x4.xml -->

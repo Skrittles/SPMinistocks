@@ -80,6 +80,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     private int mHour = 0;
     private int mMinute = 0;
 
+
+
     String getChangeLog() {
         return CHANGE_LOG;
     }
@@ -374,6 +376,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
+        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+
         // Hook the About preference to the About (MinistocksActivity) activity
         Preference about = findPreference("about");
         about.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -535,6 +539,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
+        // Enable Visual Stockboard
+        Preference visual_stockboard = findPreference("visual_stockboard");
+        if(visual_stockboard.isEnabled())
+            storage.putBoolean("visual_stockboard",true);
+        else
+            storage.putBoolean("visual_stockboard",false);
 
         // Hook the Online help preference to the online help link
         Preference online_help = findPreference("online_help");

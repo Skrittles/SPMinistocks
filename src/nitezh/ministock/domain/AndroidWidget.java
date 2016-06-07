@@ -150,6 +150,10 @@ public class AndroidWidget implements Widget {
         return (size == 0 || size == 2);
     }
 
+    public boolean isVisual(){
+        return storage.getBoolean("visual_stockboard",false);
+    }
+
     public int _getSize() {
         return this.storage.getInt("widgetSize", 0);
     }

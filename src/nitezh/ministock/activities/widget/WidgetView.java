@@ -99,26 +99,52 @@ public class WidgetView {
         RemoteViews views;
         if (widget.getSize() == 1) {
             if (useLargeFont) {
+               if(widget.getStorage().getBoolean("visual_stockboard",false))
+                  views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
+               else
                 views = new RemoteViews(packageName, R.layout.widget_1x4_large);
             } else {
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
+                else
                 views = new RemoteViews(packageName, R.layout.widget_1x4);
             }
         } else if (widget.getSize() == 2) {
             if (useLargeFont) {
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
+                else
                 views = new RemoteViews(packageName, R.layout.widget_2x2_large);
             } else {
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
+                else
                 views = new RemoteViews(packageName, R.layout.widget_2x2);
             }
         } else if (widget.getSize() == 3) {
             if (useLargeFont) {
-                views = new RemoteViews(packageName, R.layout.widget_2x4_large);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_2x4_large);
+
+                //Loads graphic overlay if "Visual Stockboard" is activated in the options
             } else {
-                views = new RemoteViews(packageName, R.layout.widget_2x4);
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
+                else
+                    views = new RemoteViews(packageName, R.layout.widget_2x4);
             }
         } else {
             if (useLargeFont) {
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
+                else
                 views = new RemoteViews(packageName, R.layout.widget_1x2_large);
             } else {
+                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
+                else
                 views = new RemoteViews(packageName, R.layout.widget_1x2);
             }
         }
@@ -204,7 +230,7 @@ public class WidgetView {
         StockQuote quote = this.quotes.get(symbol);
         if (quote == null || quote.getPrice() == null || quote.getPercent() == null) {
             widgetRow.setHasNoData(true);
-            if (this.widget.isNarrow()) {
+            if (this.widget.isNarrow() || this.widget.isVisual()) {
                 widgetRow.setPrice("no");
                 widgetRow.setPriceColor(Color.GRAY);
                 widgetRow.setStockInfo("data");
@@ -356,12 +382,16 @@ public class WidgetView {
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
-        if (parsedValue < 0) {
-            colour = WidgetColors.LOSS;
-        } else if (parsedValue == 0) {
+        if (widget.getStorage().getBoolean("visual_stockboard",false))
             colour = WidgetColors.SAME;
-        } else {
-            colour = WidgetColors.GAIN;
+        else {
+            if (parsedValue < 0) {
+                colour = WidgetColors.LOSS;
+            } else if (parsedValue == 0) {
+                colour = WidgetColors.SAME;
+            } else {
+                colour = WidgetColors.GAIN;
+            }
         }
         return colour;
     }

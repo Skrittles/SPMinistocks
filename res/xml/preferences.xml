@@ -227,30 +227,29 @@
                         android:summaryOn="Update prices on the weekend"
                         android:title="Weekend updates"/>
             </PreferenceScreen>
-            <!--
-            <PreferenceScreen
-                android:key="backup_restore"
-                android:summary="This is an experimental feature"
-                android:title="Backup and Restore (BETA)">
-                <Preference
-                    android:key="backup_portfolio"
-                    android:summary="Backup portfolio to cloud"
-                    android:title="Backup portfolio"/>
-                <Preference
-                    android:key="restore_portfolio"
-                    android:summary="Restore portfolio from cloud"
-                    android:title="Restore portfolio"/>
-                <Preference
-                    android:key="backup_widget"
-                    android:summary="Backup this widget to cloud"
-                    android:title="Backup widget"/>
-                <Preference
-                    android:key="restore_widget"
-                    android:summary="Restore a widget from cloud"
-                    android:title="Restore widget"/>
-            </PreferenceScreen>
-            -->
         </PreferenceScreen>
+        <!--PreferenceScreen
+            android:key="backup_restore"
+            android:summary="This is an experimental feature"
+            android:title="Backup and Restore (BETA)">
+            <Preference
+                android:key="backup_portfolio"
+                android:summary="Backup portfolio to cloud"
+                android:title="Backup portfolio"/>
+            <Preference
+                android:key="restore_portfolio"
+                android:summary="Restore portfolio from cloud"
+                android:title="Restore portfolio"/>
+            <Preference
+                android:key="backup_widget"
+                android:summary="Backup this widget to cloud"
+                android:title="Backup widget"/>
+            <Preference
+                android:key="restore_widget
+                "
+                android:summary="Restore a widget from cloud"
+                android:title="Restore widget"/>
+        </PreferenceScreen-->
         <Preference
                 android:key="portfolio"
                 android:summary="Setup your stock purchase details"
@@ -259,6 +258,12 @@
                 android:key="update_now"
                 android:summary="Update prices and return to home screen"
                 android:title="Update prices now"/>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="visual_stockboard"
+            android:summaryOff="Enable visual stockboard"
+            android:summaryOn="Enable visual stockboard"
+            android:title="Visual Stockboard"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen
