@@ -21,7 +21,7 @@
 
 
             <LinearLayout
-                android:id="@+id/widget_topleft"
+                android:id="@+id/Panel1"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -99,7 +99,7 @@
 
 
             <LinearLayout
-                android:id="@+id/widget_topmiddle"
+                android:id="@+id/Panel2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -177,7 +177,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/widget_topright"
+                android:id="@+id/Panel3"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"

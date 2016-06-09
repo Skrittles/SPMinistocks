@@ -21,7 +21,7 @@
 
 
             <LinearLayout
-                android:id="@+id/widget_topleft"
+                android:id="@+id/Panel1"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -90,7 +90,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/widget_midleft"
+                android:id="@+id/Panel4"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -160,7 +160,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/widget_bottomleft"
+                android:id="@+id/Panel7"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -238,7 +238,7 @@
 
 
             <LinearLayout
-                android:id="@+id/widget_topmiddle"
+                android:id="@+id/Panel2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -307,7 +307,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/widget_midmiddle"
+                android:id="@+id/Panel5"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -377,7 +377,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/widget_bottommiddle"
+                android:id="@+id/Panel8"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -454,7 +454,7 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/widget_topright"
+                android:id="@+id/Panel3"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -524,7 +524,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/widget_midright"
+                android:id="@+id/Panel6"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
@@ -595,7 +595,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/widget_bottomright"
+                android:id="@+id/Panel9"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"

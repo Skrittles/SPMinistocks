@@ -252,7 +252,7 @@ public class WidgetView {
         widgetRow.setPrice(widgetStock.getPrice());
         widgetRow.setStockInfo(widgetStock.getDailyPercent());
         widgetRow.setStockInfoColor(WidgetColors.NA);
-        if (!widget.isNarrow()) {
+        if (!widget.isNarrow() && !widget.isVisual()) {
             widgetRow.setSymbol(widgetStock.getDisplayName());
             widgetRow.setVolume(widgetStock.getVolume());
             widgetRow.setVolumeColor(WidgetColors.VOLUME);
@@ -412,10 +412,26 @@ public class WidgetView {
             int viewId = ReflectionTools.getField("line" + i);
             if (viewId > 0) {
                 views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
+                views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
             }
         }
         for (int i = 1; i < count + 1; i++) {
             views.setViewVisibility(ReflectionTools.getField("line" + i), View.VISIBLE);
+        }
+        //Shows only Panels with a stock in it
+        //This is only necessary if Visual Stockboard is actually activated
+        if(widget.isVisual()) {
+            //Calculates Symbols that are actually used
+            //TODO Move this to a more accessible place (e.g. AndroidWidget)
+            int usedSymbols = 0;
+            for (String s : symbols) {
+                if (!s.equals(""))
+                    usedSymbols++;
+            }
+
+            for (int i = 1; i <= usedSymbols; i++) {
+                views.setViewVisibility(ReflectionTools.getField("Panel" + i), View.VISIBLE);
+            }
         }
     }
 
