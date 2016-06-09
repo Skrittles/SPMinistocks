@@ -36,6 +36,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
+import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -73,6 +74,7 @@ public class WidgetView {
     private final String quotesTimeStamp;
     private final Context context;
     private HashMap<ViewType, Boolean> enabledViews;
+    private int panel;
 
     public WidgetView(Context context, int appWidgetId, UpdateType updateMode,
                       HashMap<String, StockQuote> quotes, String quotesTimeStamp) {
@@ -381,11 +383,70 @@ public class WidgetView {
         return widgetRow;
     }
 
+    private String getColourForPanel(String value){
+        double parsedValue = NumberTools.parseDouble(value, 0d);
+
+        final double MAX_VALUE = 10;
+        final double MIN_VALUE = 0.1;
+
+        if(parsedValue > MAX_VALUE)
+            parsedValue = MAX_VALUE;
+        else if (parsedValue < -MAX_VALUE)
+            parsedValue = -MAX_VALUE;
+        double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
+
+        final int MIN = 64;
+        final int MAX = 230;
+        int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
+
+        String hex = Integer.toHexString(normInt);
+        String green = "04BF3C";
+        String red = "D23641";
+        String neutral = "#80D5D5D5";
+        String colour;
+
+        if (parsedValue > 0)
+            colour = "#" + hex + green;
+        else if (parsedValue < 0)
+            colour = "#" + hex + red;
+        else
+            colour = neutral;
+
+        System.out.println("Value: " + value);
+        System.out.println("ParsedValue: " + parsedValue);
+        System.out.println("NormInt: " + normInt);
+        System.out.println("Hex: " + hex);
+        return colour;
+    }
+
+
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
-        if (widget.getStorage().getBoolean("visual_stockboard",false))
+        if (widget.getStorage().getBoolean("visual_stockboard",false)) {
             colour = WidgetColors.SAME;
+            //TODO change code
+            if (value.endsWith("%")) {
+                int panelInt = 0;
+                try {
+                    R.id rid = new R.id();
+                    Class cl = rid.getClass();
+                    Field id = cl.getDeclaredField("Panel" + panel);
+                    panelInt = id.getInt(null);
+                }
+                catch (NoSuchFieldException e) {
+                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
+                    // Sollte eigentlich nicht vorkommen
+                    System.out.println("NO FIELD Panel" + panel + " IN CLASS R.id");
+                }
+                catch (IllegalAccessException e) {
+                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
+                    // Sollte eigentlich nicht vorkommen
+                    System.out.println("NOT ALLOWED TO ACCESS Panel" + panel + " IN CLASS R.id");
+                }
+                remoteViews.setInt(panelInt, "setBackgroundColor", Color.parseColor(getColourForPanel(value)));
+            }
+        }
         else {
             if (parsedValue < 0) {
                 colour = WidgetColors.LOSS;
@@ -418,6 +479,7 @@ public class WidgetView {
         for (int i = 1; i < count + 1; i++) {
             views.setViewVisibility(ReflectionTools.getField("line" + i), View.VISIBLE);
         }
+
         //Shows only Panels with a stock in it
         //This is only necessary if Visual Stockboard is actually activated
         if(widget.isVisual()) {
@@ -484,6 +546,7 @@ public class WidgetView {
 
             // Get the info for this quote
             lineNo++;
+            panel = lineNo;
             WidgetRow rowInfo = getRowInfo(symbol, ViewType.values()[widgetDisplay]);
 
             // Values
