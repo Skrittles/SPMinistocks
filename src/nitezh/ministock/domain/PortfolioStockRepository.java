@@ -25,6 +25,7 @@
 package nitezh.ministock.domain;
 
 import android.content.Context;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,39 +52,39 @@ import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
 
 public class PortfolioStockRepository {
-    public static final String PORTFOLIO_JSON = "portfolioJson";
-    public static final String WIDGET_JSON = "widgetJson";
-    public HashMap<String, StockQuote> stocksQuotes = new HashMap<>();
+            public static final String PORTFOLIO_JSON = "portfolioJson";
+            public static final String WIDGET_JSON = "widgetJson";
+            public HashMap<String, StockQuote> stocksQuotes = new HashMap<>();
 
-    public HashMap<String, PortfolioStock> portfolioStocksInfo = new HashMap<>();
-    public Set<String> widgetsStockSymbols = new HashSet<>();
+            public HashMap<String, PortfolioStock> portfolioStocksInfo = new HashMap<>();
+            public Set<String> widgetsStockSymbols = new HashSet<>();
 
-    private static final HashMap<String, PortfolioStock> mPortfolioStocks = new HashMap<>();
-    private static boolean mDirtyPortfolioStockMap = true;
-    private Storage mAppStorage;
+            private static final HashMap<String, PortfolioStock> mPortfolioStocks = new HashMap<>();
+            private static boolean mDirtyPortfolioStockMap = true;
+            private Storage mAppStorage;
 
-    public PortfolioStockRepository(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
-        this.mAppStorage = appStorage;
+            public PortfolioStockRepository(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
+                this.mAppStorage = appStorage;
 
-        this.widgetsStockSymbols = widgetRepository.getWidgetsStockSymbols();
-        this.portfolioStocksInfo = getPortfolioStocksInfo(widgetsStockSymbols);
-        this.stocksQuotes = getStocksQuotes(appStorage, cache, widgetRepository);
-    }
-
-    private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
-        Set<String> symbolSet = portfolioStocksInfo.keySet();
-
-        return new StockQuoteRepository(appStorage, cache, widgetRepository)
-                .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
-    }
-
-    private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
-        HashMap<String, PortfolioStock> stocks = this.getStocks();
-        for (String symbol : symbols) {
-            if (!stocks.containsKey(symbol)) {
-                stocks.put(symbol, null);
+                this.widgetsStockSymbols = widgetRepository.getWidgetsStockSymbols();
+                this.portfolioStocksInfo = getPortfolioStocksInfo(widgetsStockSymbols);
+                this.stocksQuotes = getStocksQuotes(appStorage, cache, widgetRepository);
             }
-        }
+
+            private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
+                Set<String> symbolSet = portfolioStocksInfo.keySet();
+
+                return new StockQuoteRepository(appStorage, cache, widgetRepository)
+                        .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
+            }
+
+            private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
+                HashMap<String, PortfolioStock> stocks = this.getStocks();
+                for (String symbol : symbols) {
+                    if (!stocks.containsKey(symbol)) {
+                        stocks.put(symbol, null);
+                    }
+                }
 
         return stocks;
     }
@@ -318,7 +319,6 @@ public class PortfolioStockRepository {
         }
 
         updateStock(tokens[1].substring(8), "", "",tokens[2].substring(10), "","","");
-
 
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
         DialogTools.showSimpleDialog(context, "PortfolioActivity restored",

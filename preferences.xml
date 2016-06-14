@@ -35,47 +35,47 @@
                 android:key="stock_setup"
                 android:summary="Setup the stocks for this widget"
                 android:title="Stocks setup">
-            <nitezh.ministock.domain.StockPreference
-                android:defaultValue="^DJI"
-                android:key="Stock1"
-                android:summary="Set symbol"
-                android:title="Stock 1"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock2"
-                android:summary="Set symbol"
-                android:title="Stock 2"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock3"
-                android:summary="Set symbol"
-                android:title="Stock 3"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock4"
-                android:summary="Set symbol"
-                android:title="Stock 4"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock5"
-                android:summary="Set symbol"
-                android:title="Stock 5"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock6"
-                android:summary="Set symbol"
-                android:title="Stock 6"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock7"
-                android:summary="Set symbol"
-                android:title="Stock 7"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock8"
-                android:summary="Set symbol"
-                android:title="Stock 8"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock9"
-                android:summary="Set symbol"
-                android:title="Stock 9"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock10"
-                android:summary="Set symbol"
-                android:title="Stock 10"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:defaultValue="^DJI"
+                    android:key="Stock1"
+                    android:summary="Set symbol"
+                    android:title="Stock 1"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock2"
+                    android:summary="Set symbol"
+                    android:title="Stock 2"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock3"
+                    android:summary="Set symbol"
+                    android:title="Stock 3"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock4"
+                    android:summary="Set symbol"
+                    android:title="Stock 4"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock5"
+                    android:summary="Set symbol"
+                    android:title="Stock 5"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock6"
+                    android:summary="Set symbol"
+                    android:title="Stock 6"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock7"
+                    android:summary="Set symbol"
+                    android:title="Stock 7"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock8"
+                    android:summary="Set symbol"
+                    android:title="Stock 8"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock9"
+                    android:summary="Set symbol"
+                    android:title="Stock 9"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock10"
+                    android:summary="Set symbol"
+                    android:title="Stock 10"/>
         </PreferenceScreen>
         <PreferenceScreen
                 android:key="advanced"

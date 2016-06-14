@@ -33,16 +33,13 @@ import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
-import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
@@ -74,7 +71,6 @@ public class WidgetView {
     private final String quotesTimeStamp;
     private final Context context;
     private HashMap<ViewType, Boolean> enabledViews;
-    private int panel;
 
     public WidgetView(Context context, int appWidgetId, UpdateType updateMode,
                       HashMap<String, StockQuote> quotes, String quotesTimeStamp) {
@@ -103,53 +99,35 @@ public class WidgetView {
         RemoteViews views;
         if (widget.getSize() == 1) {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x4_large);
+                views = new RemoteViews(packageName, R.layout.widget_1x4_large);
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x4);
+                views = new RemoteViews(packageName, R.layout.widget_1x4);
             }
         } else if (widget.getSize() == 2) {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x2_large);
+                views = new RemoteViews(packageName, R.layout.widget_2x2_large);
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x2);
+                views = new RemoteViews(packageName, R.layout.widget_2x2);
             }
         } else if (widget.getSize() == 3) {
             if (useLargeFont) {
                 if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
+                    views = new RemoteViews(packageName, R.layout.widgettest);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x4_large);
 
                 //Loads graphic overlay if "Visual Stockboard" is activated in the options
             } else {
                 if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
+                    views = new RemoteViews(packageName, R.layout.widgettest);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x4);
             }
         } else {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x2_large);
+                views = new RemoteViews(packageName, R.layout.widget_1x2_large);
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x2);
+                views = new RemoteViews(packageName, R.layout.widget_1x2);
             }
         }
         views.setImageViewResource(R.id.widget_bg,
@@ -254,7 +232,7 @@ public class WidgetView {
         widgetRow.setPrice(widgetStock.getPrice());
         widgetRow.setStockInfo(widgetStock.getDailyPercent());
         widgetRow.setStockInfoColor(WidgetColors.NA);
-        if (!widget.isNarrow() && !widget.isVisual()) {
+        if (!widget.isNarrow()) {
             widgetRow.setSymbol(widgetStock.getDisplayName());
             widgetRow.setVolume(widgetStock.getVolume());
             widgetRow.setVolumeColor(WidgetColors.VOLUME);
@@ -383,78 +361,15 @@ public class WidgetView {
         return widgetRow;
     }
 
-    private String getColourForPanel(String value){
-        double parsedValue = NumberTools.parseDouble(value, 0d);
-
-        final double MAX_VALUE = 10;
-        final double MIN_VALUE = 0.1;
-
-        if(parsedValue > MAX_VALUE)
-            parsedValue = MAX_VALUE;
-        else if (parsedValue < -MAX_VALUE)
-            parsedValue = -MAX_VALUE;
-        double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
-
-        final int MIN = 64;
-        final int MAX = 230;
-        int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
-
-        String hex = Integer.toHexString(normInt);
-        String green = "04BF3C";
-        String red = "D23641";
-        String neutral = "#80D5D5D5";
-        String colour;
-
-        if (parsedValue > 0)
-            colour = "#" + hex + green;
-        else if (parsedValue < 0)
-            colour = "#" + hex + red;
-        else
-            colour = neutral;
-
-        System.out.println("Value: " + value);
-        System.out.println("ParsedValue: " + parsedValue);
-        System.out.println("NormInt: " + normInt);
-        System.out.println("Hex: " + hex);
-        return colour;
-    }
-
-
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
-        if (widget.getStorage().getBoolean("visual_stockboard",false)) {
+        if (parsedValue < 0) {
+            colour = WidgetColors.LOSS;
+        } else if (parsedValue == 0) {
             colour = WidgetColors.SAME;
-            //TODO change code
-            if (value.endsWith("%")) {
-                int panelInt = 0;
-                try {
-                    R.id rid = new R.id();
-                    Class cl = rid.getClass();
-                    Field id = cl.getDeclaredField("Panel" + panel);
-                    panelInt = id.getInt(null);
-                }
-                catch (NoSuchFieldException e) {
-                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
-                    // Sollte eigentlich nicht vorkommen
-                    System.out.println("NO FIELD Panel" + panel + " IN CLASS R.id");
-                }
-                catch (IllegalAccessException e) {
-                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
-                    // Sollte eigentlich nicht vorkommen
-                    System.out.println("NOT ALLOWED TO ACCESS Panel" + panel + " IN CLASS R.id");
-                }
-                remoteViews.setInt(panelInt, "setBackgroundColor", Color.parseColor(getColourForPanel(value)));
-            }
-        }
-        else {
-            if (parsedValue < 0) {
-                colour = WidgetColors.LOSS;
-            } else if (parsedValue == 0) {
-                colour = WidgetColors.SAME;
-            } else {
-                colour = WidgetColors.GAIN;
-            }
+        } else {
+            colour = WidgetColors.GAIN;
         }
         return colour;
     }
@@ -473,27 +388,10 @@ public class WidgetView {
             int viewId = ReflectionTools.getField("line" + i);
             if (viewId > 0) {
                 views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
-                views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
             }
         }
         for (int i = 1; i < count + 1; i++) {
             views.setViewVisibility(ReflectionTools.getField("line" + i), View.VISIBLE);
-        }
-
-        //Shows only Panels with a stock in it
-        //This is only necessary if Visual Stockboard is actually activated
-        if(widget.isVisual()) {
-            //Calculates Symbols that are actually used
-            //TODO Move this to a more accessible place (e.g. AndroidWidget)
-            int usedSymbols = 0;
-            for (String s : symbols) {
-                if (!s.equals(""))
-                    usedSymbols++;
-            }
-
-            for (int i = 1; i <= usedSymbols; i++) {
-                views.setViewVisibility(ReflectionTools.getField("Panel" + i), View.VISIBLE);
-            }
         }
     }
 
@@ -546,7 +444,6 @@ public class WidgetView {
 
             // Get the info for this quote
             lineNo++;
-            panel = lineNo;
             WidgetRow rowInfo = getRowInfo(symbol, ViewType.values()[widgetDisplay]);
 
             // Values
