@@ -83,7 +83,7 @@ public class YahooStockQuoteRepository {
         HashMap<String, String> fxChanges = this.fxChangeRepository.getChanges(cache, symbols);
         JSONArray jsonArray;
         JSONObject quoteJson;
-        //for(String mbISIN : symbols) mbISIN = ISINtoSymbol(mbISIN);
+
         try {
             jsonArray = this.retrieveQuotesAsJson(cache, symbols);
             if (jsonArray != null) {
@@ -166,14 +166,14 @@ public class YahooStockQuoteRepository {
 
         return quotes;
     }
-
+/*
     public String ISINtoSymbol(String ISIN){
 
         String Symbol= null;
         String apiLink = ISIN_URL.replace("ISIN",ISIN);
 
         try{
-          //  System.out.println(URLEncoder.encode(apiLink,"utf-8"));
+            System.out.println(URLEncoder.encode(apiLink,"utf-8"));
             URL query = new URL(apiLink);
 
           //  System.out.println(URLEncoder.encode(apiLink,"utf-8"));
@@ -209,6 +209,6 @@ public class YahooStockQuoteRepository {
         return "failed";
     }
 
-
+*/
 
 }
