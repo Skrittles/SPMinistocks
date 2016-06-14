@@ -154,7 +154,7 @@ public class WidgetView {
         }
         views.setImageViewResource(R.id.widget_bg,
                 getImageViewSrcId(backgroundStyle, useLargeFont));
-        this.hideUnusedRows(views, widget.getSymbolCount());
+        this.hideUnusedStocks(views, widget.getSymbolCount());
         return views;
     }
 
@@ -383,16 +383,24 @@ public class WidgetView {
         return widgetRow;
     }
 
-    private String getColourForPanel(String value){
-        double parsedValue = NumberTools.parseDouble(value, 0d);
 
+    private String getColourForPanel(String value){
         final double MAX_VALUE = 10;
         final double MIN_VALUE = 0.1;
 
+        String green = "04BF3C";
+        String red = "D23641";
+        String neutral = "#80D5D5D5";
+        String colour;
+
+        double parsedValue = NumberTools.parseDouble(value, 0d);
+
+        // Calculate colour transparency
         if(parsedValue > MAX_VALUE)
             parsedValue = MAX_VALUE;
         else if (parsedValue < -MAX_VALUE)
             parsedValue = -MAX_VALUE;
+
         double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
 
         final int MIN = 64;
@@ -400,11 +408,8 @@ public class WidgetView {
         int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
 
         String hex = Integer.toHexString(normInt);
-        String green = "04BF3C";
-        String red = "D23641";
-        String neutral = "#80D5D5D5";
-        String colour;
 
+        // Set colour green, red or grey
         if (parsedValue > 0)
             colour = "#" + hex + green;
         else if (parsedValue < 0)
@@ -412,41 +417,26 @@ public class WidgetView {
         else
             colour = neutral;
 
-        System.out.println("Value: " + value);
-        System.out.println("ParsedValue: " + parsedValue);
-        System.out.println("NormInt: " + normInt);
-        System.out.println("Hex: " + hex);
-        return colour;
+         return colour;
     }
 
 
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
+        
         if (widget.getStorage().getBoolean("visual_stockboard",false)) {
             colour = WidgetColors.SAME;
-            //TODO change code
+            
+            // Set Background colour for each Panel of Viusal Stockboard
             if (value.endsWith("%")) {
                 int panelInt = 0;
-                try {
-                    R.id rid = new R.id();
-                    Class cl = rid.getClass();
-                    Field id = cl.getDeclaredField("Panel" + panel);
-                    panelInt = id.getInt(null);
-                }
-                catch (NoSuchFieldException e) {
-                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
-                    // Sollte eigentlich nicht vorkommen
-                    System.out.println("NO FIELD Panel" + panel + " IN CLASS R.id");
-                }
-                catch (IllegalAccessException e) {
-                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
-                    // Sollte eigentlich nicht vorkommen
-                    System.out.println("NOT ALLOWED TO ACCESS Panel" + panel + " IN CLASS R.id");
-                }
+                panelInt = ReflectionTools.getField("Panel" + panel);
+
                 remoteViews.setInt(panelInt, "setBackgroundColor", Color.parseColor(getColourForPanel(value)));
             }
         }
+        // Set change colour for default view
         else {
             if (parsedValue < 0) {
                 colour = WidgetColors.LOSS;
@@ -468,7 +458,11 @@ public class WidgetView {
         }
     }
 
-    private void hideUnusedRows(RemoteViews views, int count) {
+    // Set visibility for unused Stocks
+    private void hideUnusedStocks(RemoteViews views, int count) {
+
+
+        // Set all Stocks invisible
         for (int i = 0; i < 11; i++) {
             int viewId = ReflectionTools.getField("line" + i);
             if (viewId > 0) {
@@ -476,15 +470,14 @@ public class WidgetView {
                 views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
             }
         }
+         // Set used rows visible
         for (int i = 1; i < count + 1; i++) {
             views.setViewVisibility(ReflectionTools.getField("line" + i), View.VISIBLE);
         }
 
-        //Shows only Panels with a stock in it
-        //This is only necessary if Visual Stockboard is actually activated
+        // Set used Panels visible if Visual Stockboard is activated
         if(widget.isVisual()) {
-            //Calculates Symbols that are actually used
-            //TODO Move this to a more accessible place (e.g. AndroidWidget)
+            //find used Symbols
             int usedSymbols = 0;
             for (String s : symbols) {
                 if (!s.equals(""))
