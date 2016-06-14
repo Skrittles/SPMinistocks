@@ -30,8 +30,8 @@ import nitezh.ministock.activities.PreferencesActivity;
  * Instead of controlling the behaviour of a preference in PreferenceActivity,
  * everything is controlled in this custom preference.
  */
-public class CustomPreference extends EditTextPreference {
-    public CustomPreference(Context context, AttributeSet attrs) {
+public class StockPreference extends EditTextPreference {
+    public StockPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -115,19 +115,26 @@ public class CustomPreference extends EditTextPreference {
                     //Gets the tag AKA preference key of the currently used preferences
                     String target = (String) v.getTag();
                     String dropped = (String) ((View) event.getLocalState()).getTag();
+                    String targetSummaryKey = target + "_summary";
+                    String droppedSummaryKey = dropped + "_summary";
+
+                    //Gets the summary of the stocks currently in the preferences
+                    String targetSummary = preferences.getString(targetSummaryKey,"");
+                    String droppedSummary = preferences.getString(droppedSummaryKey,"");
 
                     //Gets the values of the stocks currently in the preferences
                     String targetValue = preferences.getString(target,"");
                     String droppedValue = preferences.getString(dropped,"");
-                    String bufferValue = preferences.getString(target,"");
+
 
                     //Swaps preference values
                     editor.putString(target, droppedValue);
-                    editor.putString(dropped,bufferValue);
+                    editor.putString(dropped, targetValue);
+                    editor.putString(targetSummaryKey, droppedSummary);
+                    editor.putString(droppedSummaryKey, targetSummary);
                     editor.apply();
                     break;
             }
-
             return true;
         }
     };

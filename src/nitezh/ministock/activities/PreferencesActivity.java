@@ -26,27 +26,16 @@ package nitezh.ministock.activities;
 
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
-import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.view.DragEvent;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -54,18 +43,12 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-import nitezh.ministock.domain.CustomPreference;
-import nitezh.ministock.utils.Cache;
 import nitezh.ministock.DialogTools;
-import nitezh.ministock.utils.StorageCache;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
 import nitezh.ministock.UserData;
 import nitezh.ministock.activities.widget.WidgetProviderBase;
-import nitezh.ministock.domain.AndroidWidgetRepository;
-import nitezh.ministock.domain.PortfolioStockRepository;
-import nitezh.ministock.domain.WidgetRepository;
 import nitezh.ministock.utils.DateTools;
 import nitezh.ministock.utils.VersionTools;
 
@@ -260,9 +243,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.putString(key, value);
         editor.apply();
 
-        // Also update the UI
-        EditTextPreference preference = (EditTextPreference) findPreference(key);
-        preference.setText(value);
+        //Updating the UI is handled in StockPreference
 
         // Set up a listener whenever a key changes
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
