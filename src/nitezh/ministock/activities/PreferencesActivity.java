@@ -29,6 +29,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -39,11 +40,23 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 import android.widget.TimePicker;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import nitezh.ministock.dataaccess.FxChangeRepository;
+import nitezh.ministock.dataaccess.YahooStockQuoteRepository;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.DialogTools;
 import nitezh.ministock.utils.StorageCache;
@@ -74,11 +87,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     private static boolean mPendingUpdate = false;
     private static String mSymbolSearchKey = "";
     private final String CHANGE_LOG = "• Experimental Backup and Restore option added.<br /><br /><i>If you appreciate this app please rate it 5 stars in the Android market!</i>";
+    private static final String ISIN_URL = "http://query.yahooapis.com:80/v1/public/yql?q=select+*+from+yahoo.finance.isin+where+symbol+in+(\"ISIN\")&env=store://datatables.org/alltableswithkeys";
     // Fields for time pickers
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
     private String mTimePickerKey = null;
     private int mHour = 0;
     private int mMinute = 0;
+
+
 
     String getChangeLog() {
         return CHANGE_LOG;
@@ -88,6 +104,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     public void onNewIntent(Intent intent) {
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             setPreference(mSymbolSearchKey, intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
+
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
             startSearch(query, false, null, false);
@@ -360,6 +377,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             value = "";
         } else if (value.startsWith("Use ")) {
             value = value.replace("Use ", "");
+        } else if (value.startsWith("ISIN ")) {
+            try{value= new getIsin().execute(value.replace("ISIN ", "")).get();}
+            catch(Exception e){value = "";}
         }
         // Set dirty
         mPendingUpdate = true;
@@ -368,6 +388,44 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.putString(key + "_summary", summary);
         editor.apply();
     }
+
+    private class getIsin extends AsyncTask<String, Void , String>{
+        protected String doInBackground(String ... ISIN){
+            String Symbol;
+            String apiLink = ISIN_URL.replace("ISIN",ISIN[0]);
+            try{
+                URL query = new URL(apiLink);
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+                DocumentBuilder builder = factory.newDocumentBuilder();
+
+                Document retrievedXML = builder.parse(new InputSource(query.openStream()));
+
+                retrievedXML.getDocumentElement().normalize();
+                NodeList nodeList = retrievedXML.getElementsByTagName("Isin");
+                Symbol =getElementValue(nodeList.item(0));
+            }
+            catch(Exception e){return ISIN[0];}
+            return Symbol;
+        }
+    }
+
+    private final String getElementValue( Node elem ) {
+        Node child;
+        if( elem != null){
+            if (elem.hasChildNodes()){
+                for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
+                    if( child.getNodeType() == Node.TEXT_NODE  ){
+                        return child.getNodeValue();
+                    }
+                }
+            }
+        }
+        return "Not found";
+    }
+
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -454,6 +512,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
 
         /*
         // Hook the Backup portfolio option to the backup portfolio method
