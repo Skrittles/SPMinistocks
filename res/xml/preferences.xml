@@ -36,10 +36,10 @@
                 android:summary="Setup the stocks for this widget"
                 android:title="Stocks setup">
             <nitezh.ministock.domain.CustomPreference
-                    android:defaultValue="^DJI"
-                    android:key="Stock1"
-                    android:summary="Set symbol"
-                    android:title="Stock 1"/>
+                android:defaultValue="^DJI"
+                android:key="Stock1"
+                android:summary="Set symbol"
+                android:title="Stock 1"/>
             <nitezh.ministock.domain.CustomPreference
                 android:key="Stock2"
                 android:summary="Set symbol"
