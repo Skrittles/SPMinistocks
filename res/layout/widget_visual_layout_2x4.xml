@@ -19,25 +19,24 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:id="@+id/Panel1"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -46,67 +45,67 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text11" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text12" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text12" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text14" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text13" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/Panel4"
+                android:id="@+id/Panel5"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:layout_marginLeft="4dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -115,68 +114,68 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text41" style="@style/StockName"/>
+                        <TextView android:id="@+id/text51" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text42" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text52" style="@style/StockPrice"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text44" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text53" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/Panel7"
+                android:id="@+id/Panel9"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:layout_marginLeft="4dp"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -185,76 +184,147 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text71" style="@style/StockName"/>
+                        <TextView android:id="@+id/text91" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text72" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text92" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text74" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text93" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
+
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Panel13"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text131" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text132" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text133" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/widget_middle"
+            android:id="@+id/widget_midleft"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:orientation="vertical">
-
 
             <LinearLayout
                 android:id="@+id/Panel2"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -263,67 +333,67 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text21" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text22" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text22" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text24" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text23" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/Panel5"
+                android:id="@+id/Panel6"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -332,68 +402,68 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text51" style="@style/StockName"/>
+                        <TextView android:id="@+id/text61" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text52" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text62" style="@style/StockPrice"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text54" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text63" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/Panel8"
+                android:id="@+id/Panel10"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -402,52 +472,123 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text81" style="@style/StockName"/>
+                        <TextView android:id="@+id/text101" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text82" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text102" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text84" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text103" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Panel14"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text141" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text142" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text143" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/widget_right"
+            android:id="@+id/widget_midright"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
@@ -458,19 +599,19 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="2dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -479,69 +620,69 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text31" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text32" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text32" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text34" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text33" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
 
+            </LinearLayout>
             <LinearLayout
-                android:id="@+id/Panel6"
+                android:id="@+id/Panel7"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -550,69 +691,67 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text61" style="@style/StockName"/>
+                        <TextView android:id="@+id/text71" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text62" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text72" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text64" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text73" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
-
             </LinearLayout>
-
             <LinearLayout
-                android:id="@+id/Panel9"
+                android:id="@+id/Panel11"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginRight="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
                 android:background="#ffff0000">
 
-
-                <!-- Left side of inner TextViews -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <!-- Stock Symbol -->
                     <LinearLayout
@@ -621,49 +760,412 @@
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="3dp"
-                        android:layout_marginBottom="30dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text91" style="@style/StockName"/>
+                        <TextView android:id="@+id/text111" style="@style/StockName"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Right side of inner TextViews -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
-                    <!-- Value -->
+                    <!-- Change -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="3dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginRight="3dp"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text92" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text112" style="@style/StockWideChange"/>
                     </LinearLayout>
-
 
                     <!-- Price -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text94" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text113" style="@style/StockPrice"/>
                     </LinearLayout>
+
                 </LinearLayout>
 
+
             </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Panel15"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text151" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text152" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text153" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/widget_right"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/Panel4"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text41" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text42" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text43" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Panel8"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text81" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text82" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text83" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Panel12"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text121" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text122" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text123" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/Panel16"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
+
+                <!-- Upper side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text161" style="@style/StockName"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Down side of inner TextViews -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text162" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text163" style="@style/StockPrice"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

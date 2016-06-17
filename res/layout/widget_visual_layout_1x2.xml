@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="horizontal"
-        android:layout_margin="5dp">
+        android:layout_margin="10dp">
 
         <LinearLayout
            android:id="@+id/widget_left"
@@ -24,8 +24,8 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
             android:layout_marginRight="2dp"
             android:background="#ffff0000">
@@ -93,7 +93,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="2dp"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
                 android:layout_marginRight="2dp"
@@ -158,81 +158,83 @@
 
             </LinearLayout>
         </LinearLayout>
-    <LinearLayout
-        android:id="@+id/widget_right"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
         <LinearLayout
-            android:id="@+id/Panel2"
+            android:id="@+id/widget_right"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="2dp"
-            android:layout_marginRight="2dp"
-            android:background="#ffff0000">
+            android:orientation="vertical">
 
-            <!-- Upper side of inner TextViews -->
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:id="@+id/Panel2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="2dp"
+                android:background="#ffff0000">
 
-                <!-- Stock Symbol -->
+                <!-- Upper side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginBottom="2dp"
-                    android:layout_marginRight="3dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text21" style="@style/StockName"/>
+
+                    <!-- Stock Symbol -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text21" style="@style/StockName"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- Down side of inner TextViews -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <!-- Change -->
+                <!-- Down side of inner TextViews -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text22" style="@style/StockWideChange"/>
+
+                    <!-- Change -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text22" style="@style/StockWideChange"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text23" style="@style/StockPrice"/>
+                    </LinearLayout>
+
                 </LinearLayout>
 
-                <!-- Price -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="3"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_marginRight="3dp"
-                    android:orientation="horizontal">
-                    <TextView android:id="@+id/text23" style="@style/StockPrice"/>
-                </LinearLayout>
 
-            </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/Panel4"
