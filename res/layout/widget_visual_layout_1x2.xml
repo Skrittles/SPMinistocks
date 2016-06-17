@@ -40,6 +40,19 @@
                 <!-- Stock Symbol -->
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="3dp"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/text11" style="@style/StockNameVS"/>
+                </LinearLayout>
+
+                <!-- Price -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_marginLeft="3dp"
@@ -47,46 +60,83 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginRight="3dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text11" style="@style/StockName"/>
+                    <TextView android:id="@+id/text12" style="@style/StockPriceVS"/>
                 </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Down side of inner TextViews -->
+            <!-- Two bottom rows for different displays of change -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <!-- Change -->
+                <!-- In percent -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="3dp"
                     android:layout_marginRight="2dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text12" style="@style/StockWideChange"/>
+                    <TextView android:id="@+id/text13" style="@style/StockWideChangeVS"/>
                 </LinearLayout>
 
-                <!-- Price -->
+
+                <!-- Numerical -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="2"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="3dp"
                     android:layout_marginRight="3dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text13" style="@style/StockPrice"/>
+                    <TextView android:id="@+id/text14" style="@style/StockWideChangeVS"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <!-- In percent -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginRight="2dp"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/text15" style="@style/StockChangeVS"/>
                 </LinearLayout>
 
+
+                <!-- Numerical -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginRight="3dp"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/text16" style="@style/StockChangeVS"/>
+                </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/Panel3"
                 android:layout_width="fill_parent"
@@ -109,6 +159,19 @@
                     <!-- Stock Symbol -->
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text31" style="@style/StockNameVS"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
@@ -116,42 +179,78 @@
                         android:layout_marginBottom="2dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text31" style="@style/StockName"/>
+                        <TextView android:id="@+id/text32" style="@style/StockPriceVS"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- Down side of inner TextViews -->
+                <!-- Two bottom rows for different displays of change -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <!-- Change -->
+                    <!-- In percent -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text32" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text33" style="@style/StockWideChangeVS"/>
                     </LinearLayout>
 
-                    <!-- Price -->
+
+                    <!-- Numerical -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text33" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text34" style="@style/StockWideChangeVS"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- In percent -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text35" style="@style/StockChangeVS"/>
+                    </LinearLayout>
+
+
+                    <!-- Numerical -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text36" style="@style/StockChangeVS"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -187,6 +286,19 @@
                     <!-- Stock Symbol -->
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="3dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text21" style="@style/StockNameVS"/>
+                    </LinearLayout>
+
+                    <!-- Price -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_marginLeft="3dp"
@@ -194,42 +306,78 @@
                         android:layout_marginBottom="2dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text21" style="@style/StockName"/>
+                        <TextView android:id="@+id/text22" style="@style/StockPriceVS"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- Down side of inner TextViews -->
+                <!-- Two bottom rows for different displays of change -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
-                    <!-- Change -->
+                    <!-- In percent -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text22" style="@style/StockWideChange"/>
+                        <TextView android:id="@+id/text23" style="@style/StockWideChangeVS"/>
                     </LinearLayout>
 
-                    <!-- Price -->
+
+                    <!-- Numerical -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="3"
+                        android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="2dp"
                         android:layout_marginBottom="3dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/text23" style="@style/StockPrice"/>
+                        <TextView android:id="@+id/text24" style="@style/StockWideChangeVS"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <!-- In percent -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="2dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text25" style="@style/StockChangeVS"/>
+                    </LinearLayout>
+
+
+                    <!-- Numerical -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:orientation="horizontal">
+                        <TextView android:id="@+id/text26" style="@style/StockChangeVS"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -258,6 +406,19 @@
                 <!-- Stock Symbol -->
                 <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="3dp"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/text41" style="@style/StockNameVS"/>
+                </LinearLayout>
+
+                <!-- Price -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:layout_marginLeft="3dp"
@@ -265,42 +426,78 @@
                     android:layout_marginBottom="2dp"
                     android:layout_marginRight="3dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text41" style="@style/StockName"/>
+                    <TextView android:id="@+id/text42" style="@style/StockPriceVS"/>
                 </LinearLayout>
 
             </LinearLayout>
 
-            <!-- Down side of inner TextViews -->
+            <!-- Two bottom rows for different displays of change -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <!-- Change -->
+                <!-- In percent -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="2"
+                    android:layout_weight="3"
                     android:layout_marginLeft="3dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="3dp"
                     android:layout_marginRight="2dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text42" style="@style/StockWideChange"/>
+                    <TextView android:id="@+id/text43" style="@style/StockWideChangeVS"/>
                 </LinearLayout>
 
-                <!-- Price -->
+
+                <!-- Numerical -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="3"
+                    android:layout_weight="2"
                     android:layout_marginLeft="2dp"
                     android:layout_marginTop="2dp"
                     android:layout_marginBottom="3dp"
                     android:layout_marginRight="3dp"
                     android:orientation="horizontal">
-                    <TextView android:id="@+id/text43" style="@style/StockPrice"/>
+                    <TextView android:id="@+id/text44" style="@style/StockWideChangeVS"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <!-- In percent -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginRight="2dp"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/text45" style="@style/StockChangeVS"/>
+                </LinearLayout>
+
+
+                <!-- Numerical -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginRight="3dp"
+                    android:orientation="horizontal">
+                    <TextView android:id="@+id/text46" style="@style/StockChangeVS"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -308,4 +505,3 @@
 
         </LinearLayout>L
     </LinearLayout>
-</RelativeLayout>
