@@ -76,14 +76,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
 
 
+
     String getChangeLog() {
         return CHANGE_LOG;
     }
 
     @Override
     public void onNewIntent(Intent intent) {
-        System.out.println("ACTION" + intent.getAction());
-        System.out.println("DATA" + intent.getDataString());
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             setPreference(mSymbolSearchKey, intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -167,11 +166,31 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         int widgetSize = sharedPreferences.getInt("widgetSize", 0);
 
         // Remove extra stocks
-        if (widgetSize == 0 || widgetSize == 1) {
-            PreferenceScreen stock_setup = (PreferenceScreen) findPreference("stock_setup");
-            for (int i = 5; i < 11; i++)
+        // Normal view
+        PreferenceScreen stock_setup = (PreferenceScreen) findPreference("stock_setup");
+        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+        if ((widgetSize == 0 || widgetSize == 1) && !storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 5; i < 17; i++)
+                removePref(stock_setup, "Stock" + i);
+        }else if ((widgetSize == 2 || widgetSize == 3) && !storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 11; i < 17; i++)
+                removePref(stock_setup, "Stock" + i);
+        // Visual Stockboard view
+        }else if((widgetSize == 0) && storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 5; i < 17; i++)
+                removePref(stock_setup, "Stock" + i);
+        }else if((widgetSize == 1) && storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 9; i < 17; i++)
+                removePref(stock_setup, "Stock" + i);
+        }else if((widgetSize == 2) && storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 9; i < 17; i++)
                 removePref(stock_setup, "Stock" + i);
         }
+
+
+
+
+
         // Remove extra widget views
         if (widgetSize == 1 || widgetSize == 3) {
             PreferenceScreen widget_views = (PreferenceScreen) findPreference("widget_views");
@@ -370,7 +389,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+
 
         // Hook the About preference to the About (MinistocksActivity) activity
         Preference about = findPreference("about");
@@ -539,6 +558,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });
 
         // Enable Visual Stockboard
+        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         Preference visual_stockboard = findPreference("visual_stockboard");
         if(visual_stockboard.isEnabled())
             storage.putBoolean("visual_stockboard",true);
