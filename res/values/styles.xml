@@ -203,5 +203,34 @@
         <item name="android:layout_width">9dp</item>
         <item name="android:gravity">right</item>
     </style>
+    
+     <!-- styles for visual stockboard view-->
+    <style name="StockDatumVS">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:textSize">7sp</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="StockPriceVS" parent="StockDatumVS">
+        <item name="android:layout_width">9dp</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="StockChangeVS" parent="StockDatumVS">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="StockWideChangeVS" parent="StockDatumVS">
+        <item name="android:layout_width">9dp</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="StockNameVS" parent="StockDatumVS">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:lines">1</item>
+    </style>
 
 </resources>
