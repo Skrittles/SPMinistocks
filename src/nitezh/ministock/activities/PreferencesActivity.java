@@ -74,7 +74,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     private int mHour = 0;
     private int mMinute = 0;
     // The amount of stock preferences in preferences.xml
-    private static final int MAX_STOCKS = 16;
+    public static final int MAX_STOCKS = 16;
 
 
 

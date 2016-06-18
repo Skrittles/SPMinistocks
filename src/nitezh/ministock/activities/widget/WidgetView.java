@@ -46,6 +46,7 @@ import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
+import nitezh.ministock.activities.PreferencesActivity;
 import nitezh.ministock.utils.StorageCache;
 import nitezh.ministock.WidgetProvider;
 import nitezh.ministock.domain.AndroidWidgetRepository;
@@ -78,7 +79,7 @@ public class WidgetView {
     // Not useful for anything other than getColourForChange()
     private int panel;
     // The amount of stock preferences in preferences.xml
-    private static final int MAX_STOCKS = 16;
+    private static final int MAX_STOCKS = PreferencesActivity.MAX_STOCKS;
 
     public WidgetView(Context context, int appWidgetId, UpdateType updateMode,
                       HashMap<String, StockQuote> quotes, String quotesTimeStamp) {
@@ -230,7 +231,7 @@ public class WidgetView {
         return alwaysOn;
 
         // TODO It seems that hasPortfolioData is always false. This should be fixed
-/*        HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
+        /*HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
         enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
         enabledViews.put(ViewType.VIEW_DAILY_CHANGE, widget.hasDailyChangeView());
         enabledViews.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
