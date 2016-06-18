@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -220,7 +221,74 @@ public class PortfolioStockRepository {
 
     public void backupPortfolio(Context context) {
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
+
+        // Build a list with symbols from stockQuotes.
+        Collection<StockQuote> quotes = stocksQuotes.values();
+
+        Iterator<StockQuote> it = quotes.iterator();
+
+        List<String> stocks = new ArrayList<String>();
+
+        while (it.hasNext()) {
+
+            StockQuote stockQuote = it.next();
+
+            stocks.add(stockQuote.getSymbol());
+
+        }
+
+        // transform symbols to a List of portfolioStocks.
+        List<PortfolioStock> portstocks = new ArrayList<PortfolioStock>();
+
+        Iterator<String> stocksss = stocks.iterator();
+
+        while (stocksss.hasNext()) {
+
+            String symbol = stocksss.next();
+
+            portstocks.add(getStock(symbol));
+
+        }
+
+        // write information of PortfolioStocks into String Array.
+        // build pseudo format for fileoutputwriter.
+
+        Iterator<PortfolioStock> it2 = portstocks.iterator();
+
+        List<String> symbols = new ArrayList<String>();
+
+        while (it2.hasNext()) {
+
+            PortfolioStock tmp = it2.next();
+
+            symbols.add( "\n" +
+
+                    "Symbol: " + tmp.getSymbol() + "\n" +
+
+                    "Quantity: " + tmp.getQuantity() + "\n" +
+
+                    "Price: " + tmp.getPrice() + "\n" +
+
+                    "Date: " + tmp.getDate() + "\n" +
+
+                    "HighLimit: " + tmp.getHighLimit() + "\n" +
+
+                    "LowLimit: " + tmp.getLowLimit() + "\n" +
+
+                    "CustomName: " + tmp.getCustomName() + "\n" +
+
+                    "####################\n"
+
+            );
+
+        }
+
+        rawJson = symbols.toString();
+
         UserData.writeInternalStorage(context, rawJson, PORTFOLIO_JSON);
+
+        this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
+
         DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
                 "Your portfolio settings have been backed up to internal mAppStorage.");
     }
@@ -228,6 +296,30 @@ public class PortfolioStockRepository {
     public void restorePortfolio(Context context) {
         mDirtyPortfolioStockMap = true;
         String rawJson = UserData.readInternalStorage(context, PORTFOLIO_JSON);
+
+        // Create an array where you can find parsed information from portfolio_json.
+        String delims = "[\n]+";
+
+        String[] tokens = rawJson.split(delims);
+
+        String tmp = "";
+
+        for (int i = 0; i < tokens.length; i++) {
+            tmp = tmp + "\n" + tokens[i];
+        }
+
+        UserData.writeInternalStorage(context, tmp, "parse.txt");
+
+        // Write StockQuotes with symbols from backup file.
+        int j = 1;
+        for (int i = 1; i < tokens.length; i += 9) {
+            this.mAppStorage.putString("Stock" + j, tokens[i].substring(8));
+            j++;
+        }
+
+        updateStock(tokens[1].substring(8), "", "",tokens[2].substring(10), "","","");
+
+
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
         DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
                 "Your portfolio settings have been restored from internal mAppStorage.");
