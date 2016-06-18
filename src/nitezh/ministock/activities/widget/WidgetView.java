@@ -74,7 +74,11 @@ public class WidgetView {
     private final String quotesTimeStamp;
     private final Context context;
     private HashMap<ViewType, Boolean> enabledViews;
+    // A nubmer that indicates which panel is currently edited
+    // Not useful for anything other than getColourForChange()
     private int panel;
+    // The amount of stock preferences in preferences.xml
+    private static final int MAX_STOCKS = 16;
 
     public WidgetView(Context context, int appWidgetId, UpdateType updateMode,
                       HashMap<String, StockQuote> quotes, String quotesTimeStamp) {
@@ -212,7 +216,21 @@ public class WidgetView {
     }
 
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
-        HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
+        HashMap<WidgetProviderBase.ViewType, Boolean> alwaysOn = new HashMap<>();
+        alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, true);
+        alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, true);
+        alwaysOn.put(ViewType.VIEW_PL_CHANGE, true);
+        alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, true);
+        alwaysOn.put(ViewType.VIEW_PL_PERCENT, true);
+        alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, true);
+        alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, true);
+        alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, true);
+        alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, true);
+        alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, true);
+        return alwaysOn;
+
+        // TODO It seems that hasPortfolioData is always false. This should be fixed
+/*        HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
         enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
         enabledViews.put(ViewType.VIEW_DAILY_CHANGE, widget.hasDailyChangeView());
         enabledViews.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
@@ -223,7 +241,7 @@ public class WidgetView {
         enabledViews.put(ViewType.VIEW_PL_PERCENT, widget.hasTotalPlPercentView() && this.hasPortfolioData);
         enabledViews.put(ViewType.VIEW_PL_CHANGE, widget.hasTotalPlChangeView() && this.hasPortfolioData);
         enabledViews.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
-        return enabledViews;
+        return enabledViews;*/
     }
 
     private WidgetRow getRowInfo(String symbol, ViewType widgetView) {
@@ -459,33 +477,38 @@ public class WidgetView {
     }
 
     // Set visibility for unused Stocks
+    // Makes every Stock invisible, then makes only used stocks visible again
     private void hideUnusedStocks(RemoteViews views, int count) {
+        for (int i = 0; i <= MAX_STOCKS; i++) {
+            int viewId;
+            if (!widget.isVisual()) {
+                //Enable rows for non-visual view
+                viewId = ReflectionTools.getField("line" + i);
+                if (viewId > 0) {
+                    views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
+                }
+                // Set used rows visible
+                for (int j = 1; j < count + 1; j++) {
+                    views.setViewVisibility(ReflectionTools.getField("line" + j), View.VISIBLE);
+                }
+            } else {
+                //Enable panels for visual view
+                viewId = ReflectionTools.getField("Panel" + i);
+                if (viewId > 0) {
+                    views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
+                }
 
+                // Find used Symbols
+                int usedSymbols = 0;
+                for (String s : symbols) {
+                    if (!s.equals(""))
+                        usedSymbols++;
+                }
 
-        // Set all Stocks invisible
-        for (int i = 0; i < 11; i++) {
-            int viewId = ReflectionTools.getField("line" + i);
-            if (viewId > 0) {
-                views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
-                views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
-            }
-        }
-         // Set used rows visible
-        for (int i = 1; i < count + 1; i++) {
-            views.setViewVisibility(ReflectionTools.getField("line" + i), View.VISIBLE);
-        }
-
-        // Set used Panels visible if Visual Stockboard is activated
-        if(widget.isVisual()) {
-            //find used Symbols
-            int usedSymbols = 0;
-            for (String s : symbols) {
-                if (!s.equals(""))
-                    usedSymbols++;
-            }
-
-            for (int i = 1; i <= usedSymbols; i++) {
-                views.setViewVisibility(ReflectionTools.getField("Panel" + i), View.VISIBLE);
+                // Set used Panels visible
+                for (int j = 1; j <= usedSymbols; j++) {
+                    views.setViewVisibility(ReflectionTools.getField("Panel" + j), View.VISIBLE);
+                }
             }
         }
     }
