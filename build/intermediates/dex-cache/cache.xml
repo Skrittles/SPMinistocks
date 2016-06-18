@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Daniel\Documents\GitHub\SPMinistocks\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="f1317d5ddac24dabec571e26b3dda62bc3f02981">
+        <dex dex="C:\Users\Daniel\Documents\GitHub\SPMinistocks\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_72ee54539098b10cfe5be9f7359da594159a31fd\classes.dex" />
+    </item>
+    <item
+        jar="C:\Users\Daniel\Documents\GitHub\SPMinistocks\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="82ee97a3271660a04ee97ede411b4803e2ffeeef">
+        <dex dex="C:\Users\Daniel\Documents\GitHub\SPMinistocks\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_fc9cd0b2eed965fb79f9e2f04df7d510d07f1c14\classes.dex" />
+    </item>
+
+</items>

@@ -95,4 +95,13 @@ public class YahooStockQuoteRepositoryTests extends TestCase {
         assertTrue(Arrays.asList("NasdaqNM", "NMS").contains(googQuote.getExchange()));
         assertEquals("Google Inc.", googQuote.getName());
     }
+/*
+    public void testGetSymbolFromISIN(){
+        String MS = "US5949181045";
+        String DBAG = "DE0005140008";
+        assertTrue(this.yahooRepository.ISINtoSymbol(MS).equals("MSF.DE") && this.yahooRepository.ISINtoSymbol(DBAG).equals("DBK.DE") );
+
+
+
+    }*/
 }

@@ -1,0 +1,227 @@
+-- Merging decision tree log ---
+manifest
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:24:1-196:12
+	xmlns:tools
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:25:11-57
+	xmlns:android
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:24:11-69
+	package
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:26:11-37
+	android:versionName
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:28:11-35
+		INJECTED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml
+		INJECTED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml
+	android:versionCode
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:27:11-35
+		INJECTED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml
+		INJECTED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml
+uses-sdk
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:30:5-43
+	android:minSdkVersion
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:30:15-41
+uses-permission#android.permission.INTERNET
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:32:5-66
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:32:22-64
+uses-permission#android.permission.WRITE_EXTERNAL_STORAGE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:33:5-34:50
+	android:maxSdkVersion
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:34:22-48
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:33:22-78
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:35:5-74
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:35:22-72
+uses-permission#android.permission.READ_EXTERNAL_STORAGE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:36:5-37:50
+	android:maxSdkVersion
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:37:22-48
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:36:22-77
+application
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:39:5-195:19
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:40:18-50
+	android:icon
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:39:18-47
+activity#nitezh.ministock.activities.MinistocksActivity
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:42:9-51:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:44:19-51
+	android:configChanges
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:43:19-54
+	android:theme
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:45:19-62
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:42:19-64
+intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:47:13-50:29
+action#android.intent.action.MAIN
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:48:17-68
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:48:25-66
+category#android.intent.category.LAUNCHER
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:49:17-76
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:49:27-74
+activity#nitezh.ministock.activities.PortfolioActivity
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:52:9-60:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:54:19-44
+	android:configChanges
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:53:19-54
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:52:19-63
+	android:launchMode
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:55:19-54
+intent-filter#android.intent.action.MAIN
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:57:13-59:29
+activity#nitezh.ministock.activities.PreferencesActivity
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:61:9-83:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:65:19-46
+	android:configChanges
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:63:19-54
+	android:clearTaskOnLaunch
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:62:19-51
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:61:19-65
+	android:finishOnTaskLaunch
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:64:19-52
+	android:launchMode
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:66:19-54
+intent-filter#android.intent.action.EDIT+android.intent.category.DEFAULT
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:68:13-71:29
+action#android.intent.action.EDIT
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:69:17-68
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:69:25-66
+category#android.intent.category.DEFAULT
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:70:17-75
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:70:27-73
+intent-filter#android.intent.action.PICK+android.intent.category.DEFAULT
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:72:13-75:29
+action#android.intent.action.PICK
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:73:17-68
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:73:25-66
+intent-filter#android.intent.action.SEARCH+android.intent.category.DEFAULT
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:76:13-79:29
+action#android.intent.action.SEARCH
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:77:17-70
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:77:25-68
+meta-data#android.app.searchable
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:81:13-82:60
+	android:resource
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:82:24-58
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:81:24-61
+activity#nitezh.ministock.activities.configure.ConfigureActivity1x2
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:84:9-90:20
+	android:theme
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:85:19-62
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:84:19-76
+intent-filter#android.appwidget.action.APPWIDGET_CONFIGURE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:87:13-89:29
+action#android.appwidget.action.APPWIDGET_CONFIGURE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:88:17-86
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:88:25-84
+activity#nitezh.ministock.activities.configure.ConfigureActivity2x2
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:91:9-97:20
+	android:theme
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:92:19-62
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:91:19-76
+activity#nitezh.ministock.activities.configure.ConfigureActivity1x4
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:98:9-104:20
+	android:theme
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:99:19-62
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:98:19-76
+activity#nitezh.ministock.activities.configure.ConfigureActivity2x4
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:105:9-111:20
+	android:theme
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:106:19-62
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:105:19-76
+activity#nitezh.ministock.activities.SymbolSearchableActivity
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:112:9-133:20
+	android:configChanges
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:113:19-54
+	android:theme
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:116:19-66
+	android:excludeFromRecents
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:114:19-52
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:112:19-70
+	android:launchMode
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:115:19-49
+provider#nitezh.ministock.SymbolProvider
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:136:9-139:59
+	android:syncable
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:138:19-43
+	android:authorities
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:137:19-71
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:136:19-49
+	tools:ignore
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:139:19-57
+receiver#nitezh.ministock.WidgetProvider
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:142:9-155:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:143:19-45
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:142:19-49
+intent-filter#android.appwidget.action.APPWIDGET_UPDATE+nitezh.ministock.ASYNC_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:145:13-148:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:146:17-83
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:146:25-81
+action#nitezh.ministock.ASYNC_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:147:17-71
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:147:25-69
+intent-filter#nitezh.ministock.ALARM_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:149:13-151:29
+action#nitezh.ministock.ALARM_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:150:17-71
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:150:25-69
+meta-data#android.appwidget.provider
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:153:13-154:60
+	android:resource
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:154:24-58
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:153:24-65
+receiver#nitezh.ministock.activities.widget.WidgetProvider1x4
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:156:9-168:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:157:19-52
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:156:19-70
+intent-filter#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:159:13-161:29
+intent-filter#nitezh.ministocks.ALARM_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:162:13-164:29
+action#nitezh.ministocks.ALARM_UPDATE
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:163:17-72
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:163:25-70
+receiver#nitezh.ministock.activities.widget.WidgetProvider2x2
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:169:9-181:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:170:19-52
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:169:19-70
+receiver#nitezh.ministock.activities.widget.WidgetProvider2x4
+ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:182:9-194:20
+	android:label
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:183:19-57
+	android:name
+		ADDED from C:\Users\Daniel\Documents\GitHub\SPMinistocks\AndroidManifest.xml:182:19-70

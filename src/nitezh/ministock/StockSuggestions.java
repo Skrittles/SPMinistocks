@@ -64,7 +64,7 @@ class StockSuggestions {
             return suggestions;
         }
         Matcher m = PATTERN_RESPONSE.matcher(response);
-        if (m.find()) {
+       if (m.find()) {
             response = m.group(1);
             try {
                 JSONArray jsonA = new JSONObject(response)
@@ -76,6 +76,7 @@ class StockSuggestions {
                     JSONObject jsonO = jsonA.getJSONObject(i);
                     suggestion.put("symbol", jsonO.getString("symbol"));
                     suggestion.put("name", jsonO.getString("name"));
+
                     suggestions.add(suggestion);
                 }
                 return suggestions;

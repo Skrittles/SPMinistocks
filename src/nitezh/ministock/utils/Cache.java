@@ -35,6 +35,7 @@ public abstract class Cache {
 
     public void put(String key, String data, Integer ttl) {
         JSONObject item = new JSONObject();
+
         try {
             item.put("value", data);
 

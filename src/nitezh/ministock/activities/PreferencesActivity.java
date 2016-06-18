@@ -48,15 +48,21 @@ import org.xml.sax.InputSource;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+
+import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.dataaccess.FxChangeRepository;
 import nitezh.ministock.dataaccess.YahooStockQuoteRepository;
+import nitezh.ministock.tests.mocks.MockCache;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.DialogTools;
 import nitezh.ministock.utils.StorageCache;
@@ -378,8 +384,18 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         } else if (value.startsWith("Use ")) {
             value = value.replace("Use ", "");
         } else if (value.startsWith("ISIN ")) {
-            try{value= new getIsin().execute(value.replace("ISIN ", "")).get();}
-            catch(Exception e){value = "";}
+            try{
+                String[] resultISIN = new String[2];
+                resultISIN= new getIsin().execute(value.replace("ISIN ", "")).get();
+                value = resultISIN[0];
+                summary= resultISIN[1];
+            }
+            catch(Exception e){value = "Not found";
+                }
+        }
+        if ( value.equals("Not found")){
+            DialogTools.showSimpleDialogOk(this,"Error", "ISIN not found, please try again.");
+            value = "";
         }
         // Set dirty
         mPendingUpdate = true;
@@ -389,9 +405,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.apply();
     }
 
-    private class getIsin extends AsyncTask<String, Void , String>{
-        protected String doInBackground(String ... ISIN){
-            String Symbol;
+    private class getIsin extends AsyncTask<String, Void , String[]>{
+        protected String[] doInBackground(String ... ISIN){
+            String[] Symbol = new String[2];
             String apiLink = ISIN_URL.replace("ISIN",ISIN[0]);
             try{
                 URL query = new URL(apiLink);
@@ -403,9 +419,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
                 retrievedXML.getDocumentElement().normalize();
                 NodeList nodeList = retrievedXML.getElementsByTagName("Isin");
-                Symbol =getElementValue(nodeList.item(0));
+                Symbol[0] =getElementValue(nodeList.item(0));
+                Symbol[1]= SymbolProvider.getDescription(Symbol[0]);
             }
-            catch(Exception e){return ISIN[0];}
+            catch(Exception e){
+                Symbol[0] = "Not found";
+                Symbol[1] = "";
+                return Symbol;}
             return Symbol;
         }
     }

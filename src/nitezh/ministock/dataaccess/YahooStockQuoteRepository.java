@@ -107,6 +107,28 @@ public class YahooStockQuoteRepository {
 
         return quotes;
     }
+    public String getDescription (Cache cache, String symbol){
+        List<String> symbols = Arrays.asList(symbol);
+        HashMap<String, StockQuote> quotes = new HashMap<>();
+        HashMap<String, String> fxChanges = this.fxChangeRepository.getChanges(cache, symbols);
+        JSONArray jsonArray;
+        JSONObject quoteJson;
+        try {
+            jsonArray = this.retrieveQuotesAsJson(cache, symbols);
+            if (jsonArray != null) {
+
+                    quoteJson = jsonArray.getJSONObject(0);
+
+                return  quoteJson.optString("name");
+
+
+            }
+        } catch (JSONException e) {
+            return null;
+        }
+        return null;
+
+    }
 
     private String buildRequestUrl(List<String> symbols) {
         StringBuilder sQuery = new StringBuilder();
