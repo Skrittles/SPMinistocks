@@ -240,18 +240,47 @@ public class PortfolioStockRepository {
     */
     public void restorePortfolio(Context context) {
         mDirtyPortfolioStockMap = true;
+
         String rawJson = UserData.readExternalStorage(context, PORTFOLIO_JSON);
 
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
 
-        persist();
+        JSONObject test = getStocksJson();
 
-        this.portfolioStocksInfo = getStocks();
+        HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(test);
+
+        //this.portfolioStocksInfo.clear();
+
+        Iterator<String> it = stocksFromBackup.keySet().iterator();
+
+        int i = 0;
+
+
+        while (it.hasNext()) {
+
+            String tmp = it.next();
+
+            i++;
+
+            this.mAppStorage.putString("Stock" + i, stocksFromBackup.get(tmp).getSymbol());
+
+            this.mAppStorage.putString("Stock" + i + "_summary", "No description");
+
+            PortfolioStock portfolioStock  = stocksFromBackup.get(tmp);
+
+            updateStock(tmp, portfolioStock.getPrice(), portfolioStock.getDate(), portfolioStock.getQuantity(),
+                    portfolioStock.getHighLimit(), portfolioStock.getLowLimit(), portfolioStock.getCustomName());
+
+        }
+
+        this.persist();
+
 
 
         DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
                 "Your portfolio settings have been restored from internal mAppStorage.");
     }
+
 
     public JSONObject getStocksJson() {
         JSONObject stocksJson = new JSONObject();
@@ -261,6 +290,51 @@ public class PortfolioStockRepository {
         }
         return stocksJson;
     }
+
+     /*
+      * Transform a JSONObject into a HashMap.
+      */
+
+    public HashMap<String, PortfolioStock> getStocksFromJson(JSONObject json) {
+
+        Iterator keys;
+        keys = json.keys();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+            JSONObject itemJson = new JSONObject();
+            try {
+                itemJson = json.getJSONObject(key);
+            } catch (JSONException ignored) {
+            }
+
+            HashMap<PortfolioField, String> stockInfoMap = new HashMap<>();
+            for (PortfolioField f : PortfolioField.values()) {
+                String data = "";
+                try {
+                    if (!itemJson.get(f.name()).equals("empty")) {
+                        data = itemJson.get(f.name()).toString();
+                    }
+                } catch (JSONException ignored) {
+                }
+                stockInfoMap.put(f, data);
+            }
+
+            PortfolioStock stock = new PortfolioStock(key,
+                    stockInfoMap.get(PortfolioField.PRICE),
+                    stockInfoMap.get(PortfolioField.DATE),
+                    stockInfoMap.get(PortfolioField.QUANTITY),
+                    stockInfoMap.get(PortfolioField.LIMIT_HIGH),
+                    stockInfoMap.get(PortfolioField.LIMIT_LOW),
+                    stockInfoMap.get(PortfolioField.CUSTOM_DISPLAY),
+                    stockInfoMap.get(PortfolioField.SYMBOL_2));
+            mPortfolioStocks.put(key, stock);
+        }
+        mDirtyPortfolioStockMap = false;
+
+        return mPortfolioStocks;
+    }
+
+
 
     public HashMap<String, PortfolioStock> getStocks() {
         if (!mDirtyPortfolioStockMap) {
