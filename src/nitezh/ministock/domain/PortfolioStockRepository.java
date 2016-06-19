@@ -51,7 +51,7 @@ import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
 
 public class PortfolioStockRepository {
-    public static final String PORTFOLIO_JSON = "portfolioJson";
+    public static final String PORTFOLIO_JSON = "portfolioJson.txt";
     public static final String WIDGET_JSON = "widgetJson";
     public HashMap<String, StockQuote> stocksQuotes = new HashMap<>();
 
