@@ -117,6 +117,7 @@ public class WidgetProviderBase extends AppWidgetProvider {
         if (action.equals("LEFT")) {
             startPreferencesActivity(context, appWidgetId);
         } else if (action.equals("RIGHT")) {
+
             updateWidgetAsync(context, appWidgetId, UpdateType.VIEW_CHANGE);
         }
     }
