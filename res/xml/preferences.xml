@@ -288,6 +288,20 @@
             android:summaryOff="Enable visual stockboard"
             android:summaryOn="Enable visual stockboard"
             android:title="Visual Stockboard"/>
+        <PreferenceScreen
+            android:title="Visual Stockboard Highlighting"
+            android:summary="Change the highlighting for Visual Stockboard">
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="highlight_numeric"
+                android:summary="Highlight numeric change"
+                android:title="Numeric change"/>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="highlight_percent"
+                android:summary="Highlight percentage change"
+                android:title="Percentage change"/>
+        </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen

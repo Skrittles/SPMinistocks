@@ -66,7 +66,7 @@ public class WidgetRow {
         this.stockInfoExtra2Color = Color.WHITE;
         this.stockInfoExtra3 = "";
         this.stockInfoExtra3Color = Color.WHITE;
-        this.visualColor = "#ffffff";
+        this.visualColor = "#80D5D5D5";
 
         this.hasNoData = false;
     }
