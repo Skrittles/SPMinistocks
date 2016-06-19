@@ -455,7 +455,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         });
 
-        /*
+        
         // Hook the Backup portfolio option to the backup portfolio method
         Preference backup_portfolio = findPreference("backup_portfolio");
         backup_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -483,6 +483,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         });
 
+
+        /*
         // Hook the Backup widget option to the backup widget method
         Preference backup_widget = findPreference("backup_widget");
         backup_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
