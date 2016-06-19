@@ -276,8 +276,11 @@ public class PortfolioStockRepository {
         this.persist();
 
 
+        if (rawJson == null) 
+            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
 
-        DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
+        else 
+            DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
                 "Your portfolio settings have been restored from ministocks/portfolioJson.txt");
     }
 
