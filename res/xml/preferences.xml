@@ -234,11 +234,11 @@
                 android:title="Backup and Restore (BETA)">
                 <Preference
                     android:key="backup_portfolio"
-                    android:summary="Backup portfolio to cloud"
+                    android:summary="Backup portfolio to ministocks/portfolio.txt"
                     android:title="Backup portfolio"/>
                 <Preference
                     android:key="restore_portfolio"
-                    android:summary="Restore portfolio from cloud"
+                    android:summary="Restore portfolio from ministocks/portfolio.txt"
                     android:title="Restore portfolio"/>
                <!--
                 <Preference
