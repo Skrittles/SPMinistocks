@@ -232,7 +232,7 @@ public class PortfolioStockRepository {
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
         UserData.writeExternalStorage(context, rawJson, PORTFOLIO_JSON);
         DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
-               "Your portfolio settings have been backed up to internal mAppStorage.");
+               "Your portfolio settings have been backed up to ministocks/portfolioJson.txt");
     }
 
    /*
@@ -278,7 +278,7 @@ public class PortfolioStockRepository {
 
 
         DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
-                "Your portfolio settings have been restored from internal mAppStorage.");
+                "Your portfolio settings have been restored from ministocks/portfolioJson.txt");
     }
 
 
