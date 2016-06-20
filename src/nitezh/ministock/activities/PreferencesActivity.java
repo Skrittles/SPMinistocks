@@ -387,6 +387,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -550,6 +551,41 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });
         */
 
+        //Hook up Visual Stockboard Highlighting
+        final CheckBoxPreference numeric = (CheckBoxPreference) findPreference("highlight_numeric");
+        final CheckBoxPreference percent = (CheckBoxPreference) findPreference("highlight_percent");
+        numeric.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if(numeric.isChecked()) {
+                    numeric.setChecked(false);
+                    percent.setChecked(true);
+                }
+                else {
+                    numeric.setChecked(true);
+                    percent.setChecked(false);
+                }
+                return false;
+            }
+        });
+        percent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if(percent.isChecked()) {
+                    percent.setChecked(false);
+                    numeric.setChecked(true);
+                }
+                else {
+                    percent.setChecked(true);
+                    numeric.setChecked(false);
+                }
+                return false;            }
+        });
+        if(numeric.isChecked())
+            storage.putBoolean("highlight_percent",false);
+        if(percent.isChecked())
+            storage.putBoolean("highlight_percent",true);
+
         // Hook Rate MinistocksActivity preference to the market link
         Preference rate_app = findPreference("rate_app");
         rate_app.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -561,9 +597,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });
 
         // Enable Visual Stockboard
-        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
-        Preference visual_stockboard = findPreference("visual_stockboard");
-        if(visual_stockboard.isEnabled())
+        CheckBoxPreference visual_stockboard = (CheckBoxPreference) findPreference("visual_stockboard");
+        if(visual_stockboard.isChecked())
             storage.putBoolean("visual_stockboard",true);
         else
             storage.putBoolean("visual_stockboard",false);

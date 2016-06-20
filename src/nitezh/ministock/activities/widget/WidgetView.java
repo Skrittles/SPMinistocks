@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
@@ -72,9 +73,6 @@ public class WidgetView {
     private final String quotesTimeStamp;
     private final Context context;
     private HashMap<ViewType, Boolean> enabledViews;
-    // A nubmer that indicates which panel is currently edited
-    // Not useful for anything other than getColourForChange()
-    private int panel;
     // The amount of stock preferences in preferences.xml
     private static final int MAX_STOCKS = PreferencesActivity.MAX_STOCKS;
 
@@ -216,15 +214,15 @@ public class WidgetView {
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
         if (widget.isVisual()){
             HashMap<WidgetProviderBase.ViewType, Boolean> alwaysOn = new HashMap<>();
-            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, true);
+            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, false);
             alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_CHANGE, true);
+            alwaysOn.put(ViewType.VIEW_PL_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT, false);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT,  widget.hasTotalPlPercentView() && this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, false);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, false);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalChangeAerView() && this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
             return alwaysOn;
         } else {
@@ -302,10 +300,8 @@ public class WidgetView {
 
         switch (widgetView) {
             case VIEW_DAILY_PERCENT:
-                stockInfo = widgetStock.getDailyPercent();
-                stockInfoExtra = widgetStock.getDailyChange();
-                stockInfoExtra2 = widgetStock.getTotalPercent();
-                stockInfoExtra3 = widgetStock.getTotalChange();
+                    stockInfo = widgetStock.getDailyPercent();
+                    stockInfoExtra = widgetStock.getDailyChange();
                 break;
 
             case VIEW_DAILY_CHANGE:
@@ -314,8 +310,15 @@ public class WidgetView {
                 break;
 
             case VIEW_PORTFOLIO_PERCENT:
-                stockInfo = widgetStock.getTotalPercent();
-                stockInfoExtra = widgetStock.getTotalChange();
+                if (!widget.isVisual()) {
+                    stockInfo = widgetStock.getTotalPercent();
+                    stockInfoExtra = widgetStock.getTotalChange();
+                } else {
+                    stockInfo = widgetStock.getDailyPercent();
+                    stockInfoExtra = widgetStock.getDailyChange();
+                    stockInfoExtra2 = widgetStock.getTotalPercent();
+                    stockInfoExtra3 = widgetStock.getTotalChange();
+                }
                 break;
 
             case VIEW_PORTFOLIO_CHANGE:
@@ -324,8 +327,15 @@ public class WidgetView {
                 break;
 
             case VIEW_PORTFOLIO_PERCENT_AER:
-                stockInfo = widgetStock.getTotalPercentAer();
-                stockInfoExtra = widgetStock.getTotalChangeAer();
+                if (!widget.isVisual()) {
+                    stockInfo = widgetStock.getTotalPercentAer();
+                    stockInfoExtra = widgetStock.getTotalChangeAer();
+                } else {
+                    stockInfo = widgetStock.getDailyPercent();
+                    stockInfoExtra = widgetStock.getDailyChange();
+                    stockInfoExtra2 = widgetStock.getTotalPercentAer();
+                    stockInfoExtra3 = widgetStock.getTotalChangeAer();
+                }
                 break;
 
             case VIEW_PL_DAILY_PERCENT:
@@ -339,11 +349,15 @@ public class WidgetView {
             case VIEW_PL_DAILY_CHANGE:
                 plView = true;
                 plChange = true;
-                priceColumn = widgetStock.getPlHolding();
-                stockInfo = widgetStock.getPlDailyChange();
-                stockInfoExtra = widgetStock.getDailyPercent();
-                stockInfoExtra2 = widgetStock.getTotalPercent();
-                stockInfoExtra3 = widgetStock.getTotalChange();
+                if(!widget.isVisual()) {
+                    priceColumn = widgetStock.getPlHolding();
+                    stockInfo = widgetStock.getPlDailyChange();
+                } else {
+                    stockInfo = widgetStock.getDailyChange();
+                    stockInfoExtra = widgetStock.getDailyPercent();
+                    stockInfoExtra2 = widgetStock.getTotalPercent();
+                    stockInfoExtra3 = widgetStock.getTotalChange();
+                }
                 break;
 
             case VIEW_PL_PERCENT:
@@ -366,8 +380,15 @@ public class WidgetView {
                 plView = true;
                 plChange = true;
                 priceColumn = widgetStock.getPlHolding();
-                stockInfo = widgetStock.getTotalPercentAer();
-                stockInfoExtra = widgetStock.getPlTotalChangeAer();
+                if (!widget.isVisual()) {
+                    stockInfo = widgetStock.getTotalPercentAer();
+                    stockInfoExtra = widgetStock.getPlTotalChangeAer();
+                } else {
+                    stockInfo = widgetStock.getDailyPercent();
+                    stockInfoExtra = widgetStock.getDailyChange();
+                    stockInfoExtra2 = widgetStock.getTotalPercentAer();
+                    stockInfoExtra3 = widgetStock.getPlTotalChangeAer();
+                }
                 break;
         }
 
@@ -388,7 +409,8 @@ public class WidgetView {
         }
 
         if (widget.isVisual() && stockInfoExtra2 == null) {
-            widgetRow.setStockInfoExtra2(widgetRow.getStockInfo());
+            stockInfoExtra2 = widgetRow.getStockInfo();
+            //widgetRow.setStockInfoExtra2(widgetRow.getStockInfo());
             widgetRow.setStockInfoExtra2Color(WidgetColors.NA);
         }
 
@@ -438,13 +460,9 @@ public class WidgetView {
                 }
 
                 // Set Background colour for each Panel of Viusal Stockboard
-                if (widgetView == ViewType.VIEW_DAILY_PERCENT) {
-                    widgetRow.setVisualColor(getColourForPanelPercent(stockInfo));
+                if (widget.getStorage().getBoolean("highlight_percent",true)) {
+                    widgetRow.setVisualColor(getColourForPanelPercent(stockInfoExtra2));
                 } else {
-                    System.out.println(stockInfo);
-                    System.out.println(stockInfoExtra);
-                    System.out.println(stockInfoExtra2);
-                    System.out.println(stockInfoExtra3);
                     widgetRow.setVisualColor(getColourForPanelNumeric(stockInfoExtra3));
                 }
 
@@ -652,7 +670,6 @@ public class WidgetView {
 
             // Get the info for this quote
             lineNo++;
-            panel = lineNo;
             WidgetRow rowInfo = getRowInfo(symbol, ViewType.values()[widgetDisplay]);
 
             // Values
