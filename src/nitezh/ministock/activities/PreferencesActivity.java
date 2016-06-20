@@ -73,6 +73,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     private String mTimePickerKey = null;
     private int mHour = 0;
     private int mMinute = 0;
+    // The amount of stock preferences in preferences.xml
+    public static final int MAX_STOCKS = 16;
 
 
 
@@ -82,8 +84,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     @Override
     public void onNewIntent(Intent intent) {
-        System.out.println("ACTION" + intent.getAction());
-        System.out.println("DATA" + intent.getDataString());
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             setPreference(mSymbolSearchKey, intent.getDataString(), intent.getStringExtra(SearchManager.EXTRA_DATA_KEY));
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -167,11 +167,31 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         int widgetSize = sharedPreferences.getInt("widgetSize", 0);
 
         // Remove extra stocks
-        if (widgetSize == 0 || widgetSize == 1) {
-            PreferenceScreen stock_setup = (PreferenceScreen) findPreference("stock_setup");
-            for (int i = 5; i < 11; i++)
+        // Normal view
+        PreferenceScreen stock_setup = (PreferenceScreen) findPreference("stock_setup");
+        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+        if ((widgetSize == 0 || widgetSize == 1) && !storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 5; i <= MAX_STOCKS; i++)
+                removePref(stock_setup, "Stock" + i);
+        }else if ((widgetSize == 2 || widgetSize == 3) && !storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 11; i <= MAX_STOCKS; i++)
+                removePref(stock_setup, "Stock" + i);
+        // Visual Stockboard view
+        }else if((widgetSize == 0) && storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 5; i <= MAX_STOCKS; i++)
+                removePref(stock_setup, "Stock" + i);
+        }else if((widgetSize == 1) && storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 9; i <= MAX_STOCKS; i++)
+                removePref(stock_setup, "Stock" + i);
+        }else if((widgetSize == 2) && storage.getBoolean("visual_stockboard",false)) {
+            for (int i = 9; i <= MAX_STOCKS; i++)
                 removePref(stock_setup, "Stock" + i);
         }
+
+
+
+
+
         // Remove extra widget views
         if (widgetSize == 1 || widgetSize == 3) {
             PreferenceScreen widget_views = (PreferenceScreen) findPreference("widget_views");
@@ -370,7 +390,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
-        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+
 
         // Hook the About preference to the About (MinistocksActivity) activity
         Preference about = findPreference("about");
@@ -441,7 +461,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
 
         // Hook up the symbol search for the stock preferences
-        for (int i = 1; i < 11; i++) {
+        for (int i = 1; i <= MAX_STOCKS; i++) {
             String key = "Stock" + i;
             findPreference(key).setOnPreferenceClickListener(new OnPreferenceClickListener() {
                 @Override
@@ -539,6 +559,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });
 
         // Enable Visual Stockboard
+        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         Preference visual_stockboard = findPreference("visual_stockboard");
         if(visual_stockboard.isEnabled())
             storage.putBoolean("visual_stockboard",true);
@@ -645,8 +666,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             else if (summary.equals("")) {
                 summary = "No description";
             }
-            findPreference(key).setTitle(value);
-            findPreference(key).setSummary(summary);
+
+            // This sets the title and summary for a stock, but throws an exception if n Stocks are allowed, but Stock n+i has data
+            // TODO Fix issue where this causes a NullPointerException
+            try {
+                findPreference(key).setTitle(value);
+                findPreference(key).setSummary(summary);
+            }catch (NullPointerException e){System.out.println(e);}
         }
         // Initialise the ListPreference summaries
         else if (key.startsWith("background") || key.startsWith("updated_colour") || key.startsWith("updated_display") || key.startsWith("text_style")) {

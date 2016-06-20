@@ -33,19 +33,17 @@ import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.RemoteViews;
 
-import java.lang.reflect.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
+import nitezh.ministock.activities.PreferencesActivity;
 import nitezh.ministock.utils.StorageCache;
 import nitezh.ministock.WidgetProvider;
 import nitezh.ministock.domain.AndroidWidgetRepository;
@@ -74,7 +72,11 @@ public class WidgetView {
     private final String quotesTimeStamp;
     private final Context context;
     private HashMap<ViewType, Boolean> enabledViews;
+    // A nubmer that indicates which panel is currently edited
+    // Not useful for anything other than getColourForChange()
     private int panel;
+    // The amount of stock preferences in preferences.xml
+    private static final int MAX_STOCKS = PreferencesActivity.MAX_STOCKS;
 
     public WidgetView(Context context, int appWidgetId, UpdateType updateMode,
                       HashMap<String, StockQuote> quotes, String quotesTimeStamp) {
@@ -154,7 +156,7 @@ public class WidgetView {
         }
         views.setImageViewResource(R.id.widget_bg,
                 getImageViewSrcId(backgroundStyle, useLargeFont));
-        this.hideUnusedRows(views, widget.getSymbolCount());
+        this.hideUnusedStocks(views, widget.getSymbolCount());
         return views;
     }
 
@@ -212,18 +214,34 @@ public class WidgetView {
     }
 
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
-        HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
-        enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
-        enabledViews.put(ViewType.VIEW_DAILY_CHANGE, widget.hasDailyChangeView());
-        enabledViews.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PORTFOLIO_CHANGE, widget.hasTotalChangeView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, widget.hasTotalChangeAerView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PL_DAILY_PERCENT, widget.hasDailyPlPercentView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PL_DAILY_CHANGE, widget.hasDailyPlChangeView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PL_PERCENT, widget.hasTotalPlPercentView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PL_CHANGE, widget.hasTotalPlChangeView() && this.hasPortfolioData);
-        enabledViews.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
-        return enabledViews;
+        if (widget.isVisual()){
+            HashMap<WidgetProviderBase.ViewType, Boolean> alwaysOn = new HashMap<>();
+            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, true);
+            alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
+            alwaysOn.put(ViewType.VIEW_PL_CHANGE, true);
+            alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT, false);
+            alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, false);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, false);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
+            return alwaysOn;
+        } else {
+            // TODO It seems that hasPortfolioData is always false. This should be checked
+            HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
+            enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
+            enabledViews.put(ViewType.VIEW_DAILY_CHANGE, widget.hasDailyChangeView());
+            enabledViews.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PORTFOLIO_CHANGE, widget.hasTotalChangeView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, widget.hasTotalChangeAerView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PL_DAILY_PERCENT, widget.hasDailyPlPercentView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PL_DAILY_CHANGE, widget.hasDailyPlChangeView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PL_PERCENT, widget.hasTotalPlPercentView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PL_CHANGE, widget.hasTotalPlChangeView() && this.hasPortfolioData);
+            enabledViews.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
+            return enabledViews;
+        }
     }
 
     private WidgetRow getRowInfo(String symbol, ViewType widgetView) {
@@ -234,104 +252,122 @@ public class WidgetView {
         StockQuote quote = this.quotes.get(symbol);
         if (quote == null || quote.getPrice() == null || quote.getPercent() == null) {
             widgetRow.setHasNoData(true);
-            if (this.widget.isNarrow() || this.widget.isVisual()) {
+            if (this.widget.isNarrow()) {
                 widgetRow.setPrice("no");
                 widgetRow.setPriceColor(Color.GRAY);
                 widgetRow.setStockInfo("data");
                 widgetRow.setStockInfoColor(Color.GRAY);
+            } else if (this.widget.isVisual()) {
+                widgetRow.setStockInfoExtra2("no");
+                widgetRow.setStockInfoExtra2Color(Color.GRAY);
+                widgetRow.setStockInfoExtra3("data");
+                widgetRow.setStockInfoExtra3Color(Color.GRAY);
             } else {
                 widgetRow.setStockInfoExtra("no");
                 widgetRow.setStockInfoExtraColor(Color.GRAY);
-                widgetRow.setStockInfo("no");
+                widgetRow.setStockInfo("data");
                 widgetRow.setStockInfoColor(Color.GRAY);
             }
-            return widgetRow;
+                return widgetRow;
         }
 
-        // Set default values
-        PortfolioStock portfolioStock = this.portfolioStocks.get(symbol);
-        WidgetStock widgetStock = new WidgetStock(quote, portfolioStock);
-        widgetRow.setPrice(widgetStock.getPrice());
-        widgetRow.setStockInfo(widgetStock.getDailyPercent());
-        widgetRow.setStockInfoColor(WidgetColors.NA);
-        if (!widget.isNarrow() && !widget.isVisual()) {
-            widgetRow.setSymbol(widgetStock.getDisplayName());
-            widgetRow.setVolume(widgetStock.getVolume());
-            widgetRow.setVolumeColor(WidgetColors.VOLUME);
-            widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
-            widgetRow.setStockInfoExtraColor(WidgetColors.NA);
-        }
+            // Set default values
+            PortfolioStock portfolioStock = this.portfolioStocks.get(symbol);
+            WidgetStock widgetStock = new WidgetStock(quote, portfolioStock);
+            widgetRow.setPrice(widgetStock.getPrice());
+            widgetRow.setStockInfo(widgetStock.getDailyPercent());
+            widgetRow.setStockInfoColor(WidgetColors.NA);
+            if (!widget.isNarrow() && !widget.isVisual()) {
+                widgetRow.setSymbol(widgetStock.getDisplayName());
+                widgetRow.setVolume(widgetStock.getVolume());
+                widgetRow.setVolumeColor(WidgetColors.VOLUME);
+                widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
+                widgetRow.setStockInfoExtraColor(WidgetColors.NA);
+            }
+            if (widget.isVisual()) {
+                widgetRow.setVolume(widgetStock.getVolume());
+                widgetRow.setVolumeColor(WidgetColors.VOLUME);
+                widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
+                widgetRow.setStockInfoExtraColor(WidgetColors.NA);
+                widgetRow.setStockInfoExtra2(widgetStock.getPlTotalChange());
+            }
 
         Boolean plView = false;
         Boolean plChange = false;
         String priceColumn = null;
         String stockInfo = null;
         String stockInfoExtra = null;
+        String stockInfoExtra2 = null;
+        String stockInfoExtra3 = null;
 
         switch (widgetView) {
             case VIEW_DAILY_PERCENT:
-                stockInfoExtra = widgetStock.getDailyChange();
                 stockInfo = widgetStock.getDailyPercent();
+                stockInfoExtra = widgetStock.getDailyChange();
+                stockInfoExtra2 = widgetStock.getTotalPercent();
+                stockInfoExtra3 = widgetStock.getTotalChange();
                 break;
 
             case VIEW_DAILY_CHANGE:
-                stockInfoExtra = widgetStock.getDailyPercent();
                 stockInfo = widgetStock.getDailyChange();
+                stockInfoExtra = widgetStock.getDailyPercent();
                 break;
 
             case VIEW_PORTFOLIO_PERCENT:
-                stockInfoExtra = widgetStock.getTotalChange();
                 stockInfo = widgetStock.getTotalPercent();
+                stockInfoExtra = widgetStock.getTotalChange();
                 break;
 
             case VIEW_PORTFOLIO_CHANGE:
-                stockInfoExtra = widgetStock.getTotalPercent();
                 stockInfo = widgetStock.getTotalChange();
+                stockInfoExtra = widgetStock.getTotalPercent();
                 break;
 
             case VIEW_PORTFOLIO_PERCENT_AER:
-                stockInfoExtra = widgetStock.getTotalChangeAer();
                 stockInfo = widgetStock.getTotalPercentAer();
+                stockInfoExtra = widgetStock.getTotalChangeAer();
                 break;
 
             case VIEW_PL_DAILY_PERCENT:
                 plView = true;
                 plChange = true;
                 priceColumn = widgetStock.getPlHolding();
-                stockInfoExtra = widgetStock.getPlDailyChange();
                 stockInfo = widgetStock.getDailyPercent();
+                stockInfoExtra = widgetStock.getPlDailyChange();
                 break;
 
             case VIEW_PL_DAILY_CHANGE:
                 plView = true;
                 plChange = true;
                 priceColumn = widgetStock.getPlHolding();
-                stockInfoExtra = widgetStock.getDailyPercent();
                 stockInfo = widgetStock.getPlDailyChange();
+                stockInfoExtra = widgetStock.getDailyPercent();
+                stockInfoExtra2 = widgetStock.getTotalPercent();
+                stockInfoExtra3 = widgetStock.getTotalChange();
                 break;
 
             case VIEW_PL_PERCENT:
                 plView = true;
                 plChange = true;
                 priceColumn = widgetStock.getPlHolding();
-                stockInfoExtra = widgetStock.getPlTotalChange();
                 stockInfo = widgetStock.getTotalPercent();
+                stockInfoExtra = widgetStock.getPlTotalChange();
                 break;
 
             case VIEW_PL_CHANGE:
                 plView = true;
                 plChange = true;
                 priceColumn = widgetStock.getPlHolding();
-                stockInfoExtra = widgetStock.getTotalPercent();
                 stockInfo = widgetStock.getPlTotalChange();
+                stockInfoExtra = widgetStock.getTotalPercent();
                 break;
 
             case VIEW_PL_PERCENT_AER:
                 plView = true;
                 plChange = true;
                 priceColumn = widgetStock.getPlHolding();
-                stockInfoExtra = widgetStock.getPlTotalChangeAer();
                 stockInfo = widgetStock.getTotalPercentAer();
+                stockInfoExtra = widgetStock.getPlTotalChangeAer();
                 break;
         }
 
@@ -351,13 +387,25 @@ public class WidgetView {
             widgetRow.setPriceColor(WidgetColors.NA);
         }
 
+        if (widget.isVisual() && stockInfoExtra2 == null) {
+            widgetRow.setStockInfoExtra2(widgetRow.getStockInfo());
+            widgetRow.setStockInfoExtra2Color(WidgetColors.NA);
+        }
+
+        if (widget.isVisual() && stockInfoExtra3 == null) {
+            stockInfoExtra3 = widgetRow.getStockInfoExtra();
+           // widgetRow.setStockInfoExtra3(widgetRow.getStockInfoExtra());
+            widgetRow.setStockInfoExtra3Color(WidgetColors.NA);
+        }
+
+
         // Add currency symbol if we have a holding
         if (priceColumn != null) {
             widgetRow.setPrice(CurrencyTools.addCurrencyToSymbol(priceColumn, symbol));
         }
 
         // Set the value and colour for the change values
-        if (!widget.isNarrow()) {
+        if (!widget.isNarrow() || widget.isVisual()) {
             if (stockInfoExtra != null) {
                 if (plChange) {
                     widgetRow.setStockInfoExtra(CurrencyTools.addCurrencyToSymbol(stockInfoExtra, symbol));
@@ -369,6 +417,37 @@ public class WidgetView {
             if (stockInfo != null) {
                 widgetRow.setStockInfo(stockInfo);
                 widgetRow.setStockInfoColor(getColourForChange(stockInfo));
+            }
+            // Setup extra entries for the panels in Visual Stockboard
+            if (widget.isVisual()) {
+                if (stockInfoExtra2 != null) {
+                    if (plChange) {
+                        widgetRow.setStockInfoExtra2(CurrencyTools.addCurrencyToSymbol(stockInfoExtra2, symbol));
+                    } else {
+                        widgetRow.setStockInfoExtra2(stockInfoExtra2);
+                    }
+                    widgetRow.setStockInfoExtra2Color(getColourForChange(stockInfoExtra2));
+                }
+                if (stockInfoExtra3 != null) {
+                    if (plChange) {
+                        widgetRow.setStockInfoExtra3(CurrencyTools.addCurrencyToSymbol(stockInfoExtra3, symbol));
+                    } else {
+                        widgetRow.setStockInfoExtra3(stockInfoExtra3);
+                    }
+                    widgetRow.setStockInfoExtra3Color(getColourForChange(stockInfoExtra3));
+                }
+
+                // Set Background colour for each Panel of Viusal Stockboard
+                if (widgetView == ViewType.VIEW_DAILY_PERCENT) {
+                    widgetRow.setVisualColor(getColourForPanelPercent(stockInfo));
+                } else {
+                    System.out.println(stockInfo);
+                    System.out.println(stockInfoExtra);
+                    System.out.println(stockInfoExtra2);
+                    System.out.println(stockInfoExtra3);
+                    widgetRow.setVisualColor(getColourForPanelNumeric(stockInfoExtra3));
+                }
+
             }
         } else {
             if (stockInfo != null) {
@@ -383,16 +462,23 @@ public class WidgetView {
         return widgetRow;
     }
 
-    private String getColourForPanel(String value){
-        double parsedValue = NumberTools.parseDouble(value, 0d);
-
-        final double MAX_VALUE = 10;
+    private String getColourForPanelNumeric(String value) {
+        final double MAX_VALUE = 50;
         final double MIN_VALUE = 0.1;
 
+        String green = "04BF3C";
+        String red = "D23641";
+        String neutral = "#80D5D5D5";
+        String colour;
+
+        double parsedValue = NumberTools.parseDouble(value, 0d);
+
+        // Calculate colour transparency
         if(parsedValue > MAX_VALUE)
             parsedValue = MAX_VALUE;
         else if (parsedValue < -MAX_VALUE)
             parsedValue = -MAX_VALUE;
+
         double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
 
         final int MIN = 64;
@@ -400,11 +486,44 @@ public class WidgetView {
         int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
 
         String hex = Integer.toHexString(normInt);
+
+        // Set colour green, red or grey
+        if (parsedValue > 0)
+            colour = "#" + hex + green;
+        else if (parsedValue < 0)
+            colour = "#" + hex + red;
+        else
+            colour = neutral;
+        System.out.println("Colour" + colour);
+        return colour;
+    }
+
+    private String getColourForPanelPercent(String value){
+        final double MAX_VALUE = 10;
+        final double MIN_VALUE = 0.1;
+
         String green = "04BF3C";
         String red = "D23641";
         String neutral = "#80D5D5D5";
         String colour;
 
+        double parsedValue = NumberTools.parseDouble(value, 0d);
+
+        // Calculate colour transparency
+        if(parsedValue > MAX_VALUE)
+            parsedValue = MAX_VALUE;
+        else if (parsedValue < -MAX_VALUE)
+            parsedValue = -MAX_VALUE;
+
+        double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
+
+        final int MIN = 64;
+        final int MAX = 230;
+        int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
+
+        String hex = Integer.toHexString(normInt);
+
+        // Set colour green, red or grey
         if (parsedValue > 0)
             colour = "#" + hex + green;
         else if (parsedValue < 0)
@@ -412,42 +531,19 @@ public class WidgetView {
         else
             colour = neutral;
 
-        System.out.println("Value: " + value);
-        System.out.println("ParsedValue: " + parsedValue);
-        System.out.println("NormInt: " + normInt);
-        System.out.println("Hex: " + hex);
-        return colour;
+         return colour;
     }
 
 
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
-        if (widget.getStorage().getBoolean("visual_stockboard",false)) {
+        // Set text colour for Visual Stockboard to default
+        if (widget.isVisual()) {
             colour = WidgetColors.SAME;
-            //TODO change code
-            if (value.endsWith("%")) {
-                int panelInt = 0;
-                try {
-                    R.id rid = new R.id();
-                    Class cl = rid.getClass();
-                    Field id = cl.getDeclaredField("Panel" + panel);
-                    panelInt = id.getInt(null);
-                }
-                catch (NoSuchFieldException e) {
-                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
-                    // Sollte eigentlich nicht vorkommen
-                    System.out.println("NO FIELD Panel" + panel + " IN CLASS R.id");
-                }
-                catch (IllegalAccessException e) {
-                    // Falls es doch nen Fehler gibt, muss noch richtig behandelt werden.
-                    // Sollte eigentlich nicht vorkommen
-                    System.out.println("NOT ALLOWED TO ACCESS Panel" + panel + " IN CLASS R.id");
-                }
-                remoteViews.setInt(panelInt, "setBackgroundColor", Color.parseColor(getColourForPanel(value)));
-            }
-        }
-        else {
+
+        // Change colour for default view
+        } else {
             if (parsedValue < 0) {
                 colour = WidgetColors.LOSS;
             } else if (parsedValue == 0) {
@@ -468,31 +564,39 @@ public class WidgetView {
         }
     }
 
-    private void hideUnusedRows(RemoteViews views, int count) {
-        for (int i = 0; i < 11; i++) {
-            int viewId = ReflectionTools.getField("line" + i);
-            if (viewId > 0) {
-                views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
-                views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
-            }
-        }
-        for (int i = 1; i < count + 1; i++) {
-            views.setViewVisibility(ReflectionTools.getField("line" + i), View.VISIBLE);
-        }
+    // Set visibility for unused Stocks
+    // Makes every Stock invisible, then makes only used stocks visible again
+    private void hideUnusedStocks(RemoteViews views, int count) {
+        for (int i = 0; i <= MAX_STOCKS; i++) {
+            int viewId;
+            if (!widget.isVisual()) {
+                //Enable rows for non-visual view
+                viewId = ReflectionTools.getField("line" + i);
+                if (viewId > 0) {
+                    views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
+                }
+                // Set used rows visible
+                for (int j = 1; j < count + 1; j++) {
+                    views.setViewVisibility(ReflectionTools.getField("line" + j), View.VISIBLE);
+                }
+            } else {
+                //Enable panels for visual view
+                viewId = ReflectionTools.getField("Panel" + i);
+                if (viewId > 0) {
+                    views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
+                }
 
-        //Shows only Panels with a stock in it
-        //This is only necessary if Visual Stockboard is actually activated
-        if(widget.isVisual()) {
-            //Calculates Symbols that are actually used
-            //TODO Move this to a more accessible place (e.g. AndroidWidget)
-            int usedSymbols = 0;
-            for (String s : symbols) {
-                if (!s.equals(""))
-                    usedSymbols++;
-            }
+                // Find used Symbols
+                int usedSymbols = 0;
+                for (String s : symbols) {
+                    if (!s.equals(""))
+                        usedSymbols++;
+                }
 
-            for (int i = 1; i <= usedSymbols; i++) {
-                views.setViewVisibility(ReflectionTools.getField("Panel" + i), View.VISIBLE);
+                // Set used Panels visible
+                for (int j = 1; j <= usedSymbols; j++) {
+                    views.setViewVisibility(ReflectionTools.getField("Panel" + j), View.VISIBLE);
+                }
             }
         }
     }
@@ -525,9 +629,11 @@ public class WidgetView {
     }
 
     public void setStockRowItemText(int row, int col, Object text) {
-        this.remoteViews.setTextViewText(
-                ReflectionTools.getField("text" + row + col),
-                !text.equals("") ? applyFormatting((String) text) : "");
+            try {
+                this.remoteViews.setTextViewText(
+                        ReflectionTools.getField("text" + row + col),
+                        !text.equals("") ? applyFormatting((String) text) : "");
+            }catch (Exception e){}
     }
 
     public void setStockRowItemColor(int row, int col, int color) {
@@ -550,39 +656,59 @@ public class WidgetView {
             WidgetRow rowInfo = getRowInfo(symbol, ViewType.values()[widgetDisplay]);
 
             // Values
-            setStockRowItemText(lineNo, 1, rowInfo.getSymbol());
-            setStockRowItemText(lineNo, 2, rowInfo.getPrice());
-
-            if (widget.isNarrow()) {
-                setStockRowItemText(lineNo, 3, rowInfo.getStockInfo());
+            if (!widget.isVisual()) {
+                setStockRowItemText(lineNo, 1, rowInfo.getSymbol());
+                setStockRowItemText(lineNo, 2, rowInfo.getPrice());
+                if (widget.isNarrow()) {
+                    setStockRowItemText(lineNo, 3, rowInfo.getStockInfo());
+                } else {
+                    setStockRowItemText(lineNo, 3, rowInfo.getVolume());
+                    setStockRowItemText(lineNo, 4, rowInfo.getStockInfoExtra());
+                    setStockRowItemText(lineNo, 5, rowInfo.getStockInfo());
+                }
             } else {
-                setStockRowItemText(lineNo, 3, rowInfo.getVolume());
-                setStockRowItemText(lineNo, 4, rowInfo.getStockInfoExtra());
+                setStockRowItemText(lineNo, 1, rowInfo.getSymbol());
+                setStockRowItemText(lineNo, 2, rowInfo.getPrice());
+                setStockRowItemText(lineNo, 3, rowInfo.getStockInfoExtra2());
+                setStockRowItemText(lineNo, 4, rowInfo.getStockInfoExtra3());
                 setStockRowItemText(lineNo, 5, rowInfo.getStockInfo());
+                setStockRowItemText(lineNo, 6, rowInfo.getStockInfoExtra());
             }
 
             // Colours
-            setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
-            if (!this.widget.getColorsOnPrices()) {
-                setStockRowItemColor(lineNo, 2, rowInfo.getPriceColor());
+            if (!this.widget.isVisual()) {
+                setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
+                if (!this.widget.getColorsOnPrices()) {
+                    setStockRowItemColor(lineNo, 2, rowInfo.getPriceColor());
 
-                if (widget.isNarrow()) {
-                    setStockRowItemColor(lineNo, 3, rowInfo.getStockInfoColor());
+                    if (widget.isNarrow()) {
+                        setStockRowItemColor(lineNo, 3, rowInfo.getStockInfoColor());
+                    } else {
+                        setStockRowItemColor(lineNo, 3, rowInfo.getVolumeColor());
+                        setStockRowItemColor(lineNo, 4, rowInfo.getStockInfoExtraColor());
+                        setStockRowItemColor(lineNo, 5, rowInfo.getStockInfoColor());
+                    }
                 } else {
-                    setStockRowItemColor(lineNo, 3, rowInfo.getVolumeColor());
-                    setStockRowItemColor(lineNo, 4, rowInfo.getStockInfoExtraColor());
-                    setStockRowItemColor(lineNo, 5, rowInfo.getStockInfoColor());
+                    setStockRowItemColor(lineNo, 2, rowInfo.getStockInfoColor());
+
+                    if (widget.isNarrow()) {
+                        setStockRowItemColor(lineNo, 3, rowInfo.getPriceColor());
+                    } else {
+                        setStockRowItemColor(lineNo, 3, rowInfo.getVolumeColor());
+                        setStockRowItemColor(lineNo, 4, rowInfo.getPriceColor());
+                        setStockRowItemColor(lineNo, 5, rowInfo.getPriceColor());
+                    }
                 }
             } else {
-                setStockRowItemColor(lineNo, 2, rowInfo.getStockInfoColor());
+                setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
+                setStockRowItemColor(lineNo, 2, rowInfo.getPriceColor());
+                setStockRowItemColor(lineNo, 3, rowInfo.getStockInfoExtra2Color());
+                setStockRowItemColor(lineNo, 4, rowInfo.getStockInfoExtra3Color());
+                setStockRowItemColor(lineNo, 5, rowInfo.getStockInfoColor());
+                setStockRowItemColor(lineNo, 6, rowInfo.getStockInfoExtraColor());
 
-                if (widget.isNarrow()) {
-                    setStockRowItemColor(lineNo, 3, rowInfo.getPriceColor());
-                } else {
-                    setStockRowItemColor(lineNo, 3, rowInfo.getVolumeColor());
-                    setStockRowItemColor(lineNo, 4, rowInfo.getPriceColor());
-                    setStockRowItemColor(lineNo, 5, rowInfo.getPriceColor());
-                }
+                int panelInt = ReflectionTools.getField("Panel" + lineNo);
+                remoteViews.setInt(panelInt, "setBackgroundColor", Color.parseColor(rowInfo.getVisualColor()));
             }
         }
 
@@ -626,10 +752,10 @@ public class WidgetView {
     public String getLabel(int widgetDisplay) {
         // Set the widget view text in the footer
         String label = "";
-        if (widget.isNarrow()) {
+        if (widget.isNarrow() && !widget.isVisual()) {
             switch (ViewType.values()[widgetDisplay]) {
                 case VIEW_DAILY_PERCENT:
-                    label = "";
+                    label = "D%";
                     break;
 
                 case VIEW_DAILY_CHANGE:
@@ -671,7 +797,7 @@ public class WidgetView {
         } else {
             switch (ViewType.values()[widgetDisplay]) {
                 case VIEW_DAILY_PERCENT:
-                    label = "";
+                    label = "D%";
                     break;
 
                 case VIEW_DAILY_CHANGE:

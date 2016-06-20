@@ -41,6 +41,11 @@ public class WidgetRow {
     int stockInfoColor;
     String stockInfoExtra;
     int stockInfoExtraColor;
+    String stockInfoExtra2;
+    int stockInfoExtra2Color;
+    String stockInfoExtra3;
+    int stockInfoExtra3Color;
+    String visualColor;
 
     private boolean hasNoData;
 
@@ -57,6 +62,11 @@ public class WidgetRow {
         this.stockInfoColor = Color.WHITE;
         this.stockInfoExtra = "";
         this.stockInfoExtraColor = Color.WHITE;
+        this.stockInfoExtra2 = "";
+        this.stockInfoExtra2Color = Color.WHITE;
+        this.stockInfoExtra3 = "";
+        this.stockInfoExtra3Color = Color.WHITE;
+        this.visualColor = "#ffffff";
 
         this.hasNoData = false;
     }
@@ -154,4 +164,44 @@ public class WidgetRow {
     public void setStockInfoExtra(String stockInfoExtra) {
         this.stockInfoExtra = stockInfoExtra;
     }
+
+    public  void setStockInfoExtra2(String stockInfoExtra2) {
+        this.stockInfoExtra2 = stockInfoExtra2;
+    }
+
+    public String getStockInfoExtra2(){return this.stockInfoExtra2;}
+
+
+    public int getStockInfoExtra2Color() {
+        return stockInfoExtra2Color;
+    }
+
+    public void setStockInfoExtra2Color(int stockInfoExtra2Color) {
+        this.stockInfoExtra2Color = stockInfoExtra2Color;
+    }
+
+    public String getStockInfoExtra3() {
+        return stockInfoExtra3;
+    }
+
+    public void setStockInfoExtra3(String stockInfoExtra3) {
+        this.stockInfoExtra3 = stockInfoExtra3;
+    }
+
+    public int getStockInfoExtra3Color() {
+        return stockInfoExtra3Color;
+    }
+
+    public void setStockInfoExtra3Color(int stockInfoExtra3Color) {
+        this.stockInfoExtra3Color = stockInfoExtra3Color;
+    }
+
+    public String getVisualColor() {
+        return visualColor;
+    }
+
+    public void setVisualColor(String visualColor) {
+        this.visualColor = visualColor;
+    }
+
 }
