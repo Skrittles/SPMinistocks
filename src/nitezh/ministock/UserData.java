@@ -185,4 +185,80 @@ public class UserData {
 
         return null;
     }
+    
+    public static String readExternalStorage(Context context, String fileName) {
+
+        File root = Environment.getExternalStorageDirectory();
+        File dir = new File(root.getAbsolutePath() + "/ministocks");
+
+        File file = new File(dir, fileName);
+
+        try {
+            StringBuffer fileContent = new StringBuffer();
+            String tmp;
+            synchronized (UserData.sFileBackupLock) {
+                FileInputStream fis = new FileInputStream(file);
+                InputStreamReader inputStreamReader = new InputStreamReader(fis);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                while ((tmp = bufferedReader.readLine())!= null) {
+                    fileContent.append(tmp + "\n");
+                }
+            }
+
+            String res = new String(fileContent);
+
+            return res;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    
+        // Write to external storage
+    public static void writeExternalStorage(Context context, String data, String fileName) {
+
+        String state = Environment.getExternalStorageState();
+
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+
+            File root = Environment.getExternalStorageDirectory();
+            File dir = new File(root.getAbsolutePath() + "/ministocks/");
+
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            new File(dir, fileName).delete();
+
+            File file = new File(dir, fileName);
+
+
+
+            try {
+                synchronized (UserData.sFileBackupLock) {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    fos.write(data.getBytes());
+                    fos.close();
+
+                }
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            DialogTools.showSimpleDialog(context, "External Storage not available",
+                    "Your external Storage is nor available for this application ");
+
+        }
+    }
 }

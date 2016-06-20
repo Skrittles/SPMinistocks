@@ -505,6 +505,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         });
 
+
+        /*
         // Hook the Backup widget option to the backup widget method
         Preference backup_widget = findPreference("backup_widget");
         backup_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {

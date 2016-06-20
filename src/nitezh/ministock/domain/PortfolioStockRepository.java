@@ -52,9 +52,10 @@ import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
 
 public class PortfolioStockRepository {
-            public static final String PORTFOLIO_JSON = "portfolioJson";
-            public static final String WIDGET_JSON = "widgetJson";
-            public HashMap<String, StockQuote> stocksQuotes = new HashMap<>();
+
+    public static final String PORTFOLIO_JSON = "portfolioJson.txt";
+    public static final String WIDGET_JSON = "widgetJson";
+    public HashMap<String, StockQuote> stocksQuotes = new HashMap<>();
 
             public HashMap<String, PortfolioStock> portfolioStocksInfo = new HashMap<>();
             public Set<String> widgetsStockSymbols = new HashSet<>();
@@ -220,110 +221,71 @@ public class PortfolioStockRepository {
         return stock;
     }
 
+    // Problem with empty stocks in portofolio
+
     public void backupPortfolio(Context context) {
+
+        // Convert current portfolioStockInfo to JSONO-Object
+        persist();
+
+        // Write JSONO-Object to internal app storage
+        this.mAppStorage.putString(PORTFOLIO_JSON, getStocksJson().toString()).apply();
+
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
+        UserData.writeExternalStorage(context, rawJson, PORTFOLIO_JSON);
+        DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
+               "Your portfolio settings have been backed up to ministocks/portfolioJson.txt");
+    }
 
-        // Build a list with symbols from stockQuotes.
-        Collection<StockQuote> quotes = stocksQuotes.values();
+   /*
+    *  prblem with getstocks() -> getStocksJson() storage
+    */
+    public void restorePortfolio(Context context) {
+        mDirtyPortfolioStockMap = true;
 
-        Iterator<StockQuote> it = quotes.iterator();
+        String rawJson = UserData.readExternalStorage(context, PORTFOLIO_JSON);
 
-        List<String> stocks = new ArrayList<String>();
+        this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
+
+        JSONObject test = getStocksJson();
+
+        HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(test);
+
+        //this.portfolioStocksInfo.clear();
+
+        Iterator<String> it = stocksFromBackup.keySet().iterator();
+
+        int i = 0;
+
 
         while (it.hasNext()) {
 
-            StockQuote stockQuote = it.next();
+            String tmp = it.next();
 
-            stocks.add(stockQuote.getSymbol());
+            i++;
 
-        }
+            this.mAppStorage.putString("Stock" + i, stocksFromBackup.get(tmp).getSymbol());
 
-        // transform symbols to a List of portfolioStocks.
-        List<PortfolioStock> portstocks = new ArrayList<PortfolioStock>();
+            this.mAppStorage.putString("Stock" + i + "_summary", "No description");
 
-        Iterator<String> stocksss = stocks.iterator();
+            PortfolioStock portfolioStock  = stocksFromBackup.get(tmp);
 
-        while (stocksss.hasNext()) {
-
-            String symbol = stocksss.next();
-
-            portstocks.add(getStock(symbol));
+            updateStock(tmp, portfolioStock.getPrice(), portfolioStock.getDate(), portfolioStock.getQuantity(),
+                    portfolioStock.getHighLimit(), portfolioStock.getLowLimit(), portfolioStock.getCustomName());
 
         }
 
-        // write information of PortfolioStocks into String Array.
-        // build pseudo format for fileoutputwriter.
+        this.persist();
 
-        Iterator<PortfolioStock> it2 = portstocks.iterator();
 
-        List<String> symbols = new ArrayList<String>();
+        if (rawJson == null) 
+            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
 
-        while (it2.hasNext()) {
-
-            PortfolioStock tmp = it2.next();
-
-            symbols.add( "\n" +
-
-                    "Symbol: " + tmp.getSymbol() + "\n" +
-
-                    "Quantity: " + tmp.getQuantity() + "\n" +
-
-                    "Price: " + tmp.getPrice() + "\n" +
-
-                    "Date: " + tmp.getDate() + "\n" +
-
-                    "HighLimit: " + tmp.getHighLimit() + "\n" +
-
-                    "LowLimit: " + tmp.getLowLimit() + "\n" +
-
-                    "CustomName: " + tmp.getCustomName() + "\n" +
-
-                    "####################\n"
-
-            );
-
-        }
-
-        rawJson = symbols.toString();
-
-        UserData.writeInternalStorage(context, rawJson, PORTFOLIO_JSON);
-
-        this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
-
-        DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
-                "Your portfolio settings have been backed up to internal mAppStorage.");
+        else 
+            DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
+                "Your portfolio settings have been restored from ministocks/portfolioJson.txt");
     }
 
-    public void restorePortfolio(Context context) {
-        mDirtyPortfolioStockMap = true;
-        String rawJson = UserData.readInternalStorage(context, PORTFOLIO_JSON);
-
-        // Create an array where you can find parsed information from portfolio_json.
-        String delims = "[\n]+";
-
-        String[] tokens = rawJson.split(delims);
-
-        String tmp = "";
-
-        for (int i = 0; i < tokens.length; i++) {
-            tmp = tmp + "\n" + tokens[i];
-        }
-
-        UserData.writeInternalStorage(context, tmp, "parse.txt");
-
-        // Write StockQuotes with symbols from backup file.
-        int j = 1;
-        for (int i = 1; i < tokens.length; i += 9) {
-            this.mAppStorage.putString("Stock" + j, tokens[i].substring(8));
-            j++;
-        }
-
-        updateStock(tokens[1].substring(8), "", "",tokens[2].substring(10), "","","");
-
-        this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
-        DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
-                "Your portfolio settings have been restored from internal mAppStorage.");
-    }
 
     public JSONObject getStocksJson() {
         JSONObject stocksJson = new JSONObject();
@@ -333,6 +295,51 @@ public class PortfolioStockRepository {
         }
         return stocksJson;
     }
+
+     /*
+      * Transform a JSONObject into a HashMap.
+      */
+
+    public HashMap<String, PortfolioStock> getStocksFromJson(JSONObject json) {
+
+        Iterator keys;
+        keys = json.keys();
+        while (keys.hasNext()) {
+            String key = keys.next().toString();
+            JSONObject itemJson = new JSONObject();
+            try {
+                itemJson = json.getJSONObject(key);
+            } catch (JSONException ignored) {
+            }
+
+            HashMap<PortfolioField, String> stockInfoMap = new HashMap<>();
+            for (PortfolioField f : PortfolioField.values()) {
+                String data = "";
+                try {
+                    if (!itemJson.get(f.name()).equals("empty")) {
+                        data = itemJson.get(f.name()).toString();
+                    }
+                } catch (JSONException ignored) {
+                }
+                stockInfoMap.put(f, data);
+            }
+
+            PortfolioStock stock = new PortfolioStock(key,
+                    stockInfoMap.get(PortfolioField.PRICE),
+                    stockInfoMap.get(PortfolioField.DATE),
+                    stockInfoMap.get(PortfolioField.QUANTITY),
+                    stockInfoMap.get(PortfolioField.LIMIT_HIGH),
+                    stockInfoMap.get(PortfolioField.LIMIT_LOW),
+                    stockInfoMap.get(PortfolioField.CUSTOM_DISPLAY),
+                    stockInfoMap.get(PortfolioField.SYMBOL_2));
+            mPortfolioStocks.put(key, stock);
+        }
+        mDirtyPortfolioStockMap = false;
+
+        return mPortfolioStocks;
+    }
+
+
 
     public HashMap<String, PortfolioStock> getStocks() {
         if (!mDirtyPortfolioStockMap) {
