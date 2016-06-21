@@ -24,7 +24,9 @@
 
 package nitezh.ministock.domain;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.os.AsyncTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,6 +49,7 @@ import nitezh.ministock.DialogTools;
 import nitezh.ministock.Storage;
 import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.UserData;
+import nitezh.ministock.activities.PreferencesActivity;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
@@ -63,6 +66,8 @@ public class PortfolioStockRepository {
     private static boolean mDirtyPortfolioStockMap = true;
     private Storage mAppStorage;
 
+    private Context context = null;
+
 
     public PortfolioStockRepository(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
         this.mAppStorage = appStorage;
@@ -70,6 +75,16 @@ public class PortfolioStockRepository {
         this.widgetsStockSymbols = widgetRepository.getWidgetsStockSymbols();
         this.portfolioStocksInfo = getPortfolioStocksInfo(widgetsStockSymbols);
         this.stocksQuotes = getStocksQuotes(mAppStorage, cache, widgetRepository);
+    }
+
+    public  PortfolioStockRepository(Context context, Storage appStorage, Cache cache, WidgetRepository widgetRepository){
+        this.context = context;
+        this.mAppStorage = appStorage;
+
+        this.widgetsStockSymbols = widgetRepository.getWidgetsStockSymbols();
+        this.portfolioStocksInfo = getPortfolioStocksInfo(widgetsStockSymbols);
+        this.stocksQuotes = getStocksQuotes(mAppStorage, cache, widgetRepository);
+
     }
 
 
@@ -256,6 +271,9 @@ public class PortfolioStockRepository {
 
         Iterator<String> it = stocksFromBackup.keySet().iterator();
 
+        String[] queryName = new String[1];
+
+
         int i = 0;
         while (it.hasNext()) {
             String tmp = it.next();
@@ -266,12 +284,14 @@ public class PortfolioStockRepository {
 
             String symbol = stocksFromBackup.get(tmp).getSymbol();
             String customName = stocksFromBackup.get(tmp).getCustomName();
+
             try {
                 this.mAppStorage.putString("Stock" + i, symbol);
-                if(!customName.equals(""))
+                if(!customName.equals("")) {
                     this.mAppStorage.putString("Stock" + i + "_summary", customName);
-                else
-                    this.mAppStorage.putString("Stock" + i + "_summary", SymbolProvider.getDescription(symbol));
+                } else {
+                    this.mAppStorage.putString("Stock" + i + "_summary", this.getBackupDescription(symbol));
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -472,4 +492,23 @@ public class PortfolioStockRepository {
     public enum PortfolioField {
         PRICE, DATE, QUANTITY, LIMIT_HIGH, LIMIT_LOW, CUSTOM_DISPLAY, SYMBOL_2
     }
+
+    private class Description extends AsyncTask<String, Void , String> {
+        protected String doInBackground(String... query){
+            String symbol = query[0];
+            return SymbolProvider.getDescription(symbol);
+        }
+
+        protected void onProgressUpdate(Integer... progress){
+            DialogTools.showSimpleDialog(context,"Please Wait","Backup in progress");
+        }
+    }
+
+    private String getBackupDescription(String symbol){
+        try {
+            return new Description().execute(symbol).get();
+        } catch (Exception ignored){}
+        return "No description";
+    }
+
 }

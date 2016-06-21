@@ -31,6 +31,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import java.util.HashMap;

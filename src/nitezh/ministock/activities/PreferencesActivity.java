@@ -26,6 +26,7 @@ package nitezh.ministock.activities;
 
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -386,6 +387,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         // Also update the UI
         updateSummaries(getPreferenceScreen().getSharedPreferences(), mTimePickerKey);
     }
+
 
     void setPreference(String key, String value, String summary) {
         // Return if no key
