@@ -25,6 +25,7 @@
 package nitezh.ministock.domain;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -45,6 +47,7 @@ import java.util.Set;
 
 import nitezh.ministock.DialogTools;
 import nitezh.ministock.Storage;
+import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.UserData;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.utils.CurrencyTools;
@@ -58,7 +61,7 @@ public class PortfolioStockRepository {
     public HashMap<String, PortfolioStock> portfolioStocksInfo = new HashMap<>();
     public Set<String> widgetsStockSymbols = new HashSet<>();
 
-    private static final HashMap<String, PortfolioStock> mPortfolioStocks = new HashMap<>();
+    private static HashMap<String, PortfolioStock> mPortfolioStocks = new HashMap<>();
     private static boolean mDirtyPortfolioStockMap = true;
     private Storage mAppStorage;
 
@@ -67,7 +70,7 @@ public class PortfolioStockRepository {
 
         this.widgetsStockSymbols = widgetRepository.getWidgetsStockSymbols();
         this.portfolioStocksInfo = getPortfolioStocksInfo(widgetsStockSymbols);
-        this.stocksQuotes = getStocksQuotes(appStorage, cache, widgetRepository);
+        this.stocksQuotes = getStocksQuotes(mAppStorage, cache, widgetRepository);
     }
 
     private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
@@ -241,6 +244,8 @@ public class PortfolioStockRepository {
     public void restorePortfolio(Context context) {
         mDirtyPortfolioStockMap = true;
 
+        this.portfolioStocksInfo.clear();
+
         String rawJson = UserData.readExternalStorage(context, PORTFOLIO_JSON);
 
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
@@ -249,32 +254,32 @@ public class PortfolioStockRepository {
 
         HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(test);
 
-        //this.portfolioStocksInfo.clear();
-
         Iterator<String> it = stocksFromBackup.keySet().iterator();
 
         int i = 0;
-
-
         while (it.hasNext()) {
-
             String tmp = it.next();
-
             i++;
 
-            this.mAppStorage.putString("Stock" + i, stocksFromBackup.get(tmp).getSymbol());
+            PortfolioStock portfolioStock = stocksFromBackup.get(tmp);
+            portfolioStocksInfo.put(stocksFromBackup.get(tmp).getSymbol(), portfolioStock);
 
-            this.mAppStorage.putString("Stock" + i + "_summary", "No description");
-
-            PortfolioStock portfolioStock  = stocksFromBackup.get(tmp);
-
-            updateStock(tmp, portfolioStock.getPrice(), portfolioStock.getDate(), portfolioStock.getQuantity(),
-                    portfolioStock.getHighLimit(), portfolioStock.getLowLimit(), portfolioStock.getCustomName());
-
+            String symbol = stocksFromBackup.get(tmp).getSymbol();
+            String customName = stocksFromBackup.get(tmp).getCustomName();
+            try {
+                this.mAppStorage.putString("Stock" + i, symbol);
+                if(!customName.equals(""))
+                    this.mAppStorage.putString("Stock" + i + "_summary", customName);
+                else
+                    this.mAppStorage.putString("Stock" + i + "_summary", SymbolProvider.getDescription(symbol));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
+        mPortfolioStocks = portfolioStocksInfo;
         this.persist();
-
+        mDirtyPortfolioStockMap = false;
 
         if (rawJson == null) 
             DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
@@ -384,17 +389,27 @@ public class PortfolioStockRepository {
         return mPortfolioStocks;
     }
 
+
     public void persist() {
         JSONObject json = new JSONObject();
         for (String symbol : this.portfolioStocksInfo.keySet()) {
+            if(this.portfolioStocksInfo.get(symbol) == null) {
+                updateStock(symbol);
+            }
+
             PortfolioStock item = this.portfolioStocksInfo.get(symbol);
             if (!item.isEmpty()) {
                 try {
                     json.put(symbol, item.toJson());
                 } catch (JSONException ignored) {
                 }
+            } else {
+                try{
+                    json.put(symbol, item.toNullJson());
+                } catch (JSONException ignored){}
             }
         }
+
         this.mAppStorage.putString(PORTFOLIO_JSON, json.toString());
         this.mAppStorage.apply();
         mDirtyPortfolioStockMap = true;
@@ -440,12 +455,14 @@ public class PortfolioStockRepository {
     }
 
     public void removeUnused() {
-        for (String symbol : this.portfolioStocksInfo.keySet()) {
-            String price = this.portfolioStocksInfo.get(symbol).getPrice();
-            if ((price == null || price.equals("")) && !this.widgetsStockSymbols.contains(symbol)) {
-                this.portfolioStocksInfo.remove(symbol);
+        try {
+            for (String symbol : this.portfolioStocksInfo.keySet()) {
+                String price = this.portfolioStocksInfo.get(symbol).getPrice();
+                if ((price == null || price.equals("")) && !this.widgetsStockSymbols.contains(symbol)) {
+                    this.portfolioStocksInfo.remove(symbol);
+                }
             }
-        }
+        } catch (ConcurrentModificationException e){e.printStackTrace();}
     }
 
     public void saveChanges() {

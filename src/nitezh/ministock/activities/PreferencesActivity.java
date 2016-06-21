@@ -246,9 +246,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.apply();
 
         // Also update the UI
-        EditTextPreference preference = (EditTextPreference) findPreference(key);
-        preference.setText(value);
-
+        try{
+            EditTextPreference preference = (EditTextPreference) findPreference(key);
+            preference.setText(value);
+        } catch (Exception ignored){}
         // Set up a listener whenever a key changes
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
@@ -638,8 +639,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             else if (summary.equals("")) {
                 summary = "No description";
             }
-            findPreference(key).setTitle(value);
-            findPreference(key).setSummary(summary);
+            try {
+                findPreference(key).setTitle(value);
+                findPreference(key).setSummary(summary);
+            }catch (Exception e){e.printStackTrace();}
         }
         // Initialise the ListPreference summaries
         else if (key.startsWith("background") || key.startsWith("updated_colour") || key.startsWith("updated_display") || key.startsWith("text_style")) {

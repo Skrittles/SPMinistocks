@@ -28,14 +28,19 @@ import android.app.Activity;
 import android.app.backup.BackupManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -229,10 +234,16 @@ public class UserData {
         if (Environment.MEDIA_MOUNTED.equals(state)) {
 
             File root = Environment.getExternalStorageDirectory();
-            File dir = new File(root.getAbsolutePath() + "/ministocks/");
+            File dir = new File(root.getAbsolutePath() + "/ministocks");
 
-            if (!dir.exists()) {
-                dir.mkdir();
+            if(!dir.exists()) {
+                if (dir.mkdir()) {
+                    Log.d("Fcreate","Folder created" +"\n" + dir);
+                } else {
+                    Log.d("Ffailed","Creating folder failed\n" + dir);
+                }
+            }else {
+                Log.d("Fexists",dir + " already exists");
             }
 
             new File(dir, fileName).delete();
