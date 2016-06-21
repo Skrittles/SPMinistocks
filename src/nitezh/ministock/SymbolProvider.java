@@ -143,14 +143,6 @@ public class SymbolProvider extends ContentProvider {
         return cursor;
     }
 
-    public static String getDescription(String query){
-        query = query == null ? "" : query.toLowerCase().trim();
-        List<Map<String, String>> suggestions = StockSuggestions.getSuggestions(query);
-        Map<String, String> item = suggestions.get(0);
-        return item.get("name");
-
-    }
-
     /**
      * All queries for this provider are for the search suggestion and shortcut
      * refresh mime type.
