@@ -465,7 +465,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+        final Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -655,11 +655,22 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
 
         // Enable Visual Stockboard
-        CheckBoxPreference visual_stockboard = (CheckBoxPreference) findPreference("visual_stockboard");
-        if(visual_stockboard.isChecked())
-            storage.putBoolean("visual_stockboard",true);
-        else
-            storage.putBoolean("visual_stockboard",false);
+        final CheckBoxPreference visual_stockboard = (CheckBoxPreference) findPreference("visual_stockboard");
+        visual_stockboard.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if(visual_stockboard.isChecked()) {
+                    visual_stockboard.setChecked(false);
+                    storage.putBoolean("visual_stockboard", false);
+                }
+                else {
+                    visual_stockboard.setChecked(true);
+                    storage.putBoolean("visual_stockboard", true);
+                }
+
+                return false;
+            }
+        });
 
 
         // Hook the Online help preference to the online help link
