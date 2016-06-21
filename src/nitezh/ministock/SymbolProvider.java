@@ -75,6 +75,7 @@ public class SymbolProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
         if (!TextUtils.isEmpty(selection)) {
             throw new IllegalArgumentException("selection not allowed for " + uri);
         }
@@ -117,8 +118,15 @@ public class SymbolProvider extends ContentProvider {
                 suggestion.put("symbol", "Use " + query.toUpperCase());
                 suggestion.put("name", "");
                 suggestions.add(0, suggestion);
+
+                Map<String, String> toIsin = new HashMap<>();
+                toIsin.put("symbol", "ISIN " + query.toUpperCase());
+                toIsin.put("name", "");
+                suggestions.add(0, toIsin);
             }
         }
+
+
         // Add an entry to remove the symbol
         Map<String, String> cancelSuggestion = new HashMap<>();
         cancelSuggestion.put("symbol", "Remove symbol and close");
@@ -133,6 +141,14 @@ public class SymbolProvider extends ContentProvider {
             cursor.addRow(new Object[]{i, symbol, item.get("name"), item.get("name"), symbol});
         }
         return cursor;
+    }
+
+    public static String getDescription(String query){
+        query = query == null ? "" : query.toLowerCase().trim();
+        List<Map<String, String>> suggestions = StockSuggestions.getSuggestions(query);
+        Map<String, String> item = suggestions.get(0);
+        return item.get("name");
+
     }
 
     /**

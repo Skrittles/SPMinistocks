@@ -44,6 +44,10 @@ public class DialogTools {
         alertWithCallback(context, title, body, "Close", null, null, null);
     }
 
+    public static void showSimpleDialogOk(Context context, String title, String body) {
+        alertWithCallback(context, title, body, "Ok", null, null, null);
+    }
+
 
     public static void alertWithCallback(Context context, String title, String body,
                                          String positiveButtonText,

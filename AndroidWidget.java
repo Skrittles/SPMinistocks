@@ -199,22 +199,10 @@ public class AndroidWidget implements Widget {
     public int getSymbolCount() {
         int size = this.getSize();
         int count = 0;
-        if(!this.isVisual()) {
-            if (size == 0 || size == 1) {
-                count = 4;
-            } else if (size == 2 || size == 3) {
-                count = 10;
-            }
-        }else{
-            if (size == 0) {
-                count = 4;
-            }else if (size == 1) {
-                count = 8;
-            } else if (size == 2) {
-                count = 8;
-            } else if (size == 3) {
-                count = 16;
-            }
+        if (size == 0 || size == 1) {
+            count = 4;
+        } else if (size == 2 || size == 3) {
+            count = 10;
         }
         return count;
     }

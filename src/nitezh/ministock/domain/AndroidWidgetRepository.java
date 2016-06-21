@@ -34,12 +34,15 @@ import java.util.Set;
 
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.Storage;
+import nitezh.ministock.activities.PreferencesActivity;
 
 
 public class AndroidWidgetRepository implements WidgetRepository {
 
     private final Context context;
     private final Storage appStorage;
+    // The amount of stock preferences in preferences.xml
+    public static final int MAX_STOCKS = PreferencesActivity.MAX_STOCKS;
 
     public AndroidWidgetRepository(Context context) {
         this.context = context;
@@ -124,7 +127,7 @@ public class AndroidWidgetRepository implements WidgetRepository {
         for (int appWidgetId : this.getIds()) {
             widgetPreferences = this.getWidget(appWidgetId).getStorage();
             if (widgetPreferences != null) {
-                for (int i = 1; i < 11; i++) {
+                for (int i = 1; i <= MAX_STOCKS; i++) {
                     String stockSymbol = widgetPreferences.getString("Stock" + i, "");
                     if (!stockSymbol.equals("")) widgetStockSymbols.add(stockSymbol);
                 }

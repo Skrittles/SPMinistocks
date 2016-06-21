@@ -25,7 +25,6 @@
 package nitezh.ministock.domain;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +34,6 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -65,6 +63,7 @@ public class PortfolioStockRepository {
     private static boolean mDirtyPortfolioStockMap = true;
     private Storage mAppStorage;
 
+
     public PortfolioStockRepository(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
         this.mAppStorage = appStorage;
 
@@ -73,20 +72,21 @@ public class PortfolioStockRepository {
         this.stocksQuotes = getStocksQuotes(mAppStorage, cache, widgetRepository);
     }
 
-    private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
-        Set<String> symbolSet = portfolioStocksInfo.keySet();
 
-        return new StockQuoteRepository(appStorage, cache, widgetRepository)
-                .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
-    }
+            private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
+                Set<String> symbolSet = portfolioStocksInfo.keySet();
 
-    private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
-        HashMap<String, PortfolioStock> stocks = this.getStocks();
-        for (String symbol : symbols) {
-            if (!stocks.containsKey(symbol)) {
-                stocks.put(symbol, null);
+                return new StockQuoteRepository(appStorage, cache, widgetRepository)
+                        .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
             }
-        }
+
+            private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
+                HashMap<String, PortfolioStock> stocks = this.getStocks();
+                for (String symbol : symbols) {
+                    if (!stocks.containsKey(symbol)) {
+                        stocks.put(symbol, null);
+                    }
+                }
 
         return stocks;
     }
@@ -288,7 +288,6 @@ public class PortfolioStockRepository {
             DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
                 "Your portfolio settings have been restored from ministocks/portfolioJson.txt");
     }
-
 
     public JSONObject getStocksJson() {
         JSONObject stocksJson = new JSONObject();
