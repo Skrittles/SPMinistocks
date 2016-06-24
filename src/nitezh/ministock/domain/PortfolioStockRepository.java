@@ -24,7 +24,6 @@
 
 package nitezh.ministock.domain;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -49,7 +48,6 @@ import nitezh.ministock.DialogTools;
 import nitezh.ministock.Storage;
 import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.UserData;
-import nitezh.ministock.activities.PreferencesActivity;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
@@ -239,7 +237,7 @@ public class PortfolioStockRepository {
 
     // Problem with empty stocks in portofolio
 
-    public void backupPortfolio(Context context) {
+    public void backupPortfolio(Context context, String fileName) {
 
         // Convert current portfolioStockInfo to JSONO-Object
         persist();
@@ -248,20 +246,21 @@ public class PortfolioStockRepository {
         this.mAppStorage.putString(PORTFOLIO_JSON, getStocksJson().toString()).apply();
 
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
-        UserData.writeExternalStorage(context, rawJson, PORTFOLIO_JSON);
+        UserData.writeExternalStorage(context, rawJson, fileName + ".txt");
         DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
-               "Your portfolio settings have been backed up to ministocks/portfolioJson.txt");
+               "Your portfolio settings have been backed up to ministocks/"+ fileName);
     }
 
    /*
-    *  prblem with getstocks() -> getStocksJson() storage
+    *  problem with getstocks() -> getStocksJson() storage.
+    *  TODO: Make portfolio constant.
     */
-    public void restorePortfolio(Context context) {
+    public void restorePortfolio(Context context, String backupName) {
         mDirtyPortfolioStockMap = true;
 
         this.portfolioStocksInfo.clear();
 
-        String rawJson = UserData.readExternalStorage(context, PORTFOLIO_JSON);
+        String rawJson = UserData.readExternalStorage(context, backupName);
 
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
 
@@ -271,8 +270,7 @@ public class PortfolioStockRepository {
 
         Iterator<String> it = stocksFromBackup.keySet().iterator();
 
-        String[] queryName = new String[1];
-
+        //String[] queryName = new String[1];
 
         int i = 0;
         while (it.hasNext()) {
@@ -285,6 +283,7 @@ public class PortfolioStockRepository {
             String symbol = stocksFromBackup.get(tmp).getSymbol();
             String customName = stocksFromBackup.get(tmp).getCustomName();
 
+            /*
             try {
                 this.mAppStorage.putString("Stock" + i, symbol);
                 if(!customName.equals("")) {
@@ -295,7 +294,9 @@ public class PortfolioStockRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        */
         }
+
 
         mPortfolioStocks = portfolioStocksInfo;
         this.persist();
@@ -306,7 +307,7 @@ public class PortfolioStockRepository {
 
         else 
             DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
-                "Your portfolio settings have been restored from ministocks/portfolioJson.txt");
+                "Your portfolio settings have been restored from ministocks/" + backupName);
     }
 
     public JSONObject getStocksJson() {

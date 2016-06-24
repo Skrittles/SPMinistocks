@@ -251,10 +251,12 @@
                         android:summaryOn="Update prices on the weekend"
                         android:title="Weekend updates"/>
             </PreferenceScreen>
+
             <PreferenceScreen
                 android:key="backup_restore"
                 android:summary="This is an experimental feature"
                 android:title="Backup and Restore (BETA)">
+                 <!--
                 <Preference
                     android:key="backup_portfolio"
                     android:summary="Backup portfolio to ministocks/portfolio.txt"
@@ -263,7 +265,7 @@
                     android:key="restore_portfolio"
                     android:summary="Restore portfolio from ministocks/portfolio.txt"
                     android:title="Restore portfolio"/>
-               <!--
+                      -->
                 <Preference
                     android:key="backup_widget"
                     android:summary="Backup this widget to cloud"
@@ -272,13 +274,32 @@
                     android:key="restore_widget"
                     android:summary="Restore a widget from cloud"
                     android:title="Restore widget"/>
-            -->
+
             </PreferenceScreen>
+
+
         </PreferenceScreen>
-        <Preference
+        <PreferenceScreen
+                android:key="portfolio_settings"
+                android:summary="Setup your stock purchase details"
+                android:title="Portfolio">
+
+            <Preference
                 android:key="portfolio"
                 android:summary="Setup your stock purchase details"
                 android:title="Portfolio"/>
+
+            <Preference
+                android:key="backup_portfolio"
+                android:summary="Backup portfolio to ministocks/portfolioJson.txt"
+                android:title="Backup portfolio"/>
+
+            <Preference
+                android:key="restore_portfolio"
+                android:summary="Restore portfolio from ministocks/portfolioJson.txt"
+                android:title="Restore portfolio"/>
+
+            </PreferenceScreen>
         <Preference
                 android:key="update_now"
                 android:summary="Update prices and return to home screen"

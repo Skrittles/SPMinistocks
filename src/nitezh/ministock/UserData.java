@@ -218,7 +218,8 @@ public class UserData {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
+            return null;
+            //DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -263,6 +264,7 @@ public class UserData {
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
