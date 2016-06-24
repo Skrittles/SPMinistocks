@@ -35,71 +35,47 @@
                 android:key="stock_setup"
                 android:summary="Setup the stocks for this widget"
                 android:title="Stocks setup">
-            <nitezh.ministock.domain.StockPreference
-                android:defaultValue="^DJI"
-                android:key="Stock1"
-                android:summary="Set symbol"
-                android:title="Stock 1"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock2"
-                android:summary="Set symbol"
-                android:title="Stock 2"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock3"
-                android:summary="Set symbol"
-                android:title="Stock 3"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock4"
-                android:summary="Set symbol"
-                android:title="Stock 4"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock5"
-                android:summary="Set symbol"
-                android:title="Stock 5"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock6"
-                android:summary="Set symbol"
-                android:title="Stock 6"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock7"
-                android:summary="Set symbol"
-                android:title="Stock 7"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock8"
-                android:summary="Set symbol"
-                android:title="Stock 8"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock9"
-                android:summary="Set symbol"
-                android:title="Stock 9"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock10"
-                android:summary="Set symbol"
-                android:title="Stock 10"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock11"
-                android:summary="Set symbol"
-                android:title="Stock 11"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock12"
-                android:summary="Set symbol"
-                android:title="Stock 12"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock13"
-                android:summary="Set symbol"
-                android:title="Stock 13"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock14"
-                android:summary="Set symbol"
-                android:title="Stock 14"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock15"
-                android:summary="Set symbol"
-                android:title="Stock 15"/>
-            <nitezh.ministock.domain.StockPreference
-                android:key="Stock16"
-                android:summary="Set symbol"
-                android:title="Stock 16"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:defaultValue="^DJI"
+                    android:key="Stock1"
+                    android:summary="Set symbol"
+                    android:title="Stock 1"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock2"
+                    android:summary="Set symbol"
+                    android:title="Stock 2"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock3"
+                    android:summary="Set symbol"
+                    android:title="Stock 3"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock4"
+                    android:summary="Set symbol"
+                    android:title="Stock 4"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock5"
+                    android:summary="Set symbol"
+                    android:title="Stock 5"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock6"
+                    android:summary="Set symbol"
+                    android:title="Stock 6"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock7"
+                    android:summary="Set symbol"
+                    android:title="Stock 7"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock8"
+                    android:summary="Set symbol"
+                    android:title="Stock 8"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock9"
+                    android:summary="Set symbol"
+                    android:title="Stock 9"/>
+            <nitezh.ministock.domain.CustomPreference
+                    android:key="Stock10"
+                    android:summary="Set symbol"
+                    android:title="Stock 10"/>
         </PreferenceScreen>
         <PreferenceScreen
                 android:key="advanced"
@@ -251,30 +227,29 @@
                         android:summaryOn="Update prices on the weekend"
                         android:title="Weekend updates"/>
             </PreferenceScreen>
-            <PreferenceScreen
-                android:key="backup_restore"
-                android:summary="This is an experimental feature"
-                android:title="Backup and Restore (BETA)">
-                <Preference
-                    android:key="backup_portfolio"
-                    android:summary="Backup portfolio to ministocks/portfolio.txt"
-                    android:title="Backup portfolio"/>
-                <Preference
-                    android:key="restore_portfolio"
-                    android:summary="Restore portfolio from ministocks/portfolio.txt"
-                    android:title="Restore portfolio"/>
-               <!--
-                <Preference
-                    android:key="backup_widget"
-                    android:summary="Backup this widget to cloud"
-                    android:title="Backup widget"/>
-                <Preference
-                    android:key="restore_widget"
-                    android:summary="Restore a widget from cloud"
-                    android:title="Restore widget"/>
-            -->
-            </PreferenceScreen>
         </PreferenceScreen>
+        <!--PreferenceScreen
+            android:key="backup_restore"
+            android:summary="This is an experimental feature"
+            android:title="Backup and Restore (BETA)">
+            <Preference
+                android:key="backup_portfolio"
+                android:summary="Backup portfolio to cloud"
+                android:title="Backup portfolio"/>
+            <Preference
+                android:key="restore_portfolio"
+                android:summary="Restore portfolio from cloud"
+                android:title="Restore portfolio"/>
+            <Preference
+                android:key="backup_widget"
+                android:summary="Backup this widget to cloud"
+                android:title="Backup widget"/>
+            <Preference
+                android:key="restore_widget
+                "
+                android:summary="Restore a widget from cloud"
+                android:title="Restore widget"/>
+        </PreferenceScreen-->
         <Preference
                 android:key="portfolio"
                 android:summary="Setup your stock purchase details"
@@ -289,20 +264,6 @@
             android:summaryOff="Enable visual stockboard"
             android:summaryOn="Enable visual stockboard"
             android:title="Visual Stockboard"/>
-        <PreferenceScreen
-            android:title="Visual Stockboard Highlighting"
-            android:summary="Change the highlighting for Visual Stockboard">
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="highlight_numeric"
-                android:summary="Highlight numeric change"
-                android:title="Numeric change"/>
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="highlight_percent"
-                android:summary="Highlight percentage change"
-                android:title="Percentage change"/>
-        </PreferenceScreen>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen

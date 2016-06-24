@@ -106,6 +106,18 @@ public class PortfolioStock {
         return json;
     }
 
+    public JSONObject toNullJson() {
+        JSONObject json = new JSONObject();
+        this.setJsonValue(json, PortfolioField.PRICE, "");
+        this.setJsonValue(json, PortfolioField.DATE, "");
+        this.setJsonValue(json, PortfolioField.QUANTITY, "");
+        this.setJsonValue(json, PortfolioField.LIMIT_HIGH, "");
+        this.setJsonValue(json, PortfolioField.LIMIT_LOW, "");
+        this.setJsonValue(json, PortfolioField.CUSTOM_DISPLAY, "");
+        this.setJsonValue(json, PortfolioField.SYMBOL_2, "");
+        return json;
+    }
+
     public boolean isEmpty() {
         return !(this.getPrice() != null && !this.getPrice().equals("") ||
                 (this.getCustomName() != null && !this.getCustomName().equals("")));

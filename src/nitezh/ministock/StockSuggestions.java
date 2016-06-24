@@ -76,6 +76,7 @@ class StockSuggestions {
                     JSONObject jsonO = jsonA.getJSONObject(i);
                     suggestion.put("symbol", jsonO.getString("symbol"));
                     suggestion.put("name", jsonO.getString("name"));
+
                     suggestions.add(suggestion);
                 }
                 return suggestions;
