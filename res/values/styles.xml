@@ -209,8 +209,9 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:textSize">7sp</item>
+        <item name="android:textSize">9sp</item>
         <item name="android:textColor">#ffff</item>
+
     </style>
 
     <style name="StockPriceVS" parent="StockDatumVS">
@@ -229,6 +230,36 @@
     </style>
 
     <style name="StockNameVS" parent="StockDatumVS">
+        <item name="android:layout_width">80dp</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <!-- Styles for the smaller Visual Stockboard Widgets. Here for flexibility and comfort, may overlap with the standart ones. -->
+
+    <style name="StockDatumVSsmall">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:textSize">9sp</item>
+        <item name="android:textColor">#ffff</item>
+    </style>
+
+    <style name="StockPriceVSsmall" parent="StockDatumVSsmall">
+        <item name="android:layout_width">11dp</item>
+        <item name="android:gravity">right</item>
+    </style>
+
+    <style name="StockChangeVSsmall" parent="StockDatumVSsmall">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="StockWideChangeVSsmall" parent="StockDatumVSsmall">
+        <item name="android:layout_width">9dp</item>
+        <item name="android:gravity">left</item>
+    </style>
+
+    <style name="StockNameVSsmall" parent="StockDatumVSsmall">
         <item name="android:layout_width">80dp</item>
         <item name="android:lines">1</item>
     </style>
