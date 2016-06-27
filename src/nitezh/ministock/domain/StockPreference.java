@@ -151,7 +151,12 @@ public class StockPreference extends EditTextPreference {
             greyBox = new ColorDrawable(Color.LTGRAY);
         }
 
-        //Sets up the metrics of the box
+        /**
+         * Sets up the metrics of the box
+         *
+         * @param shadowSize
+         * @param shadowTouchPoint
+         */
         @Override
         public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint) {
             View v = getView();

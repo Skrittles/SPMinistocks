@@ -26,6 +26,7 @@ package nitezh.ministock.activities;
 
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -286,6 +287,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.putString(key, value);
         editor.apply();
 
+
         //Updating the UI is handled in StockPreference
 
         // Set up a listener whenever a key changes
@@ -386,6 +388,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         updateSummaries(getPreferenceScreen().getSharedPreferences(), mTimePickerKey);
     }
 
+
     void setPreference(String key, String value, String summary) {
         // Return if no key
         if (key.equals("")) {
@@ -460,9 +463,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         return "Not found";
     }
 
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         final Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
@@ -535,9 +535,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
-
-
-        /*
         // Hook the Backup portfolio option to the backup portfolio method
         Preference backup_portfolio = findPreference("backup_portfolio");
         backup_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -565,6 +562,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         });
 
+
+        /*
         // Hook the Backup widget option to the backup widget method
         Preference backup_widget = findPreference("backup_widget");
         backup_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -605,8 +604,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a widget backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
-        });
-        */
+        });*/
+
 
         //Hook up Visual Stockboard Highlighting
         final CheckBoxPreference numeric = (CheckBoxPreference) findPreference("highlight_numeric");
@@ -773,12 +772,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             else if (summary.equals("")) {
                 summary = "No description";
             }
+
             // This sets the title and summary for a stock, but throws an exception if n Stocks are allowed, but Stock n+i has data
             // TODO Fix issue where this causes a NullPointerException
             try {
                 findPreference(key).setTitle(value);
                 findPreference(key).setSummary(summary);
-            }catch (NullPointerException e){System.out.println(e);}
+            }catch (Exception e){e.printStackTrace();}
+
         }
         // Initialise the ListPreference summaries
         else if (key.startsWith("background") || key.startsWith("updated_colour") || key.startsWith("updated_display") || key.startsWith("text_style")) {
