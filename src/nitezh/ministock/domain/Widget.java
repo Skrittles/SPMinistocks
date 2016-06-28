@@ -44,19 +44,30 @@ public interface Widget {
 
     String getBackgroundStyle();
 
+    String getVsBackgroundStyle();
+
+
     boolean useLargeFont();
 
     boolean getHideSuffix();
 
     boolean getTextStyle();
 
+    boolean getVsTextStyle();
+
     boolean getColorsOnPrices();
 
     String getFooterVisibility();
 
+    String getVsFooterVisibility();
+
     String getFooterColor();
 
+    String getVsFooterColor();
+
     boolean showShortTime();
+
+    boolean showVsShortTime();
 
     boolean hasDailyChangeView();
 
@@ -79,4 +90,7 @@ public interface Widget {
     boolean hasTotalPlPercentAerView();
 
     boolean isVisual();
+
+
+
 }

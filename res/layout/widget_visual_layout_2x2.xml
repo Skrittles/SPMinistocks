@@ -551,7 +551,7 @@
                         android:layout_marginBottom="1dp"
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
-                        <TextView android:id="@+id/tex51" style="@style/StockNameVS"/>
+                        <TextView android:id="@+id/text51" style="@style/StockNameVS"/>
                     </LinearLayout>
 
                     <!-- Price -->

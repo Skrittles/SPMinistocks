@@ -181,10 +181,22 @@
                         android:key="background"
                         android:title="Widget background"/>
                 <ListPreference
+                        android:defaultValue="transparent"
+                        android:entries="@array/background_entries"
+                        android:entryValues="@array/background_entryvalues"
+                        android:key="vs_background"
+                        android:title="Widget background"/>
+                <ListPreference
                         android:defaultValue="normal"
                         android:entries="@array/text_style_entries"
                         android:entryValues="@array/text_style_entryvalues"
                         android:key="text_style"
+                        android:title="Widget text style"/>
+                <ListPreference
+                        android:defaultValue="normal"
+                        android:entries="@array/text_style_entries"
+                        android:entryValues="@array/text_style_entryvalues"
+                        android:key="vs_text_style"
                         android:title="Widget text style"/>
                 <ListPreference
                         android:defaultValue="light"
@@ -192,6 +204,18 @@
                         android:entryValues="@array/updated_colour_entryvalues"
                         android:key="updated_colour"
                         android:title="Footer colour"/>
+                <ListPreference
+                        android:defaultValue="light"
+                        android:entries="@array/updated_colour_entries"
+                        android:entryValues="@array/updated_colour_entryvalues"
+                        android:key="vs_updated_colour"
+                        android:title="Footer colour"/>
+                <ListPreference
+                        android:defaultValue="visible"
+                        android:entries="@array/vs_updated_display_entries"
+                        android:entryValues="@array/vs_updated_display_entryvalues"
+                        android:key="vs_updated_display"
+                        android:title="Footer display"/>
                 <ListPreference
                         android:defaultValue="visible"
                         android:entries="@array/updated_display_entries"
@@ -213,6 +237,12 @@
                 <CheckBoxPreference
                         android:defaultValue="false"
                         android:key="short_time"
+                        android:summaryOff="Show date even if prices updated today"
+                        android:summaryOn="Show date even if prices updated today"
+                        android:title="Use full date"/>
+                <CheckBoxPreference
+                        android:defaultValue="false"
+                        android:key="vs_short_time"
                         android:summaryOff="Show date even if prices updated today"
                         android:summaryOn="Show date even if prices updated today"
                         android:title="Use full date"/>
@@ -288,20 +318,13 @@
             android:summaryOff="Enable visual stockboard"
             android:summaryOn="Enable visual stockboard"
             android:title="Visual Stockboard"/>
-        <PreferenceScreen
-            android:title="Visual Stockboard Highlighting"
-            android:summary="Change the highlighting for Visual Stockboard">
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="highlight_numeric"
-                android:summary="Highlight numeric change"
-                android:title="Numeric change"/>
-            <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="highlight_percent"
-                android:summary="Highlight percentage change"
-                android:title="Percentage change"/>
-        </PreferenceScreen>
+        <ListPreference
+            android:title="Specify color calculation"
+            android:summary="Change the color calculation for Visual Stockboard"
+            android:defaultValue="percentage"
+            android:entries="@array/color_change_vs_entries"
+            android:entryValues="@array/color_change_vs_entryvalues"
+            android:key="color_calculation"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen
