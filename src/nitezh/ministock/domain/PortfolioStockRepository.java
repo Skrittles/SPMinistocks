@@ -512,7 +512,7 @@ public class PortfolioStockRepository {
         return "No description";
     }
 
-    public void backupWidget(Context context) {
+    public void backupWidget(Context context, String backupName) {
         int widgetSize = this.mAppStorage.getInt("widgetSize", 0);
 
         int maxStocks;
@@ -535,8 +535,6 @@ public class PortfolioStockRepository {
                 backupStocks.add("Stock" + i + ": " + tmp + "\n");
 
         }
-
-        String backupName = "Widget" + widgetSize + ".txt";
 
         UserData.writeExternalStorage(context, backupStocks.toString(), backupName, "widgetbackups");
     }
