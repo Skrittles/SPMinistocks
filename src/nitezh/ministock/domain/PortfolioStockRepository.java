@@ -526,7 +526,7 @@ public class PortfolioStockRepository {
         backupStocks.add(tmp);
         int i = 0;
 
-        while (i < maxStocks && tmp != "") {
+        while (i < maxStocks) {
             i++;
 
             tmp = this.mAppStorage.getString("Stock" + i, "");
