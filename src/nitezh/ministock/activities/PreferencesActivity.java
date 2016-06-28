@@ -58,20 +58,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-
 import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.utils.Cache;
+
 import nitezh.ministock.DialogTools;
-import nitezh.ministock.utils.StorageCache;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
+import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.UserData;
 import nitezh.ministock.activities.widget.WidgetProviderBase;
 import nitezh.ministock.domain.AndroidWidgetRepository;
 import nitezh.ministock.domain.PortfolioStockRepository;
 import nitezh.ministock.domain.WidgetRepository;
+import nitezh.ministock.utils.Cache;
 import nitezh.ministock.utils.DateTools;
+import nitezh.ministock.utils.StorageCache;
 import nitezh.ministock.utils.VersionTools;
 
 import static android.content.SharedPreferences.Editor;
@@ -599,15 +601,29 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
         // Hook the Backup portfolio option to the backup portfolio method
+        // Backups get names from user input,
+        // default they get the name portfolio_backup + current date (format: YYYY-MM-DD)
+
+        // No backups, if backup name has newlines or spaces.
+        //TODO: Catch Backup names with spaces and newlines.
         Preference backup_portfolio = findPreference("backup_portfolio");
         backup_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
-                Cache cache = new StorageCache(storage);
-                WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
-                new PortfolioStockRepository(storage, cache, widgetRepository).backupPortfolio(PreferencesActivity.this);
+                    DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
+                        @Override
+                        public Object call() throws Exception {
+                            Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                            Cache cache = new StorageCache(storage);
+                            WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                            new PortfolioStockRepository(storage, cache, widgetRepository).backupPortfolio(PreferencesActivity.this, this.getInputValue());
+                            return new Object();
+                        }
+                    };
+                    DialogTools.inputWithCallback(PreferencesActivity.this, "Backup this portfolio", "Please enter a name for this backup:", "OK", "Cancel", "Portfolio_backup" + DateTools.getDateAsString(), callable);
+
                 return true;
             }
         });
@@ -618,16 +634,31 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         restore_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
-                Cache cache = new StorageCache(storage);
-                WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
-                new PortfolioStockRepository(storage, cache, widgetRepository).restorePortfolio(PreferencesActivity.this);
+
+                CharSequence[] backupNames = UserData.readFileNames(PreferencesActivity.this, "portfoliobackups");
+                // If there are no backups show an appropriate dialog
+                if (backupNames.length == 0) {
+                    DialogTools.showSimpleDialog(PreferencesActivity.this, "No backups available", "There were no portfolio backups to restore.");
+                    return true;
+                }
+
+                // If there are backups then show the list
+                DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
+                    @Override
+                    public Object call() throws Exception {
+                        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                        Cache cache = new StorageCache(storage);
+                        WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                        new PortfolioStockRepository(storage, cache, widgetRepository).restorePortfolio(PreferencesActivity.this, this.getInputValue());
+                        return new Object();
+                    }
+                };
+                    DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a portfolio backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
         });
 
 
-        /*
         // Hook the Backup widget option to the backup widget method
         Preference backup_widget = findPreference("backup_widget");
         backup_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -636,11 +667,15 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
                     @Override
                     public Object call() throws Exception {
-                        UserData.backupWidget(PreferencesActivity.this, mAppWidgetId, this.getInputValue());
+                        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                        Cache cache = new StorageCache(storage);
+                        WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                        new PortfolioStockRepository(storage, cache, widgetRepository).backupWidget(PreferencesActivity.this, this.getInputValue());
                         return new Object();
                     }
                 };
-                DialogTools.inputWithCallback(PreferencesActivity.this, "Backup this widget", "Please enter a name for this backup:", "OK", "Cancel", "AppWidgetProvider backup from " + DateTools.getNowAsString(), callable);
+                DialogTools.inputWithCallback(PreferencesActivity.this, "Backup this widget", "Please enter a name for this backup:", "OK", "Cancel", "Widget_backup" + DateTools.getDateAsString(), callable);
+
                 return true;
             }
         });
@@ -650,7 +685,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         restore_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                CharSequence[] backupNames = UserData.getWidgetBackupNames(PreferencesActivity.this);
+                CharSequence[] backupNames = UserData.readFileNames(PreferencesActivity.this, "widgetbackups");
                 // If there are no backups show an appropriate dialog
                 if (backupNames == null) {
                     DialogTools.showSimpleDialog(PreferencesActivity.this, "No backups available", "There were no widget backups to restore.");
@@ -661,14 +696,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
                     @Override
                     public Object call() throws Exception {
-                        UserData.restoreWidget(PreferencesActivity.this, mAppWidgetId, this.getInputValue());
+                        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                        Cache cache = new StorageCache(storage);
+                        WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                        new PortfolioStockRepository(storage, cache, widgetRepository).restoreWidget(PreferencesActivity.this, this.getInputValue());
                         return new Object();
                     }
                 };
                 DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a widget backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
-        });*/
+        });
 
 
 

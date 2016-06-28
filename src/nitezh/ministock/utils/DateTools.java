@@ -84,6 +84,15 @@ public class DateTools {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm").format(new Date());
     }
 
+    /*
+        return current date format: YYYY-MM-DD
+        Usage in PreferenceActivity for BackupFile date.
+     */
+
+    public static String getDateAsString() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+    }
+
     public static String timeDigitPad(int c) {
         if (c >= 10)
             return String.valueOf(c);

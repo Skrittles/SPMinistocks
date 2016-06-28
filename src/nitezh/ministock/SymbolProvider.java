@@ -160,7 +160,7 @@ public class SymbolProvider extends ContentProvider {
         }
     }
 
-    public static String getDescription(String symbol){
+    public static String getDescription(String symbol) throws Exception{
         symbol = symbol == null ? "" : symbol.toLowerCase().trim();
         List<Map<String, String>> suggestions = StockSuggestions.getSuggestions(symbol);
         Map<String, String> item = suggestions.get(0);

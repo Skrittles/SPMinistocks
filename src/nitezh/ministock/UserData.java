@@ -86,7 +86,9 @@ public class UserData {
 
     public static void backupWidget(Context context, int appWidgetId, String backupName) {
         try {
+
             JSONObject jsonForAllWidgets = getJsonBackupsForAllWidgets(context);
+
             JSONObject jsonForWidget = getJsonForWidget(context, appWidgetId);
 
             jsonForAllWidgets.put(backupName, jsonForWidget);
@@ -160,6 +162,25 @@ public class UserData {
         return null;
     }
 
+
+    public static CharSequence[] readFileNames(Context context, String internalDirectory) {
+
+        File root = Environment.getExternalStorageDirectory();
+        File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
+
+        File[] files = dir.listFiles();
+
+        ArrayList<String> fileNames = new ArrayList<>();
+
+        for(int i = 0; i < files.length; i++) {
+            if(files[i].isFile())
+                fileNames.add(files[i].getName());
+        }
+
+        return fileNames.toArray(new String[fileNames.size()]);
+    }
+
+
     public static void writeInternalStorage(Context context, String stringData, String filename) {
         try {
             synchronized (UserData.sFileBackupLock) {
@@ -192,10 +213,10 @@ public class UserData {
         return null;
     }
     
-    public static String readExternalStorage(Context context, String fileName) {
+    public static String readExternalStorage(Context context, String fileName, String internalDirectory) {
 
         File root = Environment.getExternalStorageDirectory();
-        File dir = new File(root.getAbsolutePath() + "/ministocks");
+        File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
         File file = new File(dir, fileName);
 
@@ -218,7 +239,8 @@ public class UserData {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
+            return null;
+            //DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -228,14 +250,14 @@ public class UserData {
     
     
         // Write to external storage
-    public static void writeExternalStorage(Context context, String data, String fileName) {
+    public static void writeExternalStorage(Context context, String data, String fileName, String internalDirectory) {
 
         String state = Environment.getExternalStorageState();
 
         if (Environment.MEDIA_MOUNTED.equals(state)) {
 
             File root = Environment.getExternalStorageDirectory();
-            File dir = new File(root.getAbsolutePath() + "/ministocks");
+            File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
             if(!dir.exists()) {
                 if (dir.mkdir()) {
@@ -263,6 +285,7 @@ public class UserData {
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

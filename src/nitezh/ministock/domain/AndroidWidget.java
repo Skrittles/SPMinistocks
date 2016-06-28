@@ -338,4 +338,5 @@ public class AndroidWidget implements Widget {
     public boolean hasTotalPlPercentAerView() {
         return this.storage.getBoolean("show_profit_aer", false);
     }
+
 }

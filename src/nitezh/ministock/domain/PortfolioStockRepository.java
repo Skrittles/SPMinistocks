@@ -24,7 +24,6 @@
 
 package nitezh.ministock.domain;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -67,6 +66,7 @@ public class PortfolioStockRepository {
     private static boolean mDirtyPortfolioStockMap = true;
     private Storage mAppStorage;
 
+    private static Set<String> widgetStocks;
     private Context context = null;
 
 
@@ -76,6 +76,8 @@ public class PortfolioStockRepository {
         this.widgetsStockSymbols = widgetRepository.getWidgetsStockSymbols();
         this.portfolioStocksInfo = getPortfolioStocksInfo(widgetsStockSymbols);
         this.stocksQuotes = getStocksQuotes(mAppStorage, cache, widgetRepository);
+
+        this.widgetStocks = widgetsStockSymbols;
     }
 
     public  PortfolioStockRepository(Context context, Storage appStorage, Cache cache, WidgetRepository widgetRepository){
@@ -88,21 +90,21 @@ public class PortfolioStockRepository {
 
     }
 
+
     private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
         Set<String> symbolSet = portfolioStocksInfo.keySet();
 
         return new StockQuoteRepository(appStorage, cache, widgetRepository)
                 .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
-        }
+    }
 
-        private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
-            HashMap<String, PortfolioStock> stocks = this.getStocks();
-            for (String symbol : symbols) {
-                if (!stocks.containsKey(symbol)) {
-                    stocks.put(symbol, null);
-                }
+    private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
+        HashMap<String, PortfolioStock> stocks = this.getStocks();
+        for (String symbol : symbols) {
+            if (!stocks.containsKey(symbol)) {
+                stocks.put(symbol, null);
             }
-
+        }
         return stocks;
     }
 
@@ -141,6 +143,7 @@ public class PortfolioStockRepository {
 
         return info;
     }
+
 
     private boolean hasInfoForStock(PortfolioStock stock) {
         return !stock.getPrice().equals("");
@@ -237,9 +240,8 @@ public class PortfolioStockRepository {
         return stock;
     }
 
-    // Problem with empty stocks in portofolio
 
-    public void backupPortfolio(Context context) {
+    public void backupPortfolio(Context context, String fileName) {
 
         // Convert current portfolioStockInfo to JSONO-Object
         persist();
@@ -248,19 +250,19 @@ public class PortfolioStockRepository {
         this.mAppStorage.putString(PORTFOLIO_JSON, getStocksJson().toString()).apply();
 
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
-        UserData.writeExternalStorage(context, rawJson, PORTFOLIO_JSON);
+        UserData.writeExternalStorage(context, rawJson, fileName + ".txt", "portfoliobackups/");
         DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
-               "Your portfolio settings have been backed up to ministocks/portfolioJson.txt");
+               "Your portfolio settings have been backed up to ministocks/portfoliobackups/"+ fileName);
     }
 
-   /*
-    *  prblem with getstocks() -> getStocksJson() storage
-    */
-    public void restorePortfolio(Context context) {
-        mDirtyPortfolioStockMap = true;
-        this.portfolioStocksInfo.clear();
 
-        String rawJson = UserData.readExternalStorage(context, PORTFOLIO_JSON);
+    public void restorePortfolio(Context context, String backupName) {
+        mDirtyPortfolioStockMap = true;
+
+        //this.portfolioStocksInfo.clear();
+
+
+        String rawJson = UserData.readExternalStorage(context, backupName, "portfoliobackups/");
 
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
 
@@ -270,8 +272,7 @@ public class PortfolioStockRepository {
 
         Iterator<String> it = stocksFromBackup.keySet().iterator();
 
-        String[] queryName = new String[1];
-
+        //String[] queryName = new String[1];
 
         int i = 0;
         while (it.hasNext()) {
@@ -284,6 +285,7 @@ public class PortfolioStockRepository {
             String symbol = stocksFromBackup.get(tmp).getSymbol();
             String customName = stocksFromBackup.get(tmp).getCustomName();
 
+            /*
             try {
                 this.mAppStorage.putString("Stock" + i, symbol);
                 if(!customName.equals("")) {
@@ -294,18 +296,20 @@ public class PortfolioStockRepository {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        */
         }
+
 
         mPortfolioStocks = portfolioStocksInfo;
         this.persist();
         mDirtyPortfolioStockMap = false;
 
         if (rawJson == null) 
-            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file portfolioJson.txt not found");
+            DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file not found");
 
         else 
             DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
-                "Your portfolio settings have been restored from ministocks/portfolioJson.txt");
+                "Your portfolio settings have been restored from ministocks/portfoliobackups/" + backupName);
     }
 
     public JSONObject getStocksJson() {
@@ -476,7 +480,7 @@ public class PortfolioStockRepository {
         try {
             for (String symbol : this.portfolioStocksInfo.keySet()) {
                 String price = this.portfolioStocksInfo.get(symbol).getPrice();
-                if ((price == null || price.equals("")) && !this.widgetsStockSymbols.contains(symbol)) {
+                if ((price == null /* || price.equals("")*/) && !this.widgetsStockSymbols.contains(symbol)) {
                     this.portfolioStocksInfo.remove(symbol);
                 }
             }
@@ -495,7 +499,11 @@ public class PortfolioStockRepository {
     private class Description extends AsyncTask<String, Void , String> {
         protected String doInBackground(String... query){
             String symbol = query[0];
-            return SymbolProvider.getDescription(symbol);
+            try {
+                return SymbolProvider.getDescription(symbol);
+            }catch (Exception e){DialogTools.showSimpleDialog(context,"Sorry","An uexpected error has occurred");}
+
+            return "";
         }
 
         protected void onProgressUpdate(Integer... progress){
@@ -510,4 +518,71 @@ public class PortfolioStockRepository {
         return "No description";
     }
 
+    public void backupWidget(Context context, String backupName) {
+        int widgetSize = this.mAppStorage.getInt("widgetSize", 0);
+
+        int maxStocks = PreferencesActivity.MAX_STOCKS;
+
+        ArrayList<String> backupStocks = new ArrayList<>();
+
+        String tmp = "Widgetsize: " + widgetSize + "\n";
+
+        backupStocks.add(tmp);
+        int i = 0;
+
+        while (i < maxStocks) {
+            i++;
+
+            tmp = this.mAppStorage.getString("Stock" + i, "");
+
+            if(tmp != "")
+                backupStocks.add("Stock" + i + ": " + tmp + "\n");
+
+        }
+
+        UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups");
+    }
+
+
+    public void restoreWidget(Context context, String fileName) {
+        int widgetsize = this.mAppStorage.getInt("widgetSize", 0);
+
+        String rawJson = UserData.readExternalStorage(context, fileName, "widgetbackups");
+
+        String delims = "[:\n]+";
+
+        String[] tokens = null;
+        try {
+            tokens = rawJson.split(delims);
+        } catch (NullPointerException ignored){}
+
+        // Check for correct widgetsize, else print error
+        if (tokens != null && tokens[1].trim().equals(String.valueOf(widgetsize))) {
+
+            // Remove all stocks from widget.
+            for(int j = 1; j < 16; j++) {
+                 this.mAppStorage.putString("Stock" + j, "").apply();
+                 this.mAppStorage.putString("Stock" + j + "_summary" , "").apply();
+            }
+
+                /*
+            System.out.println(tokens[0]);
+            System.out.println(tokens[1]);
+            System.out.println(tokens[2]);
+               System.out.println(tokens[3]);
+               */
+                int i = 1;
+
+                // put all backup stocks into internal storage.
+                for(int j = 3; j < tokens.length; j += 2) {
+
+
+                    this.mAppStorage.putString("Stock" + i, tokens[j]).apply();
+                    this.mAppStorage.putString("Stock" + i + "_summary", getBackupDescription(tokens[j])).apply();
+                    i++;
+                }
+            DialogTools.showSimpleDialog(context, "Restore widget successful", "This widget has been successfully restored!");
+        } else DialogTools.showSimpleDialog(context, "Restore widget failed", "This widget has the wrong size for this backup!");
+
+    }
 }
