@@ -24,21 +24,22 @@
 
 package nitezh.ministock.activities;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TimePicker;
 
 import org.w3c.dom.Document;
@@ -47,12 +48,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -61,9 +58,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 
 import nitezh.ministock.SymbolProvider;
-import nitezh.ministock.dataaccess.FxChangeRepository;
-import nitezh.ministock.dataaccess.YahooStockQuoteRepository;
-import nitezh.ministock.tests.mocks.MockCache;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.DialogTools;
 import nitezh.ministock.utils.StorageCache;
@@ -468,6 +462,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         final Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        final PreferenceScreen stocks = (PreferenceScreen) findPreference("stock_setup");
+        stocks.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                Dialog dialog = stocks.getDialog();
+                View v = stocks.getDialog().getLayoutInflater().inflate(R.layout.drag_layout,null);
+                dialog.addContentView(v,
+                        new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT ));
+                return false;
+
+            }
+        });
 
         // Hook the About preference to the About (MinistocksActivity) activity
         Preference about = findPreference("about");
