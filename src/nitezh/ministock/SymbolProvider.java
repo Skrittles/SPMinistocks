@@ -31,6 +31,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.text.TextUtils;
 
 import java.util.HashMap;
@@ -75,6 +76,7 @@ public class SymbolProvider extends ContentProvider {
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
         if (!TextUtils.isEmpty(selection)) {
             throw new IllegalArgumentException("selection not allowed for " + uri);
         }
@@ -117,8 +119,15 @@ public class SymbolProvider extends ContentProvider {
                 suggestion.put("symbol", "Use " + query.toUpperCase());
                 suggestion.put("name", "");
                 suggestions.add(0, suggestion);
+
+                Map<String, String> toIsin = new HashMap<>();
+                toIsin.put("symbol", "ISIN " + query.toUpperCase());
+                toIsin.put("name", "");
+                suggestions.add(0, toIsin);
             }
         }
+
+
         // Add an entry to remove the symbol
         Map<String, String> cancelSuggestion = new HashMap<>();
         cancelSuggestion.put("symbol", "Remove symbol and close");
@@ -149,6 +158,13 @@ public class SymbolProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Unknown URL " + uri);
         }
+    }
+
+    public static String getDescription(String symbol){
+        symbol = symbol == null ? "" : symbol.toLowerCase().trim();
+        List<Map<String, String>> suggestions = StockSuggestions.getSuggestions(symbol);
+        Map<String, String> item = suggestions.get(0);
+        return item.get("name");
     }
 
     @Override
