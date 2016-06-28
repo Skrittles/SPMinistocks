@@ -540,40 +540,47 @@ public class PortfolioStockRepository {
 
 
     public void restoreWidget(Context context, String fileName) {
+        int widgetsize = this.mAppStorage.getInt("widgetSize", 0);
+
         String rawJson = UserData.readExternalStorage(context, fileName, "widgetbackups");
 
         String delims = "[:\n]+";
 
         String[] tokens = rawJson.split(delims);
 
-        // Remove all stocks from widget.
-        for(int j = 1; j < 16; j++) {
-            this.mAppStorage.putString("Stock" + j, "").apply();
-            this.mAppStorage.putString("Stock" + j + "_summary" , "").apply();
-        }
-
-        /*
-        System.out.println(tokens[0]);
-        System.out.println(tokens[1]);
-        System.out.println(tokens[2]);
-        System.out.println(tokens[3]);
-        */
-
-        int widgetsize = this.mAppStorage.getInt("widgetSize", 0);
-
         // Check for correct widgetsize, else print error
         if (tokens[1].trim().equals(String.valueOf(widgetsize))) {
 
-            int i = 1;
-
-            // put all backup stocks into internal storage.
-            for(int j = 3; j < tokens.length; j += 2) {
 
 
-                this.mAppStorage.putString("Stock" + i, tokens[j]).apply();
-                this.mAppStorage.putString("Stock" + i + "_summary", getBackupDescription(tokens[j])).apply();
-                i++;
+
+            // Remove all stocks from widget.
+            for(int j = 1; j < 16; j++) {
+                 this.mAppStorage.putString("Stock" + j, "").apply();
+                 this.mAppStorage.putString("Stock" + j + "_summary" , "").apply();
             }
+
+                /*
+            System.out.println(tokens[0]);
+            System.out.println(tokens[1]);
+            System.out.println(tokens[2]);
+               System.out.println(tokens[3]);
+               */
+
+
+
+
+
+                int i = 1;
+
+                // put all backup stocks into internal storage.
+                for(int j = 3; j < tokens.length; j += 2) {
+
+
+                    this.mAppStorage.putString("Stock" + i, tokens[j]).apply();
+                    this.mAppStorage.putString("Stock" + i + "_summary", getBackupDescription(tokens[j])).apply();
+                    i++;
+                }
         } else DialogTools.showSimpleDialog(context, "restore widget failed", "This widget has the wrong size for this backup!");
 
     }
