@@ -118,7 +118,7 @@ public class SymbolProvider extends ContentProvider {
                 suggestion.put("symbol", "Use " + query.toUpperCase());
                 suggestion.put("name", "");
                 suggestions.add(0, suggestion);
-
+                //Adds button for isin search
                 Map<String, String> toIsin = new HashMap<>();
                 toIsin.put("symbol", "ISIN " + query.toUpperCase());
                 toIsin.put("name", "");
