@@ -50,8 +50,10 @@ import org.xml.sax.InputSource;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -97,6 +99,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     //The amount of stock preferences in preferences.xml
     public static final int MAX_STOCKS = 16;
 
+    Storage storage = null;
+
 
 
     String getChangeLog() {
@@ -115,6 +119,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             String query = intent.getStringExtra(SearchManager.QUERY);
             startSearch(query, false, null, false);
         }
+
     }
 
     @Override
@@ -189,26 +194,30 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         int widgetSize = sharedPreferences.getInt("widgetSize", 0);
 
         // Remove extra stocks
-        // Normal view
         PreferenceScreen stock_setup = (PreferenceScreen) findPreference("stock_setup");
-        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
-        if ((widgetSize == 0 || widgetSize == 1) && !storage.getBoolean("visual_stockboard",false)) {
-            for (int i = 5; i <= MAX_STOCKS; i++)
-                removePref(stock_setup, "Stock" + i);
-        }else if ((widgetSize == 2 || widgetSize == 3) && !storage.getBoolean("visual_stockboard",false)) {
-            for (int i = 11; i <= MAX_STOCKS; i++)
-                removePref(stock_setup, "Stock" + i);
+        if(!storage.getBoolean("visual_stockboard",false)) {
+            // Normal view
+            if (widgetSize == 0 || widgetSize == 1)  {
+                for (int i = 5; i <= MAX_STOCKS; i++)
+                    removePref(stock_setup, "Stock" + i);
+            }else if (widgetSize == 2 || widgetSize == 3) {
+                for (int i = 11; i <= MAX_STOCKS; i++)
+                    removePref(stock_setup, "Stock" + i);
+            }
+        } else {
             // Visual Stockboard view
-        }else if((widgetSize == 0) && storage.getBoolean("visual_stockboard",false)) {
-            for (int i = 5; i <= MAX_STOCKS; i++)
-                removePref(stock_setup, "Stock" + i);
-        }else if((widgetSize == 1) && storage.getBoolean("visual_stockboard",false)) {
-            for (int i = 9; i <= MAX_STOCKS; i++)
-                removePref(stock_setup, "Stock" + i);
-        }else if((widgetSize == 2) && storage.getBoolean("visual_stockboard",false)) {
-            for (int i = 9; i <= MAX_STOCKS; i++)
-                removePref(stock_setup, "Stock" + i);
+            if(widgetSize == 0) {
+                for (int i = 5; i <= MAX_STOCKS; i++)
+                    removePref(stock_setup, "Stock" + i);
+            }else if(widgetSize == 1) {
+                for (int i = 9; i <= MAX_STOCKS; i++)
+                    removePref(stock_setup, "Stock" + i);
+            }else if(widgetSize == 2) {
+                for (int i = 9; i <= MAX_STOCKS; i++)
+                    removePref(stock_setup, "Stock" + i);
+            }
         }
+
 
         // Remove extra widget views
         if (widgetSize == 1 || widgetSize == 3) {
@@ -218,15 +227,55 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             removePref(widget_views, "show_profit_daily_change");
             removePref(widget_views, "show_profit_change");
         }
+
+        // Remove unused settings for visual Stockboard
+        PreferenceScreen appearance = (PreferenceScreen) findPreference("appearance");
+        if(storage.getBoolean("visual_stockboard",false)) {
+            PreferenceScreen settings = (PreferenceScreen) findPreference("advanced");
+            removePref(settings,"widget_views");
+            removePref(appearance,"large_font");
+            removePref(appearance,"colours_on_prices");
+            removePref(appearance,"background");
+            removePref(appearance,"updated_display");
+            removePref(appearance,"updated_colour");
+            removePref(appearance,"short_time");
+            removePref(appearance,"text_style");
+        }else if(!storage.getBoolean("visual_stockboard",false)) {
+            removePref(appearance,"vs_background");
+            removePref(appearance,"vs_updated_display");
+            removePref(appearance,"vs_updated_colour");
+            removePref(appearance,"vs_short_time");
+            removePref(appearance,"vs_text_style");
+        }
+
         // Hide Feedback option if not relevant
         String install_date = getAppPreferences().getString("install_date", null);
         if (DateTools.elapsedDays(install_date) < 30)
             removePref("about_menu", "rate_app");
 
         // Initialise the summaries when the preferences screen loads
-        Map<String, ?> map = sharedPreferences.getAll();
-        for (String key : map.keySet())
-            updateSummaries(sharedPreferences, key);
+        Map<String, ?> map = new ConcurrentHashMap<String,Object>(sharedPreferences.getAll());
+        //map = sharedPreferences.getAll();
+        map.remove("background_vs");
+
+        if(storage.getBoolean("visual_stockboard",false)) {
+            for (String key : map.keySet()) {
+                if (!key.startsWith("vs_"))
+                    map.remove(key);
+                else
+                    updateSummaries(sharedPreferences, key);
+            }
+        }
+        else
+            for (String key : map.keySet()) {
+                    if (key.startsWith("vs_")) {
+                        map.remove(key);
+                    }
+                else
+                    updateSummaries(sharedPreferences, key);
+                }
+
+
 
         // Update version number
         findPreference("version").setSummary("BUILD " + VersionTools.BUILD);
@@ -245,6 +294,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
         // Perform some custom handling of some values
         if (key.startsWith("Stock") && !key.endsWith("_summary")) {
             updateStockValue(sharedPreferences, key);
@@ -265,6 +315,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         } else if (key.equals("update_weekend")) {
             updateGlobalPref(sharedPreferences, key, CHECKBOX_TYPE);
         }
+
         // Update the summary whenever the preference is changed
         updateSummaries(sharedPreferences, key);
     }
@@ -459,7 +510,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        final Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+        storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
@@ -506,6 +557,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
         // Hook the Help preference to the Help activity
         Preference help_portfolio = findPreference("help_portfolio");
         help_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -515,6 +567,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
         // Hook the Help preference to the Help activity
         Preference help_prices = findPreference("help_prices");
         help_prices.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -524,6 +577,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
         // Hook the Update preference to the Help activity
         Preference updateNow = findPreference("update_now");
         updateNow.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -534,6 +588,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+
         // Hook the PortfolioActivity preference to the PortfolioActivity activity
         Preference portfolio = findPreference("portfolio");
         portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -616,40 +671,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });*/
 
 
-        //Hook up Visual Stockboard Highlighting
-        final CheckBoxPreference numeric = (CheckBoxPreference) findPreference("highlight_numeric");
-        final CheckBoxPreference percent = (CheckBoxPreference) findPreference("highlight_percent");
-        numeric.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(numeric.isChecked()) {
-                    numeric.setChecked(false);
-                    percent.setChecked(true);
-                }
-                else {
-                    numeric.setChecked(true);
-                    percent.setChecked(false);
-                }
-                return false;
-            }
-        });
-        percent.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(percent.isChecked()) {
-                    percent.setChecked(false);
-                    numeric.setChecked(true);
-                }
-                else {
-                    percent.setChecked(true);
-                    numeric.setChecked(false);
-                }
-                return false;            }
-        });
-        if(numeric.isChecked())
-            storage.putBoolean("highlight_percent",false);
-        if(percent.isChecked())
-            storage.putBoolean("highlight_percent",true);
 
         // Hook Rate MinistocksActivity preference to the market link
         Preference rate_app = findPreference("rate_app");
@@ -787,14 +808,23 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             try {
                 findPreference(key).setTitle(value);
                 findPreference(key).setSummary(summary);
+
             }catch (Exception e){e.printStackTrace();}
 
+
         }
+
         // Initialise the ListPreference summaries
-        else if (key.startsWith("background") || key.startsWith("updated_colour") || key.startsWith("updated_display") || key.startsWith("text_style")) {
+        else if ((key.startsWith("background") || key.startsWith("vs_background") ||
+                key.startsWith("updated_colour") || key.startsWith("vs_updated_colour") ||
+                key.startsWith("updated_display") || key.startsWith("vs_updated_display")||
+                key.startsWith("text_style") || key.startsWith("vs_text_style"))) {
+
             String value = sharedPreferences.getString(key, "");
             findPreference(key).setSummary("Selected: " + value.substring(0, 1).toUpperCase() + value.substring(1));
         }
+
+
         // Initialise the Update interval
         else if (key.startsWith("update_interval")) {
             // Update summary based on selected value
@@ -835,6 +865,25 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         } else if (key.equals("update_weekend")) {
             updateFromGlobal(sharedPreferences, key, CHECKBOX_TYPE);
         }
+
+        // Set whether percentage or numeric change is used for the calculation of the panel color
+        // if boolean usePercentage is false numeric is used
+        else if(key.equals("color_calculation")) {
+            String value = sharedPreferences.getString(key, "");
+
+            if (value. equals( "numeric")){
+                storage.putBoolean("usePercentage",false);
+                storage.apply();
+
+            } else {
+                storage.putBoolean("usePercentage",true);
+                storage.apply();
+            }
+        }
+    }
+
+    void updatePreference(SharedPreferences sharedPreferences, String key){
+
     }
 
     @Override
