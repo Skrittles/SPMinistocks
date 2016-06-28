@@ -48,6 +48,7 @@ import nitezh.ministock.DialogTools;
 import nitezh.ministock.Storage;
 import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.UserData;
+import nitezh.ministock.activities.PreferencesActivity;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.utils.CurrencyTools;
 import nitezh.ministock.utils.NumberTools;
@@ -515,9 +516,7 @@ public class PortfolioStockRepository {
     public void backupWidget(Context context, String backupName) {
         int widgetSize = this.mAppStorage.getInt("widgetSize", 0);
 
-        int maxStocks;
-        if (widgetSize < 2) maxStocks = 4;
-        else maxStocks = 10;
+        int maxStocks = PreferencesActivity.MAX_STOCKS;
 
         ArrayList<String> backupStocks = new ArrayList<>();
 
