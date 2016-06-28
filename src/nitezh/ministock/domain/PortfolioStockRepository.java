@@ -536,7 +536,7 @@ public class PortfolioStockRepository {
 
         }
 
-        UserData.writeExternalStorage(context, backupStocks.toString(), backupName, "widgetbackups");
+        UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups");
     }
 
 
