@@ -34,7 +34,7 @@
         <item>Transparent</item>
         <item>None</item>
     </string-array>
-    <string-array name="background_entryvalues">
+        <string-array name="background_entryvalues">
         <item>solid</item>
         <item>transparent</item>
         <item>none</item>
@@ -60,6 +60,15 @@
         <item>visible</item>
         <item>invisible</item>
         <item>remove</item>
+    </string-array>
+
+    <string-array name="vs_updated_display_entries">
+        <item>Visible</item>
+        <item>Invisible</item>
+    </string-array>
+    <string-array name="vs_updated_display_entryvalues">
+        <item>visible</item>
+        <item>invisible</item>
     </string-array>
 
     <string-array name="price_colour_entries">
@@ -97,6 +106,16 @@
         <item>10800000</item>
         <item>86400000</item>
     </string-array>
+
+    <string-array name ="color_change_vs_entries">
+        <item>Percentage change</item>
+        <item>Numeric change</item>
+    </string-array>
+    <string-array name ="color_change_vs_entryvalues">
+        <item>percentage</item>
+        <item>numeric</item>
+    </string-array>
+
 
     <string name="symbolNotFound">Symbol \'%s\' is not found. Press to add it anyway.
     </string>

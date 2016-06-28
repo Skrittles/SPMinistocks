@@ -225,6 +225,11 @@ public class AndroidWidget implements Widget {
     }
 
     @Override
+    public String getVsBackgroundStyle() {
+        return this.storage.getString("vs_background", "transparent");
+    }
+
+    @Override
     public boolean useLargeFont() {
         return this.storage.getBoolean("large_font", false);
     }
@@ -240,6 +245,11 @@ public class AndroidWidget implements Widget {
     }
 
     @Override
+    public boolean getVsTextStyle() {
+        return this.storage.getString("text_style", "normal").equals("bold");
+    }
+
+    @Override
     public boolean getColorsOnPrices() {
         return this.storage.getBoolean("colours_on_prices", false);
     }
@@ -250,7 +260,17 @@ public class AndroidWidget implements Widget {
     }
 
     @Override
+    public String getVsFooterVisibility() {
+        return this.storage.getString("updated_display", "visible");
+    }
+
+    @Override
     public String getFooterColor() {
+        return this.storage.getString("updated_colour", "light");
+    }
+
+    @Override
+    public String getVsFooterColor() {
         return this.storage.getString("updated_colour", "light");
     }
 
@@ -258,6 +278,12 @@ public class AndroidWidget implements Widget {
     public boolean showShortTime() {
         return this.storage.getBoolean("short_time", false);
     }
+
+    @Override
+    public boolean showVsShortTime() {
+        return this.storage.getBoolean("short_time", false);
+    }
+
 
     @Override
     public boolean hasDailyChangeView() {

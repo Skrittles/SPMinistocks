@@ -36,6 +36,7 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -87,21 +88,20 @@ public class PortfolioStockRepository {
 
     }
 
+    private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
+        Set<String> symbolSet = portfolioStocksInfo.keySet();
 
-            private HashMap<String, StockQuote> getStocksQuotes(Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
-                Set<String> symbolSet = portfolioStocksInfo.keySet();
+        return new StockQuoteRepository(appStorage, cache, widgetRepository)
+                .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
+        }
 
-                return new StockQuoteRepository(appStorage, cache, widgetRepository)
-                        .getQuotes(Arrays.asList(symbolSet.toArray(new String[symbolSet.size()])), false);
-            }
-
-            private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
-                HashMap<String, PortfolioStock> stocks = this.getStocks();
-                for (String symbol : symbols) {
-                    if (!stocks.containsKey(symbol)) {
-                        stocks.put(symbol, null);
-                    }
+        private HashMap<String, PortfolioStock> getPortfolioStocksInfo(Set<String> symbols) {
+            HashMap<String, PortfolioStock> stocks = this.getStocks();
+            for (String symbol : symbols) {
+                if (!stocks.containsKey(symbol)) {
+                    stocks.put(symbol, null);
                 }
+            }
 
         return stocks;
     }
@@ -258,7 +258,6 @@ public class PortfolioStockRepository {
     */
     public void restorePortfolio(Context context) {
         mDirtyPortfolioStockMap = true;
-
         this.portfolioStocksInfo.clear();
 
         String rawJson = UserData.readExternalStorage(context, PORTFOLIO_JSON);

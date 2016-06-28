@@ -85,6 +85,11 @@ public class MockWidget implements Widget {
     }
 
     @Override
+    public String getVsBackgroundStyle() {
+        return null;
+    }
+
+    @Override
     public boolean useLargeFont() {
         return false;
     }
@@ -100,6 +105,12 @@ public class MockWidget implements Widget {
     }
 
     @Override
+    public boolean getVsTextStyle() {
+        return false;
+    }
+
+
+    @Override
     public boolean getColorsOnPrices() {
         return false;
     }
@@ -110,12 +121,27 @@ public class MockWidget implements Widget {
     }
 
     @Override
+    public String getVsFooterVisibility() {
+        return null;
+    }
+
+    @Override
     public String getFooterColor() {
         return null;
     }
 
     @Override
+    public String getVsFooterColor() {
+        return null;
+    }
+
+    @Override
     public boolean showShortTime() {
+        return false;
+    }
+
+    @Override
+    public boolean showVsShortTime() {
         return false;
     }
 
