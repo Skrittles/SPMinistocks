@@ -227,15 +227,14 @@ public class WidgetView {
             alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT, true);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT, widget.hasTotalPlPercentView() && this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, true);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, true);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
             return alwaysOn;
         } else {
-            // TODO It seems that hasPortfolioData is always false. This should be checked
             HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
             enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
             enabledViews.put(ViewType.VIEW_DAILY_CHANGE, widget.hasDailyChangeView());

@@ -24,6 +24,7 @@
 
 package nitezh.ministock.activities;
 
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -32,12 +33,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TimePicker;
 
 import org.w3c.dom.Document;
@@ -46,13 +48,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -62,9 +60,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 
 import nitezh.ministock.SymbolProvider;
-import nitezh.ministock.dataaccess.FxChangeRepository;
-import nitezh.ministock.dataaccess.YahooStockQuoteRepository;
-import nitezh.ministock.tests.mocks.MockCache;
 import nitezh.ministock.utils.Cache;
 import nitezh.ministock.DialogTools;
 import nitezh.ministock.utils.StorageCache;
@@ -337,6 +332,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.putString(key, value);
         editor.apply();
 
+
         //Updating the UI is handled in StockPreference
 
         // Set up a listener whenever a key changes
@@ -437,6 +433,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         updateSummaries(getPreferenceScreen().getSharedPreferences(), mTimePickerKey);
     }
 
+
     void setPreference(String key, String value, String summary) {
         // Return if no key
         if (key.equals("")) {
@@ -511,14 +508,25 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         return "Not found";
     }
 
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         storage = PreferenceStorage.getInstance(PreferencesActivity.this);
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+
+        final PreferenceScreen stocks = (PreferenceScreen) findPreference("stock_setup");
+        stocks.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+
+                Dialog dialog = stocks.getDialog();
+                View v = stocks.getDialog().getLayoutInflater().inflate(R.layout.drag_layout,null);
+                dialog.addContentView(v,
+                        new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT ));
+                return false;
+
+            }
+        });
 
         // Hook the About preference to the About (MinistocksActivity) activity
         Preference about = findPreference("about");
@@ -590,9 +598,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
-
-
-        /*
         // Hook the Backup portfolio option to the backup portfolio method
         Preference backup_portfolio = findPreference("backup_portfolio");
         backup_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -620,6 +625,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         });
 
+
+        /*
         // Hook the Backup widget option to the backup widget method
         Preference backup_widget = findPreference("backup_widget");
         backup_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -660,8 +667,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a widget backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
-        });
-        */
+        });*/
+
 
 
         // Hook Rate MinistocksActivity preference to the market link
@@ -794,14 +801,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             else if (summary.equals("")) {
                 summary = "No description";
             }
+
             // This sets the title and summary for a stock, but throws an exception if n Stocks are allowed, but Stock n+i has data
             // TODO Fix issue where this causes a NullPointerException
             try {
                 findPreference(key).setTitle(value);
                 findPreference(key).setSummary(summary);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
+
+            }catch (Exception e){e.printStackTrace();}
+
+
         }
 
         // Initialise the ListPreference summaries
