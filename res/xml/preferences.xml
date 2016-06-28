@@ -254,8 +254,8 @@
 
             <PreferenceScreen
                 android:key="backup_restore"
-                android:summary="This is an experimental feature"
-                android:title="Backup and Restore (BETA)">
+                android:summary="Widget backup and widget restore"
+                android:title="Backup and Restore your widget">
                  <!--
                 <Preference
                     android:key="backup_portfolio"
@@ -268,11 +268,11 @@
                       -->
                 <Preference
                     android:key="backup_widget"
-                    android:summary="Backup this widget to cloud"
+                    android:summary="Backup this widget to ministocks/widgetbackups/"
                     android:title="Backup widget"/>
                 <Preference
                     android:key="restore_widget"
-                    android:summary="Restore a widget from cloud"
+                    android:summary="Restore a widget from ministocks/widgetbackups/"
                     android:title="Restore widget"/>
 
             </PreferenceScreen>
@@ -291,12 +291,12 @@
 
             <Preference
                 android:key="backup_portfolio"
-                android:summary="Backup portfolio to ministocks/portfolioJson.txt"
+                android:summary="Backup portfolio to ministocks/"
                 android:title="Backup portfolio"/>
 
             <Preference
                 android:key="restore_portfolio"
-                android:summary="Restore portfolio from ministocks/portfolioJson.txt"
+                android:summary="Restore portfolio from ministocks/"
                 android:title="Restore portfolio"/>
 
             </PreferenceScreen>

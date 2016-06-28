@@ -554,35 +554,50 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
 
         // Hook the Restore portfolio option to the restore portfolio method
-        // TODO: Create list with backups, if some are available. User has to choose.
         Preference restore_portfolio = findPreference("restore_portfolio");
         restore_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
-                Cache cache = new StorageCache(storage);
-                WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
-                new PortfolioStockRepository(storage, cache, widgetRepository).restorePortfolio(PreferencesActivity.this, PortfolioStockRepository.PORTFOLIO_JSON);
+
+                CharSequence[] backupNames = UserData.readFileNames(PreferencesActivity.this, "portfoliobackups");
+                // If there are no backups show an appropriate dialog
+                if (backupNames.length == 0) {
+                    DialogTools.showSimpleDialog(PreferencesActivity.this, "No backups available", "There were no portfolio backups to restore.");
+                    return true;
+                }
+
+                // If there are backups then show the list
+                DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
+                    @Override
+                    public Object call() throws Exception {
+                        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                        Cache cache = new StorageCache(storage);
+                        WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                        new PortfolioStockRepository(storage, cache, widgetRepository).restorePortfolio(PreferencesActivity.this, this.getInputValue());
+                        return new Object();
+                    }
+                };
+                    DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a portfolio backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
         });
 
-        /*
+
         // Hook the Backup widget option to the backup widget method
         Preference backup_widget = findPreference("backup_widget");
         backup_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
-                    @Override
-                    public Object call() throws Exception {
-                        UserData.backupWidget(PreferencesActivity.this, mAppWidgetId, this.getInputValue());
-                        return new Object();
-                    }
-                };
-                DialogTools.inputWithCallback(PreferencesActivity.this, "Backup this widget", "Please enter a name for this backup:", "OK", "Cancel", "AppWidgetProvider backup from " + DateTools.getNowAsString(), callable);
+
+                Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                Cache cache = new StorageCache(storage);
+                WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                new PortfolioStockRepository(storage, cache, widgetRepository).backupWidget(PreferencesActivity.this);
+
+                DialogTools.showSimpleDialog(PreferencesActivity.this, "Widget backup", "Widget stocks have been backed up to ministocks/widgetbackups/");
                 return true;
             }
+
         });
 
         // Hook the Restore widget option to the restore widget method
@@ -590,7 +605,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         restore_widget.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                CharSequence[] backupNames = UserData.getWidgetBackupNames(PreferencesActivity.this);
+                CharSequence[] backupNames = UserData.readFileNames(PreferencesActivity.this, "widgetbackups");
                 // If there are no backups show an appropriate dialog
                 if (backupNames == null) {
                     DialogTools.showSimpleDialog(PreferencesActivity.this, "No backups available", "There were no widget backups to restore.");
@@ -601,14 +616,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
                     @Override
                     public Object call() throws Exception {
-                        UserData.restoreWidget(PreferencesActivity.this, mAppWidgetId, this.getInputValue());
+                        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                        Cache cache = new StorageCache(storage);
+                        WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                        new PortfolioStockRepository(storage, cache, widgetRepository).restoreWidget(PreferencesActivity.this, this.getInputValue());
                         return new Object();
                     }
                 };
                 DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a widget backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
-        });*/
+        });
 
 
         //Hook up Visual Stockboard Highlighting
