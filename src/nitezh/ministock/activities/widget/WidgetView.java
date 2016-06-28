@@ -40,7 +40,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
@@ -103,50 +102,50 @@ public class WidgetView {
         RemoteViews views;
         if (widget.getSize() == 1) {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_1x4_large);
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_1x4);
             }
         } else if (widget.getSize() == 2) {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x2_large);
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x2);
             }
         } else if (widget.getSize() == 3) {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x4_large);
 
                 //Loads graphic overlay if "Visual Stockboard" is activated in the options
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_2x4);
             }
         } else {
             if (useLargeFont) {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_1x2_large);
             } else {
-                if(widget.getStorage().getBoolean("visual_stockboard",false))
+                if(widget.isVisual())
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
                 else
                     views = new RemoteViews(packageName, R.layout.widget_1x2);
@@ -587,19 +586,19 @@ public class WidgetView {
             int viewId;
             if (!widget.isVisual()) {
                 //Enable rows for non-visual view
-                viewId = ReflectionTools.getField("line" + i);
+                viewId = ReflectionTools.getFieldId("line" + i);
                 if (viewId > 0) {
-                    views.setViewVisibility(ReflectionTools.getField("line" + i), View.GONE);
+                    views.setViewVisibility(ReflectionTools.getFieldId("line" + i), View.GONE);
                 }
                 // Set used rows visible
                 for (int j = 1; j < count + 1; j++) {
-                    views.setViewVisibility(ReflectionTools.getField("line" + j), View.VISIBLE);
+                    views.setViewVisibility(ReflectionTools.getFieldId("line" + j), View.VISIBLE);
                 }
             } else {
                 //Enable panels for visual view
-                viewId = ReflectionTools.getField("Panel" + i);
+                viewId = ReflectionTools.getFieldId("Panel" + i);
                 if (viewId > 0) {
-                    views.setViewVisibility(ReflectionTools.getField("Panel"+ i), View.INVISIBLE);
+                    views.setViewVisibility(ReflectionTools.getFieldId("Panel"+ i), View.INVISIBLE);
                 }
 
                 // Find used Symbols
@@ -611,7 +610,7 @@ public class WidgetView {
 
                 // Set used Panels visible
                 for (int j = 1; j <= usedSymbols; j++) {
-                    views.setViewVisibility(ReflectionTools.getField("Panel" + j), View.VISIBLE);
+                    views.setViewVisibility(ReflectionTools.getFieldId("Panel" + j), View.VISIBLE);
                 }
             }
         }
@@ -647,13 +646,13 @@ public class WidgetView {
     public void setStockRowItemText(int row, int col, Object text) {
             try {
                 this.remoteViews.setTextViewText(
-                        ReflectionTools.getField("text" + row + col),
+                        ReflectionTools.getFieldId("text" + row + col),
                         !text.equals("") ? applyFormatting((String) text) : "");
             }catch (Exception e){}
     }
 
     public void setStockRowItemColor(int row, int col, int color) {
-        this.remoteViews.setTextColor(ReflectionTools.getField("text" + row + col), color);
+        this.remoteViews.setTextColor(ReflectionTools.getFieldId("text" + row + col), color);
     }
 
     public void applyPendingChanges() {
@@ -722,7 +721,7 @@ public class WidgetView {
                 setStockRowItemColor(lineNo, 5, rowInfo.getStockInfoColor());
                 setStockRowItemColor(lineNo, 6, rowInfo.getStockInfoExtraColor());
 
-                int panelInt = ReflectionTools.getField("Panel" + lineNo);
+                int panelInt = ReflectionTools.getFieldId("Panel" + lineNo);
                 remoteViews.setInt(panelInt, "setBackgroundColor", Color.parseColor(rowInfo.getVisualColor()));
             }
         }

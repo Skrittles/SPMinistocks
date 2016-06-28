@@ -1,26 +1,26 @@
 package nitezh.ministock.domain;
 
-import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.EditTextPreference;
-import android.preference.Preference;
 import android.util.AttributeSet;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
-import nitezh.ministock.DialogTools;
+import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
+import nitezh.ministock.Storage;
 import nitezh.ministock.activities.PreferencesActivity;
+import nitezh.ministock.utils.ReflectionTools;
 
 /**
  * Created by Tim Greiner on 30.05.2016.
@@ -31,18 +31,41 @@ import nitezh.ministock.activities.PreferencesActivity;
  * everything is controlled in this custom preference.
  */
 public class StockPreference extends EditTextPreference {
+    int widgetSize = 0;
+    //Instead of just widget size, we use a letter code to avoid duplicate names for png files
+    String size;
+    boolean isVisual;
     public StockPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        Storage storage = PreferenceStorage.getInstance(getContext());
+        isVisual = storage.getBoolean("visual_stockboard",false);
+        widgetSize = storage.getInt("widgetSize",0);
+        switch (widgetSize){
+            case 0:
+                size="a";
+                break;
+            case 1:
+                size="b";
+                break;
+            case 2:
+                size="c";
+                break;
+            case 3:
+                size="d";
+                break;
+            default:
+                size="a";
+                break;
+        }
     }
 
     @Override
     protected void onClick() {
-        return;
     }
 
     @Override
     public void onClick(DialogInterface dialog, int which) {
-        return;
+
     }
 
     View VIEW;
@@ -54,6 +77,7 @@ public class StockPreference extends EditTextPreference {
     @Override
     protected View onCreateView(final ViewGroup parent )
     {
+        super.onCreateView(parent);
         LayoutInflater li = (LayoutInflater)getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View view =  li.inflate( R.layout.preferences_layout, parent, false);
 
@@ -100,15 +124,24 @@ public class StockPreference extends EditTextPreference {
     View.OnDragListener dragListen = new View.OnDragListener(){
         @Override
         public boolean onDrag(View v, DragEvent event){
+            ImageView screen = (ImageView) getView().getRootView().findViewById(R.id.screen);
             int dragEvent = event.getAction();
 
             switch (dragEvent){
                 case DragEvent.ACTION_DRAG_ENTERED:
+                    if(isVisual) {
+                        screen.setVisibility(View.VISIBLE);
+                        screen.setImageResource(ReflectionTools.getFieldDrawable((getKey()).toLowerCase() + size));
+                    }
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    screen.setVisibility(View.GONE);
+                    break;
                 //This part switches the content of the dropper and the drop target
                 case DragEvent.ACTION_DROP:
+                    screen.setVisibility(View.GONE);
                     SharedPreferences preferences = getSharedPreferences();
                     SharedPreferences.Editor editor = preferences.edit();
 

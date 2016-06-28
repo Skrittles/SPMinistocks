@@ -443,7 +443,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
     }
 
-    private final String getElementValue( Node elem ) {
+    private String getElementValue( Node elem ) {
         Node child;
         if( elem != null){
             if (elem.hasChildNodes()){
@@ -463,11 +463,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
 
+        // Adds an overlapping view to the existing dialog that shows up when stock_setup is pressed
+        // This view contains an image view which is used as the preview screen for the drag'n'drop menu
         final PreferenceScreen stocks = (PreferenceScreen) findPreference("stock_setup");
         stocks.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-
                 Dialog dialog = stocks.getDialog();
                 View v = stocks.getDialog().getLayoutInflater().inflate(R.layout.drag_layout,null);
                 dialog.addContentView(v,
