@@ -546,6 +546,12 @@ public class PortfolioStockRepository {
 
         String[] tokens = rawJson.split(delims);
 
+        // Remove all stocks from widget.
+        for(int j = 1; j < 16; j++) {
+            this.mAppStorage.putString("Stock" + j, "").apply();
+            this.mAppStorage.putString("Stock" + j + "_summary" , "").apply();
+        }
+
         /*
         System.out.println(tokens[0]);
         System.out.println(tokens[1]);
