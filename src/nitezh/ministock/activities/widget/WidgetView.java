@@ -227,11 +227,11 @@ public class WidgetView {
             alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT, widget.hasTotalPlPercentView() && this.hasPortfolioData);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT, this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
             return alwaysOn;
         } else {
