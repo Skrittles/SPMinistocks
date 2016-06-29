@@ -246,7 +246,7 @@ public class AndroidWidget implements Widget {
 
     @Override
     public boolean getVsTextStyle() {
-        return this.storage.getString("text_style", "normal").equals("bold");
+        return this.storage.getString("vs_text_style", "normal").equals("bold");
     }
 
     @Override
@@ -261,7 +261,7 @@ public class AndroidWidget implements Widget {
 
     @Override
     public String getVsFooterVisibility() {
-        return this.storage.getString("updated_display", "visible");
+        return this.storage.getString("vs_updated_display", "visible");
     }
 
     @Override
@@ -271,7 +271,7 @@ public class AndroidWidget implements Widget {
 
     @Override
     public String getVsFooterColor() {
-        return this.storage.getString("updated_colour", "light");
+        return this.storage.getString("vs_updated_colour", "light");
     }
 
     @Override
@@ -281,7 +281,7 @@ public class AndroidWidget implements Widget {
 
     @Override
     public boolean showVsShortTime() {
-        return this.storage.getBoolean("short_time", false);
+        return this.storage.getBoolean("vs_short_time", false);
     }
 
 
@@ -338,4 +338,5 @@ public class AndroidWidget implements Widget {
     public boolean hasTotalPlPercentAerView() {
         return this.storage.getBoolean("show_profit_aer", false);
     }
+
 }

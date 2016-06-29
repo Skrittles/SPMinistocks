@@ -107,11 +107,11 @@
         <item>86400000</item>
     </string-array>
 
-    <string-array name ="color_change_vs_entries">
+    <string-array name ="vs_color_change_entries">
         <item>Percentage change</item>
         <item>Numeric change</item>
     </string-array>
-    <string-array name ="color_change_vs_entryvalues">
+    <string-array name ="vs_color_change_entryvalues">
         <item>percentage</item>
         <item>numeric</item>
     </string-array>
