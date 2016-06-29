@@ -344,8 +344,8 @@
             android:title="Specify color calculation"
             android:summary="Change the color calculation for Visual Stockboard"
             android:defaultValue="percentage"
-            android:entries="@array/color_change_vs_entries"
-            android:entryValues="@array/color_change_vs_entryvalues"
+            android:entries="@array/vs_color_change_entries"
+            android:entryValues="@array/vs_color_change_entryvalues"
             android:key="color_calculation"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
