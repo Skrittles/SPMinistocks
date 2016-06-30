@@ -222,6 +222,12 @@
                         android:entryValues="@array/updated_display_entryvalues"
                         android:key="updated_display"
                         android:title="Footer display"/>
+                <ListPreference
+                        android:defaultValue="standard"
+                        android:entries="@array/vs_font_entries"
+                        android:entryValues="@array/vs_font_entryvalues"
+                        android:key="vs_fonts"
+                        android:title="Font" />
                 <CheckBoxPreference
                         android:defaultValue="false"
                         android:key="large_font"
@@ -346,7 +352,7 @@
             android:defaultValue="percentage"
             android:entries="@array/vs_color_change_entries"
             android:entryValues="@array/vs_color_change_entryvalues"
-            android:key="color_calculation"/>
+            android:key="vs_color_calculation"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen

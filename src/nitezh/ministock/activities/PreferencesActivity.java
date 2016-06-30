@@ -37,6 +37,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.ViewGroup;
@@ -232,8 +233,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
         // Remove unused settings for visual Stockboard
         PreferenceScreen appearance = (PreferenceScreen) findPreference("appearance");
+        PreferenceScreen settings = (PreferenceScreen) findPreference("advanced");
+        PreferenceCategory mainmenu = (PreferenceCategory) findPreference("widget_settings");
         if(storage.getBoolean("visual_stockboard",false)) {
-            PreferenceScreen settings = (PreferenceScreen) findPreference("advanced");
             removePref(settings,"widget_views");
             removePref(appearance,"large_font");
             removePref(appearance,"colours_on_prices");
@@ -243,11 +245,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             removePref(appearance,"short_time");
             removePref(appearance,"text_style");
         }else if(!storage.getBoolean("visual_stockboard",false)) {
+            mainmenu.removePreference( findPreference("vs_color_calculation"));
             removePref(appearance,"vs_background");
             removePref(appearance,"vs_updated_display");
             removePref(appearance,"vs_updated_colour");
             removePref(appearance,"vs_short_time");
             removePref(appearance,"vs_text_style");
+            removePref(appearance,"vs_font");
+
         }
 
         // Hide Feedback option if not relevant
@@ -257,26 +262,18 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
         // Initialise the summaries when the preferences screen loads
         Map<String, ?> map = new ConcurrentHashMap<String,Object>(sharedPreferences.getAll());
-        //map = sharedPreferences.getAll();
-        map.remove("background_vs");
 
         if(storage.getBoolean("visual_stockboard",false)) {
             for (String key : map.keySet()) {
-                if (!key.startsWith("vs_") && !key.startsWith("Stock"))
-                    map.remove(key);
-                else
+                if (key.startsWith("vs_") )
                     updateSummaries(sharedPreferences, key);
             }
         }
         else
             for (String key : map.keySet()) {
-                    if (key.startsWith("vs_")) {
-                        map.remove(key);
-                    }
-                else
-                    updateSummaries(sharedPreferences, key);
+                    if (!key.startsWith("vs_"))
+                        updateSummaries(sharedPreferences, key);
                 }
-
 
 
         // Update version number
@@ -856,12 +853,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         else if ((key.startsWith("background") || key.startsWith("vs_background") ||
                 key.startsWith("updated_colour") || key.startsWith("vs_updated_colour") ||
                 key.startsWith("updated_display") || key.startsWith("vs_updated_display")||
-                key.startsWith("text_style") || key.startsWith("vs_text_style"))) {
+                key.startsWith("text_style") || key.startsWith("vs_text_style") ||
+                key.startsWith("vs_font"))) {
 
             String value = sharedPreferences.getString(key, "");
             findPreference(key).setSummary("Selected: " + value.substring(0, 1).toUpperCase() + value.substring(1));
         }
-
 
         // Initialise the Update interval
         else if (key.startsWith("update_interval")) {
@@ -906,7 +903,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
         // Set whether percentage or numeric change is used for the calculation of the panel color
         // if boolean usePercentage is false numeric is used
-        else if(key.equals("color_calculation")) {
+        else if(key.equals("vs_color_calculation")) {
             String value = sharedPreferences.getString(key, "");
 
             if (value. equals( "numeric")){
@@ -920,9 +917,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
     }
 
-    void updatePreference(SharedPreferences sharedPreferences, String key){
-
-    }
 
     @Override
     protected void onStop() {

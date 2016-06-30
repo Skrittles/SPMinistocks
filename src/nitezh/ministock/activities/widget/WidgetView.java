@@ -100,9 +100,10 @@ public class WidgetView {
         boolean useLargeFont = widget.useLargeFont();
         RemoteViews views;
 
-        if(widget.getStorage().getBoolean("visual_stockboard",false))
+        if(widget.isVisual())
              backgroundStyle = widget.getVsBackgroundStyle();
 
+        //Load widget layout depending on widget size and whether large font and visual stockboard are enabled
         if (widget.getSize() == 1) {
             if (useLargeFont) {
                 if(widget.isVisual())
@@ -160,11 +161,12 @@ public class WidgetView {
         return views;
     }
 
+    //Load widget background depending on whether font size and visual stockboard are enabled
     private int getImageViewSrcId(String backgroundStyle, Boolean useLargeFont) {
         Integer imageViewSrcId;
         switch (backgroundStyle) {
             case "transparent":
-                if (useLargeFont) {
+                if (useLargeFont && !widget.isVisual()) {
                     imageViewSrcId = R.drawable.ministock_bg_transparent68_large;
                 } else {
                     imageViewSrcId = R.drawable.ministock_bg_transparent68;
@@ -174,7 +176,7 @@ public class WidgetView {
                 imageViewSrcId = R.drawable.blank;
                 break;
             default:
-                if (useLargeFont) {
+                if (useLargeFont && !widget.isVisual()) {
                     imageViewSrcId = R.drawable.ministock_bg_large;
                 } else {
                     imageViewSrcId = R.drawable.ministock_bg;

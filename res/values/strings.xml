@@ -89,6 +89,19 @@
         <item>bold</item>
     </string-array>
 
+    <string-array name="vs_font_entries">
+        <item>Schrift1</item>
+        <item>Schrift2</item>
+        <item>Schrift3</item>
+        <item>Schrift4</item>
+    </string-array>
+    <string-array name="vs_font_entryvalues">
+        <item>schrift1</item>
+        <item>schrift2</item>
+        <item>schrift3</item>
+        <item>schrift4</item>
+    </string-array>
+
     <string-array name="update_interval_entries">
         <item>5 minutes</item>
         <item>15 minutes</item>
@@ -97,7 +110,6 @@
         <item>Three hours</item>
         <item>Daily</item>
     </string-array>
-
     <string-array name="update_interval_entryvalues">
         <item>300000</item>
         <item>900000</item>
@@ -115,7 +127,6 @@
         <item>percentage</item>
         <item>numeric</item>
     </string-array>
-
 
     <string name="symbolNotFound">Symbol \'%s\' is not found. Press to add it anyway.
     </string>
