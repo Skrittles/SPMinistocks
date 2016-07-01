@@ -225,15 +225,15 @@ public class WidgetView {
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
         if (widget.isVisual()){
             HashMap<WidgetProviderBase.ViewType, Boolean> alwaysOn = new HashMap<>();
-            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, false);
+            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, true);
             alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_CHANGE, false);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT, widget.hasTotalPlPercentView() && this.hasPortfolioData);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT, this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, widget.hasTotalPlPercentAerView() && this.hasPortfolioData);
+            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, widget.hasTotalPercentView() && this.hasPortfolioData);
+            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
             alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
             return alwaysOn;
         } else {
@@ -389,8 +389,8 @@ public class WidgetView {
             case VIEW_PL_PERCENT_AER:
                 plView = true;
                 plChange = true;
-                priceColumn = widgetStock.getPlHolding();
                 if (!widget.isVisual()) {
+                    priceColumn = widgetStock.getPlHolding();
                     stockInfo = widgetStock.getTotalPercentAer();
                     stockInfoExtra = widgetStock.getPlTotalChangeAer();
                 } else {
@@ -414,19 +414,17 @@ public class WidgetView {
 
         // Set the price column to the holding value and colour
         // the column blue if we have no holdings
-        if (plView && priceColumn == null) {
+        if (plView && priceColumn == null && !widget.isVisual()) {
             widgetRow.setPriceColor(WidgetColors.NA);
         }
 
         if (widget.isVisual() && stockInfoExtra2 == null) {
             stockInfoExtra2 = widgetRow.getStockInfo();
-            //widgetRow.setStockInfoExtra2(widgetRow.getStockInfo());
             widgetRow.setStockInfoExtra2Color(WidgetColors.NA);
         }
 
         if (widget.isVisual() && stockInfoExtra3 == null) {
             stockInfoExtra3 = widgetRow.getStockInfoExtra();
-           // widgetRow.setStockInfoExtra3(widgetRow.getStockInfoExtra());
             widgetRow.setStockInfoExtra3Color(WidgetColors.NA);
         }
 
@@ -453,11 +451,7 @@ public class WidgetView {
             // Setup extra entries for the panels in Visual Stockboard
             if (widget.isVisual()) {
                 if (stockInfoExtra2 != null) {
-                    if (plChange) {
-                        widgetRow.setStockInfoExtra2(CurrencyTools.addCurrencyToSymbol(stockInfoExtra2, symbol));
-                    } else {
-                        widgetRow.setStockInfoExtra2(stockInfoExtra2);
-                    }
+                    widgetRow.setStockInfoExtra2(stockInfoExtra2);
                     widgetRow.setStockInfoExtra2Color(getColourForChange(stockInfoExtra2));
                 }
                 if (stockInfoExtra3 != null) {
