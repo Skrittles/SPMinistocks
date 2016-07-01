@@ -146,6 +146,11 @@ public class MockWidget implements Widget {
     }
 
     @Override
+    public String getVsColorCalculation() {
+        return null;
+    }
+
+    @Override
     public boolean hasDailyChangeView() {
         return false;
     }

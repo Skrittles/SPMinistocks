@@ -69,6 +69,8 @@ public interface Widget {
 
     boolean showVsShortTime();
 
+    String getVsColorCalculation();
+
     boolean hasDailyChangeView();
 
     boolean hasTotalPercentView();

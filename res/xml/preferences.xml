@@ -348,7 +348,6 @@
             android:title="Visual Stockboard"/>
         <ListPreference
             android:title="Specify color calculation"
-            android:summary="Change the color calculation for Visual Stockboard"
             android:defaultValue="percentage"
             android:entries="@array/vs_color_change_entries"
             android:entryValues="@array/vs_color_change_entryvalues"

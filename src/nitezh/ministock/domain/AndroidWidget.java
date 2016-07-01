@@ -284,6 +284,11 @@ public class AndroidWidget implements Widget {
         return this.storage.getBoolean("vs_short_time", false);
     }
 
+    @Override
+    public String getVsColorCalculation() {
+        return this.storage.getString("vs_color_calculation","percentage");
+    }
+
 
     @Override
     public boolean hasDailyChangeView() {

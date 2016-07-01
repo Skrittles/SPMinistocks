@@ -850,11 +850,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
 
         // Initialise the ListPreference summaries
-        else if ((key.startsWith("background") || key.startsWith("vs_background") ||
+        else if (key.startsWith("background") || key.startsWith("vs_background") ||
                 key.startsWith("updated_colour") || key.startsWith("vs_updated_colour") ||
                 key.startsWith("updated_display") || key.startsWith("vs_updated_display")||
                 key.startsWith("text_style") || key.startsWith("vs_text_style") ||
-                key.startsWith("vs_font"))) {
+                key.startsWith("vs_font") || key.startsWith("vs_color_calculation")) {
 
             String value = sharedPreferences.getString(key, "");
             findPreference(key).setSummary("Selected: " + value.substring(0, 1).toUpperCase() + value.substring(1));
@@ -901,20 +901,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             updateFromGlobal(sharedPreferences, key, CHECKBOX_TYPE);
         }
 
-        // Set whether percentage or numeric change is used for the calculation of the panel color
-        // if boolean usePercentage is false numeric is used
-        else if(key.equals("vs_color_calculation")) {
-            String value = sharedPreferences.getString(key, "");
-
-            if (value. equals( "numeric")){
-                storage.putBoolean("usePercentage",false);
-                storage.apply();
-
-            } else {
-                storage.putBoolean("usePercentage",true);
-                storage.apply();
-            }
-        }
     }
 
 

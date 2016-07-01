@@ -469,8 +469,10 @@ public class WidgetView {
                     widgetRow.setStockInfoExtra3Color(getColourForChange(stockInfoExtra3));
                 }
 
+
                 // Set Background colour for each Panel of Viusal Stockboard
-                if (widget.getStorage().getBoolean("usePercentage",true)) {
+                // use percentage or numeric change depending on widget settings
+                if (this.widget.getVsColorCalculation().equals("percentage")) {
                     widgetRow.setVisualColor(getColourForPanelPercent(stockInfoExtra2));
                 } else {
                     widgetRow.setVisualColor(getColourForPanelNumeric(stockInfoExtra3));
@@ -515,7 +517,7 @@ public class WidgetView {
 
         String hex = Integer.toHexString(normInt);
 
-        // Set colour green, red or grey
+        // Set colour green (positive), red (negative) or grey (neutral)
         if (parsedValue > 0)
             colour = "#" + hex + green;
         else if (parsedValue < 0)
