@@ -265,7 +265,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
         if(storage.getBoolean("visual_stockboard",false)) {
             for (String key : map.keySet()) {
-                if (key.startsWith("vs_") )
+                if (key.startsWith("vs_") || key.startsWith("Stock") )
                     updateSummaries(sharedPreferences, key);
             }
         }
