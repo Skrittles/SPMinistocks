@@ -224,18 +224,18 @@ public class WidgetView {
 
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
         if (widget.isVisual()){
-            HashMap<WidgetProviderBase.ViewType, Boolean> alwaysOn = new HashMap<>();
-            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, true);
-            alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT, this.hasPortfolioData);
-            alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
-            return alwaysOn;
+            HashMap<WidgetProviderBase.ViewType, Boolean> enabledViewsVs = new HashMap<>();
+            enabledViewsVs.put(ViewType.VIEW_DAILY_PERCENT, true);
+            enabledViewsVs.put(ViewType.VIEW_DAILY_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_PERCENT, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
+            return enabledViewsVs;
         } else {
             HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
             enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
