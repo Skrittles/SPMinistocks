@@ -302,30 +302,19 @@
                     android:summary="Restore portfolio from ministocks/portfolio.txt"
                     android:title="Restore portfolio"/>
                       -->
-                <Preference
-                    android:key="backup_widget"
-                    android:summary="Backup this widget to ministocks/widgetbackups/"
-                    android:title="Backup widget"/>
-                <Preference
-                    android:key="restore_widget"
-                    android:summary="Restore a widget from ministocks/widgetbackups/"
-                    android:title="Restore widget"/>
-
             </PreferenceScreen>
-
-
         </PreferenceScreen>
         <PreferenceScreen
-                android:key="portfolio_settings"
+                android:key="portfolio"
                 android:summary="Setup your stock purchase details"
                 android:title="Portfolio">
 
-            <Preference
+           <!-- <Preference
                 android:key="portfolio"
                 android:summary="Setup your stock purchase details"
-                android:title="Portfolio"/>
+                android:title="Portfolio"/>-->
 
-            <Preference
+            <!--<Preference
                 android:key="backup_portfolio"
                 android:summary="Backup portfolio to ministocks/"
                 android:title="Backup portfolio"/>
@@ -333,25 +322,52 @@
             <Preference
                 android:key="restore_portfolio"
                 android:summary="Restore portfolio from ministocks/"
-                android:title="Restore portfolio"/>
+                android:title="Restore portfolio"/>-->
 
             </PreferenceScreen>
+        <PreferenceScreen
+            android:key="backup_restore"
+            android:summary="Backup and Retsore options"
+            android:title="Backup/Restore">
+
+            <PreferenceCategory android:title="Prortfolio">
+            <Preference
+                android:key="backup_portfolio"
+                android:summary="Backup portfolio to ministocks/portfoliobackups/"
+                android:title="Backup portfolio"/>
+            <Preference
+                android:key="restore_portfolio"
+                android:summary="Restore portfolio from ministocks/portfoliobackups/"
+                android:title="Restore portfolio"/>
+            </PreferenceCategory>
+            <PreferenceCategory android:title="Widget">
+            <Preference
+                android:key="backup_widget"
+                android:summary="Backup this widget to ministocks/widgetbackups/"
+                android:title="Backup widget"/>
+            <Preference
+                android:key="restore_widget"
+                android:summary="Restore a widget from ministocks/widgetbackups/"
+                android:title="Restore widget"/>
+            </PreferenceCategory>
+        </PreferenceScreen>
+
         <Preference
                 android:key="update_now"
                 android:summary="Update prices and return to home screen"
                 android:title="Update prices now"/>
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="visual_stockboard"
-            android:summaryOff="Enable visual stockboard"
-            android:summaryOn="Enable visual stockboard"
-            android:title="Visual Stockboard"/>
-        <ListPreference
-            android:title="Specify color calculation"
-            android:defaultValue="percentage"
-            android:entries="@array/vs_color_change_entries"
-            android:entryValues="@array/vs_color_change_entryvalues"
-            android:key="vs_color_calculation"/>
+            <CheckBoxPreference
+                android:defaultValue="false"
+                android:key="visual_stockboard"
+                android:summaryOff="Enable visual stockboard"
+                android:summaryOn="Enable visual stockboard"
+                android:title="Visual Stockboard"/>
+            <ListPreference
+                android:title="Specify color calculation"
+                android:defaultValue="percentage"
+                android:entries="@array/vs_color_change_entries"
+                android:entryValues="@array/vs_color_change_entryvalues"
+                android:key="vs_color_calculation"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen
