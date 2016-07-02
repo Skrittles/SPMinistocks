@@ -168,6 +168,9 @@ public class UserData {
         File root = Environment.getExternalStorageDirectory();
         File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
+        if (!dir.exists())
+            dir.mkdirs();
+
         File[] files = dir.listFiles();
 
         ArrayList<String> fileNames = new ArrayList<>();
@@ -217,6 +220,9 @@ public class UserData {
 
         File root = Environment.getExternalStorageDirectory();
         File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
+
+        if (!dir.exists())
+            dir.mkdirs();
 
         File file = new File(dir, fileName);
 
