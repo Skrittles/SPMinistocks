@@ -32,6 +32,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -189,12 +190,23 @@ public class WidgetView {
     // Global formatter so we can perform global text formatting in one place
     private SpannableString applyFormatting(String s) {
         SpannableString span = new SpannableString(s);
-        if (widget.getStorage().getBoolean("visual_stockboard",false)) {
+        String font = this.widget.getVsFont();
+        if (widget.isVisual()) {
+            //change font for Visual Stockboard
+            if (font.equals("light")) {
+                span.setSpan(new TypefaceSpan("sans-serif-light"),0,s.length(),0);
+            } else if (font.equals("condensed")) {
+                span.setSpan(new TypefaceSpan("sans-serif-light"),0,s.length(),0);
+            } else {
+                span.setSpan(new TypefaceSpan("sans-serif"),0,s.length(),0);
+            }
+            //change text style for Visual Stockboard
             if (this.widget.getVsTextStyle()) {
                 span.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
             } else {
                 span.setSpan(new StyleSpan(Typeface.NORMAL), 0, s.length(), 0);
             }
+        //change text style in standard view
         } else
         if (this.widget.getTextStyle()) {
             span.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
@@ -776,7 +788,6 @@ public class WidgetView {
                         remoteViews.setTextViewText(R.id.text6, applyFormatting(this.getLabel(widgetDisplay)));
                         remoteViews.setTextColor(R.id.text6, footerColor);
                         break;
-
                 }
            }
     }

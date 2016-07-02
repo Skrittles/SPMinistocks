@@ -243,7 +243,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:textSize">8sp</item>
         <item name="android:textColor">#ffff</item>
-        <item name ="android:fontFamily">"sans-serif-thin"</item>
+        <item name ="android:fontFamily">"sans-serif"</item>
     </style>
 
     <style name="StockPriceVSsmall" parent="StockDatumVSsmall">

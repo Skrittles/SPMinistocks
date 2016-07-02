@@ -109,6 +109,10 @@ public class MockWidget implements Widget {
         return false;
     }
 
+    @Override
+    public String getVsFont() {
+        return null;
+    }
 
     @Override
     public boolean getColorsOnPrices() {

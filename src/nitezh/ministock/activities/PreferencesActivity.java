@@ -251,7 +251,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             removePref(appearance,"vs_updated_colour");
             removePref(appearance,"vs_short_time");
             removePref(appearance,"vs_text_style");
-            removePref(appearance,"vs_font");
+            removePref(appearance,"vs_fonts");
 
         }
 
@@ -854,7 +854,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 key.startsWith("updated_colour") || key.startsWith("vs_updated_colour") ||
                 key.startsWith("updated_display") || key.startsWith("vs_updated_display")||
                 key.startsWith("text_style") || key.startsWith("vs_text_style") ||
-                key.startsWith("vs_font") || key.startsWith("vs_color_calculation")) {
+                key.startsWith("vs_fonts") || key.startsWith("vs_color_calculation")) {
 
             String value = sharedPreferences.getString(key, "");
             findPreference(key).setSummary("Selected: " + value.substring(0, 1).toUpperCase() + value.substring(1));

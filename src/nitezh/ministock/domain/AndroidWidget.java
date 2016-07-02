@@ -250,6 +250,11 @@ public class AndroidWidget implements Widget {
     }
 
     @Override
+    public String getVsFont() {
+        return this.storage.getString("vs_fonts", "standard");
+    }
+
+    @Override
     public boolean getColorsOnPrices() {
         return this.storage.getBoolean("colours_on_prices", false);
     }

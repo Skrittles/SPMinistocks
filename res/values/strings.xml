@@ -90,16 +90,14 @@
     </string-array>
 
     <string-array name="vs_font_entries">
-        <item>Schrift1</item>
-        <item>Schrift2</item>
-        <item>Schrift3</item>
-        <item>Schrift4</item>
+        <item>Light</item>
+        <item>Condensed</item>
+        <item>Standard</item>
     </string-array>
     <string-array name="vs_font_entryvalues">
-        <item>schrift1</item>
-        <item>schrift2</item>
-        <item>schrift3</item>
-        <item>schrift4</item>
+        <item>light</item>
+        <item>condensed</item>
+        <item>standard</item>
     </string-array>
 
     <string-array name="update_interval_entries">

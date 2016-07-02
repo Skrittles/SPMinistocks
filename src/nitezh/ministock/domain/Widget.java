@@ -55,6 +55,8 @@ public interface Widget {
 
     boolean getVsTextStyle();
 
+    String getVsFont();
+
     boolean getColorsOnPrices();
 
     String getFooterVisibility();
@@ -92,7 +94,5 @@ public interface Widget {
     boolean hasTotalPlPercentAerView();
 
     boolean isVisual();
-
-
 
 }
