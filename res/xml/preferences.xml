@@ -175,6 +175,12 @@
                     android:summary="Customise widget appearance"
                     android:title="Appearance">
                 <ListPreference
+                        android:title="Specify color calculation"
+                        android:defaultValue="percentage"
+                        android:entries="@array/vs_color_change_entries"
+                        android:entryValues="@array/vs_color_change_entryvalues"
+                        android:key="vs_color_calculation"/>
+                <ListPreference
                         android:defaultValue="transparent"
                         android:entries="@array/background_entries"
                         android:entryValues="@array/background_entryvalues"
@@ -293,23 +299,7 @@
                 android:key="portfolio"
                 android:summary="Setup your stock purchase details"
                 android:title="Portfolio">
-
-           <!-- <Preference
-                android:key="portfolio"
-                android:summary="Setup your stock purchase details"
-                android:title="Portfolio"/>-->
-
-            <!--<Preference
-                android:key="backup_portfolio"
-                android:summary="Backup portfolio to ministocks/"
-                android:title="Backup portfolio"/>
-
-            <Preference
-                android:key="restore_portfolio"
-                android:summary="Restore portfolio from ministocks/"
-                android:title="Restore portfolio"/>-->
-
-            </PreferenceScreen>
+        </PreferenceScreen>
         <PreferenceScreen
             android:key="backup_restore"
             android:summary="Backup and Retsore options"
@@ -347,12 +337,7 @@
                 android:summaryOff="Enable visual stockboard"
                 android:summaryOn="Enable visual stockboard"
                 android:title="Visual Stockboard"/>
-            <ListPreference
-                android:title="Specify color calculation"
-                android:defaultValue="percentage"
-                android:entries="@array/vs_color_change_entries"
-                android:entryValues="@array/vs_color_change_entryvalues"
-                android:key="vs_color_calculation"/>
+
     </PreferenceCategory>
     <PreferenceCategory android:title="General">
         <PreferenceScreen
@@ -375,6 +360,14 @@
                     android:key="help_prices"
                     android:summary="Help on updating prices"
                     android:title="Updating prices"/>
+            <Preference
+                android:key="help_visual_stockboard"
+                android:summary="Help with visual stockboard"
+                android:title="Visual Stockboard"/>
+            <Preference
+                android:key="help_backup_restore"
+                android:summary="Help with the Backup/Restore options"
+                android:title="Backup/Restore"/>
 
             <PreferenceCategory android:title="Online help">
                 <Preference

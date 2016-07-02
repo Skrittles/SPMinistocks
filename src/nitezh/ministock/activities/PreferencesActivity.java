@@ -234,7 +234,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         // Remove unused settings for visual Stockboard
         PreferenceScreen appearance = (PreferenceScreen) findPreference("appearance");
         PreferenceScreen settings = (PreferenceScreen) findPreference("advanced");
-        PreferenceCategory mainmenu = (PreferenceCategory) findPreference("widget_settings");
         if(storage.getBoolean("visual_stockboard",false)) {
             removePref(settings,"widget_views");
             removePref(appearance,"large_font");
@@ -245,7 +244,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             removePref(appearance,"short_time");
             removePref(appearance,"text_style");
         }else if(!storage.getBoolean("visual_stockboard",false)) {
-            mainmenu.removePreference( findPreference("vs_color_calculation"));
+           removePref(appearance,"vs_color_calculation");
             removePref(appearance,"vs_background");
             removePref(appearance,"vs_updated_display");
             removePref(appearance,"vs_updated_colour");
@@ -390,7 +389,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     void showHelp() {
         String title = "Entering stocks";
-        String body = "<b>Entering stock symbols</b><br/><br />Stock symbols must be in the Yahoo format, which you can look up on the Yahoo Finance website.";
+        String body = "<b>Entering stock symbols</b><br/>" +
+                "<br /> Stock can be entered by using the stock symbol which must be in the Yahoo format, which you can look up on the Yahoo Finance website.<br /> " +
+                "A stock can also be entered by using the correct ISIN of the stock and selecting the ISIN option showing up under the search bar.<br />" +
+                " Either way a stock must be contained in the Yahoo Finance database." +
+                "<br /><br /> <b>Rearrange Stocks</b><br/><br /> " +
+                "The Stocks can be rearranged by a Drag'n'Drop function which starts automatically on long touch.<br /> " +
+                "If the Visual Stockboard is enabled a view will pop up to show where the stock will be arranged in the widget";
         DialogTools.showSimpleDialog(this, title, body);
     }
 
@@ -398,6 +403,32 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         String title = "Updating prices";
         String body = "You can set how often, and when the widget updates in the Advanced settings menu.  The setting applies globally to all the widgets.<br /><br />Stock price information is provided by Yahoo Finance, and there may be a delay (from real-time prices, to up to 30 minutes) for some exchanges.<br /><br />Note that the time in the lower-left of the widget is the time that the data was retrieved from Yahoo, not the time of the live price.<br /><br />If an internet connection is not present when an update occurs, the widget will just use the last shown data, and the time for that data.<br /><br /><b>Update prices now feature</b><br /><br />This will update the prices in all your widgets, if there is an internet connection available.";
         DialogTools.showSimpleDialog(this, title, body);
+    }
+
+    void  showHelpVisualStockboard() {
+        String title = "Visual Stockboard";
+        String body = "Text in progress...";
+        DialogTools.showSimpleDialog(this, title, body);
+
+    }
+
+    void  showHelpBackupRestore() {
+        String title = "Backup/Restore";
+        String body = "You can create a backups of your portfolio entries and your widget specific stock setup and restore them. <br/> " +
+                "The backups will be stored into the folder 'minitsocks' on the external storage of your device. <br/>" +
+                "<br /> <b> Portfolio backup/restore</b><br/>" +
+                "<br /> The portfolio backup saves your current portfolio entries into <br/>" +
+                " ministocks/portfoliobackups/ <br/> " +
+                "If you restore a portfolio backup your current portfolio will be expanded with the data of the chosen backup. <br/>" +
+                " If your portfolio alreday constains a stock, the stock information will be overwritten by the information of the backup. <br/>" +
+                " Stocks which are not part of the backup will stay in your portfolio. <br/>" +
+                "<br/><b>Widget backup/restore</b><br/>" +
+                "<br /> The widget backup saves your current stocksetup into" +
+                " <br/> ministocks/widgetbackups/ <br/>" +
+                " If you restore a widget backup, your current stocksetup will be deleted and exchanged with the stocks stored in the chosen widget backup. <br/>" +
+                " You can only restore widget backups into widgets of the same size. <br/>";
+        DialogTools.showSimpleDialog(this, title, body);
+
     }
 
     void showTimePickerDialog(Preference preference, String defaultValue) {
@@ -573,6 +604,26 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 showHelpPrices();
+                return true;
+            }
+        });
+
+        // Hook the Help preference to the Help activity
+        Preference help_visual_stockboard = findPreference("help_visual_stockboard");
+        help_visual_stockboard.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showHelpVisualStockboard();
+                return true;
+            }
+        });
+
+        // Hook the Help preference to the Help activity
+        Preference help_backup_restore = findPreference("help_backup_restore");
+        help_backup_restore.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showHelpBackupRestore();
                 return true;
             }
         });
