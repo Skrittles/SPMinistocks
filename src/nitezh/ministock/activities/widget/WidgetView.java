@@ -99,63 +99,66 @@ public class WidgetView {
     private RemoteViews getBlankRemoteViews(Widget widget, String packageName) {
         String backgroundStyle = widget.getBackgroundStyle();
         boolean useLargeFont = widget.useLargeFont();
+        int size = widget.getSize();
         RemoteViews views;
 
-        if(widget.isVisual())
-             backgroundStyle = widget.getVsBackgroundStyle();
-
-        //Load widget layout depending on widget size and whether large font and visual stockboard are enabled
-        if (widget.getSize() == 1) {
-            if (useLargeFont) {
-                if(widget.isVisual())
+        //Load layout depending on whether visual stockboard and uselargefont are enabled
+        if (widget.isVisual()) {
+            backgroundStyle = widget.getVsBackgroundStyle();
+            useLargeFont = widget.useVsLargeFont();
+            if (size == 1) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x4_large);
-            } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x4);
-            }
-        } else if (widget.getSize() == 2) {
-            if (useLargeFont) {
-                if(widget.isVisual())
+                }
+            } else if (size == 2) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x2_large);
-            } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x2);
-            }
-        } else if (widget.getSize() == 3) {
-            if (useLargeFont) {
-                if(widget.isVisual())
+                }
+            } else if (size == 3) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x4_large);
-
-                //Loads graphic overlay if "Visual Stockboard" is activated in the options
+                }
             } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x4);
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
+                }
             }
         } else {
-            if (useLargeFont) {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x2_large);
+            if (size == 1) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_1x4_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_1x4);
+                }
+            } else if (size == 2) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_2x2_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_2x2);
+                }
+            } else if (size == 3) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_2x4_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_2x4);
+                }
             } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
-                else
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_1x2_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_1x2);
+                }
             }
         }
+
         views.setImageViewResource(R.id.widget_bg,
                 getImageViewSrcId(backgroundStyle, useLargeFont));
         this.hideUnusedStocks(views, widget.getSymbolCount());
@@ -167,7 +170,9 @@ public class WidgetView {
         Integer imageViewSrcId;
         switch (backgroundStyle) {
             case "transparent":
-                if (useLargeFont && !widget.isVisual()) {
+                if (widget.isVisual()) {
+                    imageViewSrcId = R.drawable.ministock_bg_transparent68;
+                }else if(useLargeFont) {
                     imageViewSrcId = R.drawable.ministock_bg_transparent68_large;
                 } else {
                     imageViewSrcId = R.drawable.ministock_bg_transparent68;
@@ -177,7 +182,9 @@ public class WidgetView {
                 imageViewSrcId = R.drawable.blank;
                 break;
             default:
-                if (useLargeFont && !widget.isVisual()) {
+                if (widget.isVisual()) {
+                    imageViewSrcId = R.drawable.ministock_bg;
+                } else if (useLargeFont) {
                     imageViewSrcId = R.drawable.ministock_bg_large;
                 } else {
                     imageViewSrcId = R.drawable.ministock_bg;
