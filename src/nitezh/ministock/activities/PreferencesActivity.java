@@ -702,7 +702,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
                 CharSequence[] backupNames = UserData.readFileNames(PreferencesActivity.this, "portfoliobackups");
                 // If there are no backups show an appropriate dialog
-                if (backupNames.length == 0) {
+                if (backupNames == null) {
                     DialogTools.showSimpleDialog(PreferencesActivity.this, "No backups available", "There were no portfolio backups to restore.");
                     return true;
                 }

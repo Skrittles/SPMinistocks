@@ -570,6 +570,7 @@ public class PortfolioStockRepository {
             System.out.println(tokens[2]);
                System.out.println(tokens[3]);
                */
+
                 int i = 1;
 
                 // put all backup stocks into internal storage.
