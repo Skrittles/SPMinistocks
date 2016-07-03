@@ -73,7 +73,12 @@ public class StockPreference extends EditTextPreference {
     String mSymbolSearchKey = "";
 
 
-    //Overrides the default onCreateView to set listeners for the preferences
+    /**
+     * Overrides the default onCreateView to set listeners to preferences
+     *
+     * @param parent parent ViewGroup of the preference
+     * @return the view of the preference
+     */
     @Override
     protected View onCreateView(final ViewGroup parent )
     {
@@ -89,7 +94,7 @@ public class StockPreference extends EditTextPreference {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PREFERENCE_ACTIVITY.mSymbolSearchKey = getKey();
+                PreferencesActivity.mSymbolSearchKey = getKey();
 
                 // Start search with current value as query
                 String query = getSharedPreferences().getString(mSymbolSearchKey, "");
@@ -128,6 +133,7 @@ public class StockPreference extends EditTextPreference {
             int dragEvent = event.getAction();
 
             switch (dragEvent){
+                // Shows preview of the widget
                 case DragEvent.ACTION_DRAG_ENTERED:
                     if(isVisual) {
                         screen.setVisibility(View.VISIBLE);
@@ -136,6 +142,7 @@ public class StockPreference extends EditTextPreference {
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     break;
+                // Hides preview if nothing is dragged
                 case DragEvent.ACTION_DRAG_ENDED:
                     screen.setVisibility(View.GONE);
                     break;
@@ -185,10 +192,18 @@ public class StockPreference extends EditTextPreference {
         }
 
         /**
-         * Sets up the metrics of the box
+         * Sets up the metrics of the box that is dragged
          *
-         * @param shadowSize
-         * @param shadowTouchPoint
+         * From android documentation:
+         * @param shadowSize A {@link android.graphics.Point} containing the width and height
+         * of the shadow image. Your application must set {@link android.graphics.Point#x} to the
+         * desired width and must set {@link android.graphics.Point#y} to the desired height of the
+         * image.
+         *
+         * @param shadowTouchPoint A {@link android.graphics.Point} for the position within the
+         * shadow image that should be underneath the touch point during the drag and drop
+         * operation. Your application must set {@link android.graphics.Point#x} to the
+         * X coordinate and {@link android.graphics.Point#y} to the Y coordinate of this position.
          */
         @Override
         public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint) {
@@ -208,7 +223,11 @@ public class StockPreference extends EditTextPreference {
 
         }
 
-        //Draws the object on the canvas
+        /**
+         * Draws the object on a canvas
+         *
+         * @param canvas the canvas where the object should be drawn
+         */
         @Override
         public void onDrawShadow(Canvas canvas) {
             greyBox.draw(canvas);

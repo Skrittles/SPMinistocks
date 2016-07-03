@@ -240,19 +240,26 @@ public class WidgetView {
         return this.enabledViews;
     }
 
+
+    /**
+     * Returns a HashMap whith all views and a boolean that indicates if they are activated
+     *
+     * @param widget the widget that has the enabled views
+     * @return the HashMap with the enabled views
+     */
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
         if (widget.isVisual()){
             HashMap<WidgetProviderBase.ViewType, Boolean> enabledViewsVs = new HashMap<>();
             enabledViewsVs.put(ViewType.VIEW_DAILY_PERCENT, true);
             enabledViewsVs.put(ViewType.VIEW_DAILY_CHANGE, false);
             enabledViewsVs.put(ViewType.VIEW_PL_CHANGE, false);
-            enabledViewsVs.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            enabledViewsVs.put(ViewType.VIEW_PL_PERCENT, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PL_DAILY_CHANGE, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PL_PERCENT, false);
             enabledViewsVs.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
             enabledViewsVs.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
             enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
             enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
-            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, this.hasPortfolioData);
             return enabledViewsVs;
         } else {
             HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
@@ -326,6 +333,7 @@ public class WidgetView {
         String stockInfoExtra2 = null;
         String stockInfoExtra3 = null;
 
+        // Set information of the text in the row/panel
         switch (widgetView) {
             case VIEW_DAILY_PERCENT:
                     stockInfo = widgetStock.getDailyPercent();
@@ -504,6 +512,14 @@ public class WidgetView {
         return widgetRow;
     }
 
+
+    /**
+     * Returns a color normalized for a min/max value
+     * as a String that is used to color the panel in Visual Stockboard view
+     *
+     * @param value the change that determines the color of the panel in numbers
+     * @return a color that indicates the change of the panel
+     */
     private String getColourForPanelNumeric(String value) {
         final double MAX_VALUE = 50;
         final double MIN_VALUE = 0.1;
@@ -539,6 +555,14 @@ public class WidgetView {
         return colour;
     }
 
+
+    /**
+     * Returns a color normalized for a min/max value
+     * as a String that is used to color the panel in Visual Stockboard view
+     *
+     * @param value the change that determines the color of the panel in percent
+     * @return a color that indicates the change of the panel
+     */
     private String getColourForPanelPercent(String value){
         final double MAX_VALUE = 10;
         final double MIN_VALUE = 0.1;
@@ -674,7 +698,7 @@ public class WidgetView {
                 this.remoteViews.setTextViewText(
                         ReflectionTools.getFieldId("text" + row + col),
                         !text.equals("") ? applyFormatting((String) text) : "");
-            }catch (Exception e){}
+            }catch (Exception ignored){}
     }
 
     public void setStockRowItemColor(int row, int col, int color) {
@@ -715,7 +739,7 @@ public class WidgetView {
                 setStockRowItemText(lineNo, 6, rowInfo.getStockInfoExtra());
             }
 
-            // Colours
+            // Colors
             if (!this.widget.isVisual()) {
                 setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
                 if (!this.widget.getColorsOnPrices()) {
@@ -740,6 +764,7 @@ public class WidgetView {
                     }
                 }
             } else {
+                // Set content and color for a panel
                 setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
                 setStockRowItemColor(lineNo, 2, rowInfo.getPriceColor());
                 setStockRowItemColor(lineNo, 3, rowInfo.getStockInfoExtra2Color());
@@ -768,9 +793,7 @@ public class WidgetView {
                     // Set the view label
                     remoteViews.setTextViewText(R.id.text6, applyFormatting(this.getLabel(widgetDisplay)));
                     remoteViews.setTextColor(R.id.text6, footerColor);
-
             }
-
             }else{
 
                 switch (this.widget.getFooterVisibility()) {
@@ -908,6 +931,11 @@ public class WidgetView {
         return label;
     }
 
+
+    /**
+     * Returns the current date and time as String
+     * @return the current date
+     */
     public String getVsTimeStamp() {
         String timeStamp = this.quotesTimeStamp;
         if (!this.widget.showVsShortTime()) {
@@ -926,6 +954,10 @@ public class WidgetView {
         return timeStamp;
     }
 
+    /**
+     * Returns the current date and time as String
+     * @return the current date
+     */
     public String getTimeStamp() {
         String timeStamp = this.quotesTimeStamp;
         if (!this.widget.showShortTime()) {

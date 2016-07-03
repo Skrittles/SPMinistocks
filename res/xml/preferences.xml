@@ -175,11 +175,11 @@
                     android:summary="Customise widget appearance"
                     android:title="Appearance">
                 <ListPreference
-                        android:title="Specify color calculation"
                         android:defaultValue="percentage"
                         android:entries="@array/vs_color_change_entries"
                         android:entryValues="@array/vs_color_change_entryvalues"
-                        android:key="vs_color_calculation"/>
+                        android:key="vs_color_calculation"
+                        android:title="Specify color calculation"/>
                 <ListPreference
                         android:defaultValue="transparent"
                         android:entries="@array/background_entries"
@@ -192,18 +192,6 @@
                         android:entryValues="@array/background_entryvalues"
                         android:key="vs_background"
                         android:title="Widget background"/>
-                <ListPreference
-                        android:defaultValue="normal"
-                        android:entries="@array/text_style_entries"
-                        android:entryValues="@array/text_style_entryvalues"
-                        android:key="text_style"
-                        android:title="Widget text style"/>
-                <ListPreference
-                        android:defaultValue="normal"
-                        android:entries="@array/text_style_entries"
-                        android:entryValues="@array/text_style_entryvalues"
-                        android:key="vs_text_style"
-                        android:title="Widget text style"/>
                 <ListPreference
                         android:defaultValue="light"
                         android:entries="@array/updated_colour_entries"
@@ -234,6 +222,18 @@
                         android:entryValues="@array/vs_font_entryvalues"
                         android:key="vs_fonts"
                         android:title="Widget font" />
+                <ListPreference
+                    android:defaultValue="normal"
+                    android:entries="@array/text_style_entries"
+                    android:entryValues="@array/text_style_entryvalues"
+                    android:key="text_style"
+                    android:title="Widget text style"/>
+                <ListPreference
+                    android:defaultValue="normal"
+                    android:entries="@array/text_style_entries"
+                    android:entryValues="@array/text_style_entryvalues"
+                    android:key="vs_text_style"
+                    android:title="Widget text style"/>
                 <CheckBoxPreference
                         android:defaultValue="false"
                         android:key="large_font"

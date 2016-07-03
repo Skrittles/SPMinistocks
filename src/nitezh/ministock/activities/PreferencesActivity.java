@@ -80,7 +80,6 @@ import nitezh.ministock.utils.VersionTools;
 import static android.content.SharedPreferences.Editor;
 import static android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
-
 public class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
     // Constants
@@ -263,6 +262,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         // Initialise the summaries when the preferences screen loads
         Map<String, ?> map = new ConcurrentHashMap<String,Object>(sharedPreferences.getAll());
 
+        //Only updates summaries of preferences that are currently visible
         if(storage.getBoolean("visual_stockboard",false)) {
             for (String key : map.keySet()) {
                 if (key.startsWith("vs_") || key.startsWith("Stock") )
@@ -495,7 +495,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             value = value.replace("Use ", "");
         } else if (value.startsWith("ISIN ")) {
             try{
-                String[] resultISIN = new String[2];
+                String[] resultISIN;
                 resultISIN= new getIsin().execute(value.replace("ISIN ", "")).get();
                 value = resultISIN[0];
                 summary= resultISIN[1];
@@ -535,7 +535,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             catch(Exception e){
                 Symbol[0] = "Not found";
                 Symbol[1] = "";
-                return Symbol;}
+                return Symbol;
+            }
             return Symbol;
         }
     }
