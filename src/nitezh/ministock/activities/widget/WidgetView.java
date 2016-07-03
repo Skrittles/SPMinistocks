@@ -34,7 +34,6 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
@@ -790,6 +789,7 @@ public class WidgetView {
                     int footerColor = this.getFooterColor();
                     try {
                         remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getVsTimeStamp()));
+                    }catch (ArrayIndexOutOfBoundsException e){e.printStackTrace();}
                     remoteViews.setTextColor(R.id.text5, footerColor);
 
                     // Set the view label
@@ -814,6 +814,7 @@ public class WidgetView {
                         int footerColor = this.getFooterColor();
                         try {
                             remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getTimeStamp()));
+                        }catch (ArrayIndexOutOfBoundsException e){e.printStackTrace();}
                         remoteViews.setTextColor(R.id.text5, footerColor);
 
                         // Set the view label
