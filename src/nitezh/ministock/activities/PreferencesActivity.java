@@ -92,7 +92,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     // Private
     private static boolean mPendingUpdate = false;
     public static String mSymbolSearchKey = "";
-    private final String CHANGE_LOG = "• Experimental Backup and Restore option added.<br /><br /><i>If you appreciate this app please rate it 5 stars in the Android market!</i>";
+    private final String CHANGE_LOG = "• Backup and Restore option added.<br />• Visual Stockboard view added.<br />• ISIN support added<br /><br /><i>If you appreciate this app please rate it 5 stars in the Android market!</i>";
     private static final String ISIN_URL = "http://query.yahooapis.com:80/v1/public/yql?q=select+*+from+yahoo.finance.isin+where+symbol+in+(\"ISIN\")&env=store://datatables.org/alltableswithkeys";
     // Fields for time pickers
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
@@ -391,11 +391,11 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     void showHelp() {
         String title = "Entering stocks";
         String body = "<b>Entering stock symbols</b><br/>" +
-                "<br /> Stock can be entered by using the stock symbol which must be in the Yahoo format, which you can look up on the Yahoo Finance website.<br /> " +
-                "A stock can also be entered by using the correct ISIN of the stock and selecting the ISIN option showing up under the search bar.<br />" +
+                "<br /> Stocks can be entered by using the stock symbol which must be in the Yahoo format, which you can look up on the Yahoo Finance website.<br /> " +
+                "A stock can also be entered by using the correct ISIN of the stock and by then selecting the ISIN option showing up under the search bar.<br />" +
                 " Either way a stock must be contained in the Yahoo Finance database." +
                 "<br /><br /> <b>Rearrange Stocks</b><br/><br /> " +
-                "The Stocks can be rearranged by a Drag'n'Drop function which starts automatically on long touch.<br /> " +
+                "The Stocks can be rearranged by a Drag'n'Drop function which starts automatically when holding a stock.<br /> " +
                 "If the Visual Stockboard is enabled a view will pop up to show where the stock will be arranged in the widget";
         DialogTools.showSimpleDialog(this, title, body);
     }
@@ -408,7 +408,22 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     void  showHelpVisualStockboard() {
         String title = "Visual Stockboard";
-        String body = "Text in progress...";
+        String body = "The Visual Stockboard option changes the layout of the widget and some setting options.<br />" +
+                "Each Stock is represented by a Panel.<br />" +
+                "<br /> <b>Panel Colour </b> <br /><br />" +
+                "The change is represented in the panel colour. <br />" +
+                "positive = green, <br /> negative = red, <br /> neutral = grey<br />" +
+                "The transparency of the colour represents the value of the change.<br />" +
+                "Less transparency stands for smaller change.<br />" +
+                "Depending on the setting it will use the numeric change (price change) or the percentage change to calculate the panel colour.<br />" +
+                "<br /><br />Each Panel shows:<br /><br /> " +
+                "<b>Top row</b><br /> " +
+                "On the left side the Stock Symbol and on the right side the stock price.<br /><br /> " +
+                "<b>Middle row</b> <br />" +
+                "Shows the change of the currently selected view. The view can be changed by tapping on the right side of the widget.<br />" +
+                " Supported views are <br />  daily change % (D%), <br />  total change % (PF T%), <br />  P/L total change (P/L T%),<br />  P/L total change AER (P/L AER). <br /> <br /> "+
+                "<b>Bottom row</b> <br />" +
+                "Shows the daily change in percent on the left and on the right the daily price change.";
         DialogTools.showSimpleDialog(this, title, body);
 
     }
@@ -416,16 +431,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     void  showHelpBackupRestore() {
         String title = "Backup/Restore";
         String body = "You can create a backups of your portfolio entries and your widget specific stock setup and restore them. <br/> " +
-                "The backups will be stored into the folder 'minitsocks' on the external storage of your device. <br/>" +
+                "The backups will be stored into the folder 'ministocks' on the external storage of your device. <br/>" +
                 "<br /> <b> Portfolio backup/restore</b><br/>" +
                 "<br /> The portfolio backup saves your current portfolio entries into <br/>" +
-                " ministocks/portfoliobackups/ <br/> " +
+                " 'ministocks/portfoliobackups/'. <br/> " +
                 "If you restore a portfolio backup your current portfolio will be expanded with the data of the chosen backup. <br/>" +
-                " If your portfolio alreday constains a stock, the stock information will be overwritten by the information of the backup. <br/>" +
+                " If your portfolio already contains a stock, the stock information will be overwritten with the information from the backup. <br/>" +
                 " Stocks which are not part of the backup will stay in your portfolio. <br/>" +
                 "<br/><b>Widget backup/restore</b><br/>" +
                 "<br /> The widget backup saves your current stocksetup into" +
-                " <br/> ministocks/widgetbackups/ <br/>" +
+                " <br/> 'ministocks/widgetbackups/'. <br/>" +
                 " If you restore a widget backup, your current stocksetup will be deleted and exchanged with the stocks stored in the chosen widget backup. <br/>" +
                 " You can only restore widget backups into widgets of the same size. <br/>";
         DialogTools.showSimpleDialog(this, title, body);

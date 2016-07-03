@@ -99,26 +99,25 @@ public class WidgetView {
     private RemoteViews getBlankRemoteViews(Widget widget, String packageName) {
         String backgroundStyle = widget.getBackgroundStyle();
         boolean useLargeFont = widget.useLargeFont();
-        int size = widget.getSize();
         RemoteViews views;
 
         //Load layout depending on whether visual stockboard and uselargefont are enabled
         if (widget.isVisual()) {
             backgroundStyle = widget.getVsBackgroundStyle();
             useLargeFont = widget.useVsLargeFont();
-            if (size == 1) {
+            if (widget.getSize() == 1) {
                 if (useLargeFont) {
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x4_large);
                 } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
                 }
-            } else if (size == 2) {
+            } else if (widget.getSize() == 2) {
                 if (useLargeFont) {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x2_large);
                 } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
                 }
-            } else if (size == 3) {
+            } else if (widget.getSize() == 3) {
                 if (useLargeFont) {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x4_large);
                 } else {
@@ -132,19 +131,19 @@ public class WidgetView {
                 }
             }
         } else {
-            if (size == 1) {
+            if (widget.getSize()== 1) {
                 if (useLargeFont) {
                     views = new RemoteViews(packageName, R.layout.widget_1x4_large);
                 } else {
                     views = new RemoteViews(packageName, R.layout.widget_1x4);
                 }
-            } else if (size == 2) {
+            } else if (widget.getSize() == 2) {
                 if (useLargeFont) {
                     views = new RemoteViews(packageName, R.layout.widget_2x2_large);
                 } else {
                     views = new RemoteViews(packageName, R.layout.widget_2x2);
                 }
-            } else if (size == 3) {
+            } else if (widget.getSize() == 3) {
                 if (useLargeFont) {
                     views = new RemoteViews(packageName, R.layout.widget_2x4_large);
                 } else {
