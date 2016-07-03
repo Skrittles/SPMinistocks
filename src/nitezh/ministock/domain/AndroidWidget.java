@@ -235,6 +235,11 @@ public class AndroidWidget implements Widget {
     }
 
     @Override
+    public boolean useVsLargeFont() {
+        return this.storage.getBoolean("vs_large_font", false);
+    }
+
+    @Override
     public boolean getHideSuffix() {
         return this.storage.getBoolean("hide_suffix", false);
     }

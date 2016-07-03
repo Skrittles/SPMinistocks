@@ -49,6 +49,8 @@ public interface Widget {
 
     boolean useLargeFont();
 
+    boolean useVsLargeFont();
+
     boolean getHideSuffix();
 
     boolean getTextStyle();

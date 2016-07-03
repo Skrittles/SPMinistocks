@@ -95,6 +95,11 @@ public class MockWidget implements Widget {
     }
 
     @Override
+    public boolean useVsLargeFont() {
+        return false;
+    }
+
+    @Override
     public boolean getHideSuffix() {
         return false;
     }

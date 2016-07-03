@@ -251,6 +251,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             removePref(appearance,"vs_short_time");
             removePref(appearance,"vs_text_style");
             removePref(appearance,"vs_fonts");
+            removePref(appearance,"vs_large_font");
 
         }
 
