@@ -515,19 +515,29 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.apply();
     }
 
+    //Async task for isin search
+    //input string[0] = symbol
+    //input string[1] = summary
+    //return string symbol
     private class getIsin extends AsyncTask<String, Void , String[]>{
         protected String[] doInBackground(String ... ISIN){
+            //builds query link for isin search
             String[] Symbol = new String[2];
             String apiLink = ISIN_URL.replace("ISIN",ISIN[0]);
+
             try{
+                //Document builder setup
                 URL query = new URL(apiLink);
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
                 DocumentBuilder builder = factory.newDocumentBuilder();
 
+                //fetch xml from url
                 Document retrievedXML = builder.parse(new InputSource(query.openStream()));
 
                 retrievedXML.getDocumentElement().normalize();
+
+                //get symbol from isin by parsing xml
                 NodeList nodeList = retrievedXML.getElementsByTagName("Isin");
                 Symbol[0] =getElementValue(nodeList.item(0));
                 Symbol[1]= SymbolProvider.getDescription(Symbol[0]);
@@ -541,6 +551,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
     }
 
+    //gets last element of node
     private String getElementValue( Node elem ) {
         Node child;
         if( elem != null){
