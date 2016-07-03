@@ -250,9 +250,12 @@ public class PortfolioStockRepository {
         this.mAppStorage.putString(PORTFOLIO_JSON, getStocksJson().toString()).apply();
 
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
-        UserData.writeExternalStorage(context, rawJson, fileName + ".txt", "portfoliobackups/");
-        DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
-               "Your portfolio settings have been backed up to ministocks/portfoliobackups/"+ fileName);
+
+        if (UserData.writeExternalStorage(context, rawJson, fileName + ".txt", "portfoliobackups/"))
+
+            DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
+                "Your portfolio settings have been backed up to ministocks/portfoliobackups/"+ fileName);
+
     }
 
 

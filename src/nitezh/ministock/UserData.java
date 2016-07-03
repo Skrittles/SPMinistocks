@@ -31,7 +31,6 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -55,6 +54,7 @@ public class UserData {
 
     // Object for intrinsic lock
     public static final Object sFileBackupLock = new Object();
+    private boolean OVERWRITE_BACKUP = false;
 
     public static void cleanupPreferenceFiles(Context context) {
         ArrayList<String> preferencesPathsInUse = getPreferencesPathsInUse(context);
@@ -256,7 +256,7 @@ public class UserData {
     
     
         // Write to external storage
-    public static void writeExternalStorage(Context context, String data, String fileName, String internalDirectory) {
+    public static boolean writeExternalStorage(Context context, String data, String fileName, String internalDirectory) {
 
         String state = Environment.getExternalStorageState();
 
@@ -275,10 +275,13 @@ public class UserData {
                 Log.d("Fexists",dir + " already exists");
             }
 
+            if (new File(dir, fileName).exists()) {
+                DialogTools.showSimpleDialog(context, "Warning", "Choose a diffrent name for your backup. This one already exists");
+                return false;
+            }
             new File(dir, fileName).delete();
 
             File file = new File(dir, fileName);
-
 
 
             try {
@@ -295,11 +298,13 @@ public class UserData {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return true;
         } else {
 
             DialogTools.showSimpleDialog(context, "External Storage not available",
                     "Your external Storage is nor available for this application ");
 
+            return false;
         }
     }
 }
