@@ -268,9 +268,15 @@ public class PortfolioStockRepository {
 
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
 
-        JSONObject test = getStocksJson();
+        JSONObject backup = null;
+        try {
+            backup = new JSONObject(this.mAppStorage.getString(PORTFOLIO_JSON, ""));
+        } catch (JSONException e) {
+            DialogTools.showSimpleDialog(context, "Error with backupfile", "Backup file is corrupted.");
+            return;
+        }
 
-        HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(test);
+        HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(backup);
 
         Iterator<String> it = stocksFromBackup.keySet().iterator();
 
@@ -542,8 +548,6 @@ public class PortfolioStockRepository {
             DialogTools.showSimpleDialog(context, "Widget backup successful.",
                     "Your widget has been backed up to ministocks/widgetbackups/" + backupName);
 
-
-
     }
 
 
@@ -558,9 +562,6 @@ public class PortfolioStockRepository {
 
         // Check for correct widgetsize, else print error
         if (tokens[1].trim().equals(String.valueOf(widgetsize))) {
-
-
-
 
             // Remove all stocks from widget.
             for(int j = 1; j < 16; j++) {
