@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Buttons left and right Widget -->
+    <!-- Buttons linkes rechtes Widget -->
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -129,7 +129,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text15" style="@style/StockChangeVS"/>
@@ -143,7 +143,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text16" style="@style/StockPriceVS"/>
@@ -242,7 +242,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text25" style="@style/StockChangeVS"/>
@@ -255,7 +255,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text26" style="@style/StockPriceVS"/>
@@ -354,7 +354,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text35" style="@style/StockChangeVS"/>
@@ -368,7 +368,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text36" style="@style/StockPriceVS"/>
@@ -465,7 +465,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text45" style="@style/StockChangeVS"/>
@@ -479,7 +479,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text46" style="@style/StockPriceVS"/>
@@ -585,7 +585,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text55" style="@style/StockChangeVS"/>
@@ -599,7 +599,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text56" style="@style/StockPriceVS"/>
@@ -699,7 +699,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text65" style="@style/StockChangeVS"/>
@@ -712,7 +712,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text66" style="@style/StockPriceVS"/>
@@ -812,7 +812,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text75" style="@style/StockChangeVS"/>
@@ -826,7 +826,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text76" style="@style/StockPriceVS"/>
@@ -924,7 +924,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text85" style="@style/StockChangeVS"/>
@@ -938,7 +938,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text86" style="@style/StockPriceVS"/>
@@ -1047,7 +1047,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text95" style="@style/StockChangeVS"/>
@@ -1060,7 +1060,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text96" style="@style/StockPriceVS"/>
@@ -1161,7 +1161,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text105" style="@style/StockChangeVS"/>
@@ -1175,7 +1175,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text106" style="@style/StockPriceVS"/>
@@ -1275,7 +1275,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text115" style="@style/StockChangeVS"/>
@@ -1288,7 +1288,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text116" style="@style/StockPriceVS"/>
@@ -1388,7 +1388,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text125" style="@style/StockChangeVS"/>
@@ -1401,7 +1401,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text126" style="@style/StockPriceVS"/>
@@ -1512,7 +1512,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text135" style="@style/StockChangeVS"/>
@@ -1525,7 +1525,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text136" style="@style/StockPriceVS"/>
@@ -1625,7 +1625,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text145" style="@style/StockChangeVS"/>
@@ -1639,7 +1639,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text146" style="@style/StockPriceVS"/>
@@ -1738,7 +1738,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text155" style="@style/StockChangeVS"/>
@@ -1751,7 +1751,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text156" style="@style/StockPriceVS"/>
@@ -1850,7 +1850,7 @@
                         android:layout_weight="3"
                         android:layout_marginLeft="3dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="2dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text165" style="@style/StockChangeVS"/>
@@ -1863,7 +1863,7 @@
                         android:layout_weight="2"
                         android:layout_marginLeft="2dp"
                         android:layout_marginTop="-3.5dp"
-                        android:layout_marginBottom="3dp"
+
                         android:layout_marginRight="3dp"
                         android:orientation="horizontal">
                         <TextView android:id="@+id/text166" style="@style/StockPriceVS"/>
@@ -1884,10 +1884,11 @@
             android:layout_weight="5"
             style="@style/StockLine"
             android:layout_marginLeft="3dp"
-            android:layout_marginRight="3dp">
-
-            <TextView android:id="@+id/text5" style="@style/StockNameVS"/>
-            <TextView android:id="@+id/text6" style="@style/StockPriceVS"/>
+            android:layout_marginRight="3dp"
+            android:layout_marginBottom="-3dp"
+            android:layout_marginTop="-3dp">
+            <TextView android:id="@+id/text5" style="@style/StockNameVSsmall"/>
+            <TextView android:id="@+id/text6" style="@style/StockPriceVSsmall"/>
 
         </LinearLayout>
 
