@@ -266,8 +266,8 @@ public class UserData {
             File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
             if(!dir.exists()) {
-                if (dir.mkdir()) {
-                    Log.d("Fcreate","Folder created" +"\n" + dir);
+                if (dir.mkdirs()) {
+                    Log.d("Fcreate","Folder created\n" + dir);
                 } else {
                     Log.d("Ffailed","Creating folder failed\n" + dir);
                 }
