@@ -34,6 +34,7 @@ import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RemoteViews;
 
 import java.text.SimpleDateFormat;
@@ -787,7 +788,8 @@ public class WidgetView {
 
                     // Set time stamp
                     int footerColor = this.getFooterColor();
-                    remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getVsTimeStamp()));
+                    try {
+                        remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getVsTimeStamp()));
                     remoteViews.setTextColor(R.id.text5, footerColor);
 
                     // Set the view label
@@ -810,7 +812,8 @@ public class WidgetView {
 
                         // Set time stamp
                         int footerColor = this.getFooterColor();
-                        remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getTimeStamp()));
+                        try {
+                            remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getTimeStamp()));
                         remoteViews.setTextColor(R.id.text5, footerColor);
 
                         // Set the view label
@@ -936,7 +939,7 @@ public class WidgetView {
      * Returns the current date and time as String
      * @return the current date
      */
-    public String getVsTimeStamp() {
+    public String getVsTimeStamp() throws ArrayIndexOutOfBoundsException {
         String timeStamp = this.quotesTimeStamp;
         if (!this.widget.showVsShortTime()) {
             String date = new SimpleDateFormat("dd MMM").format(new Date()).toUpperCase();
@@ -958,7 +961,7 @@ public class WidgetView {
      * Returns the current date and time as String
      * @return the current date
      */
-    public String getTimeStamp() {
+    public String getTimeStamp() throws ArrayIndexOutOfBoundsException {
         String timeStamp = this.quotesTimeStamp;
         if (!this.widget.showShortTime()) {
             String date = new SimpleDateFormat("dd MMM").format(new Date()).toUpperCase();
