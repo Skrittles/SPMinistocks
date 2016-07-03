@@ -425,10 +425,6 @@ public class PortfolioStockRepository {
                     json.put(symbol, item.toJson());
                 } catch (JSONException ignored) {
                 }
-            } else {
-                try{
-                    json.put(symbol, item.toNullJson());
-                } catch (JSONException ignored){}
             }
         }
 
