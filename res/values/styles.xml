@@ -204,12 +204,12 @@
         <item name="android:gravity">right</item>
     </style>
     
-     <!-- styles for visual stockboard view-->
+     <!-- styles for visual stockboard view, large font-->
     <style name="StockDatumVS">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:textSize">9sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">#ffff</item>
         <item name ="android:fontFamily">sans-serif-thin</item>
 
@@ -235,13 +235,13 @@
         <item name="android:lines">1</item>
     </style>
 
-    <!-- Styles for the smaller Visual Stockboard Widgets. Here for flexibility and comfort, may overlap with the standart ones. -->
+    <!-- Styles for Visual Stockboard View, small font -->
 
     <style name="StockDatumVSsmall">
         <item name="android:layout_weight">1</item>
         <item name="android:layout_height">fill_parent</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:textSize">8sp</item>
+        <item name="android:textSize">9sp</item>
         <item name="android:textColor">#ffff</item>
         <item name ="android:fontFamily">"sans-serif"</item>
     </style>
