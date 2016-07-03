@@ -539,7 +539,12 @@ public class PortfolioStockRepository {
 
         }
 
-        UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups");
+        if (UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups"))
+            DialogTools.showSimpleDialog(context, "Widget backup successful.",
+                    "Your widget has been backed up to ministocks/widgetbackups/" + backupName);
+
+
+
     }
 
 
