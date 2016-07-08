@@ -35,7 +35,6 @@ import java.text.ParseException;
 import java.text.RuleBasedCollator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
@@ -240,21 +239,41 @@ public class PortfolioStockRepository {
         return stock;
     }
 
+    /**
+     *  Write your current portfolio to a file named with parameter file name.
+     *  Fetch portfolio as JsonObject from internal Storage and write it to external Storage as String.
+     *
+     * @param context display dialogs for User.
+     * @param fileName name the file for your backup.
+     */
 
     public void backupPortfolio(Context context, String fileName) {
 
         // Convert current portfolioStockInfo to JSONO-Object
         persist();
 
-        // Write JSONO-Object to internal app storage
+        // Write JSONO-Object as String to internal app storage
         this.mAppStorage.putString(PORTFOLIO_JSON, getStocksJson().toString()).apply();
 
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
+
+        // Write backup as String.
         UserData.writeExternalStorage(context, rawJson, fileName + ".txt", "portfoliobackups/");
+
+        // Inform User about backup status.
         DialogTools.showSimpleDialog(context, "PortfolioActivity backed up",
                "Your portfolio settings have been backed up to ministocks/portfoliobackups/"+ fileName);
     }
 
+
+    /**
+     *  Transform String from backup file to JsonObject with stock information.
+     *  Create a portfolioStocks map from JsonObject.
+     *
+     *
+     * @param context Show Dialog for User feedback.
+     * @param backupName name the file you want to get backup data from.
+     */
 
     public void restorePortfolio(Context context, String backupName) {
         mDirtyPortfolioStockMap = true;
@@ -262,18 +281,22 @@ public class PortfolioStockRepository {
         //this.portfolioStocksInfo.clear();
 
 
+        // Get String from backup file
         String rawJson = UserData.readExternalStorage(context, backupName, "portfoliobackups/");
 
+        // Save current portfolio to internal Storage.
         this.mAppStorage.putString(PORTFOLIO_JSON, rawJson).apply();
 
-        JSONObject test = getStocksJson();
+        // Create JSonObject from internalstorage.
+        JSONObject portfolioJSon = getStocksJson();
 
-        HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(test);
+        // Create portfolio stocks from JsonObject.
+        HashMap<String, PortfolioStock> stocksFromBackup = getStocksFromJson(portfolioJSon);
 
         Iterator<String> it = stocksFromBackup.keySet().iterator();
 
-        //String[] queryName = new String[1];
 
+        //
         int i = 0;
         while (it.hasNext()) {
             String tmp = it.next();
@@ -282,10 +305,11 @@ public class PortfolioStockRepository {
             PortfolioStock portfolioStock = stocksFromBackup.get(tmp);
             portfolioStocksInfo.put(stocksFromBackup.get(tmp).getSymbol(), portfolioStock);
 
+
+            /*
             String symbol = stocksFromBackup.get(tmp).getSymbol();
             String customName = stocksFromBackup.get(tmp).getCustomName();
 
-            /*
             try {
                 this.mAppStorage.putString("Stock" + i, symbol);
                 if(!customName.equals("")) {
@@ -300,14 +324,18 @@ public class PortfolioStockRepository {
         }
 
 
+        // Put restored portfolio into map -> Constructor restores portfolio from mPortfolioStocks.
         mPortfolioStocks = portfolioStocksInfo;
         this.persist();
+        // Constructor should load portfolio from mPortfolioStocks.
         mDirtyPortfolioStockMap = false;
 
-        if (rawJson == null) 
+        if (rawJson == null)
+            // Dialog for failure
             DialogTools.showSimpleDialog(context, "Restore portfolio failed", "Backup file not found");
 
-        else 
+        else
+            // Show Dialog for success and which backup has been rerstored.
             DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
                 "Your portfolio settings have been restored from ministocks/portfoliobackups/" + backupName);
     }
@@ -321,10 +349,13 @@ public class PortfolioStockRepository {
         return stocksJson;
     }
 
-     /*
-      * Transform a JSONObject into a HashMap.
-      */
-
+    /**
+     * Part from method getStocks()
+     * Modified for transformation from JsonObject to HashMap<>.
+     *
+     * @param json JSonObject with information about stocks and portfolio.
+     * @return HashMap with Portfolio and Stocks information created from json.
+     */
     public HashMap<String, PortfolioStock> getStocksFromJson(JSONObject json) {
 
         Iterator keys;
@@ -496,12 +527,15 @@ public class PortfolioStockRepository {
         PRICE, DATE, QUANTITY, LIMIT_HIGH, LIMIT_LOW, CUSTOM_DISPLAY, SYMBOL_2
     }
 
+
+    // TODO: Add description and comments.
+
     private class Description extends AsyncTask<String, Void , String> {
         protected String doInBackground(String... query){
             String symbol = query[0];
             try {
                 return SymbolProvider.getDescription(symbol);
-            }catch (Exception e){DialogTools.showSimpleDialog(context,"Sorry","An uexpected error has occurred");}
+            }catch (Exception e){DialogTools.showSimpleDialog(context,"Sorry","An unexpected error has occurred");}
 
             return "";
         }
@@ -511,6 +545,13 @@ public class PortfolioStockRepository {
         }
     }
 
+    /**
+     * Find description for input symbol.
+     * Used for restore backup. Write description to stocks setup.
+     *
+     * @param symbol you need a description for.
+     * @return description for symbol. Empty description, if it gets no description back.
+     */
     private String getBackupDescription(String symbol){
         try {
             return new Description().execute(symbol).get();
@@ -518,18 +559,29 @@ public class PortfolioStockRepository {
         return "No description";
     }
 
+    /**
+     *  Create a simple backup file, where you just store symbols for backuped stocks.
+     *
+     * @param context needed for external Storage.
+     * @param backupName define name for your backup.
+     */
+
     public void backupWidget(Context context, String backupName) {
+
         int widgetSize = this.mAppStorage.getInt("widgetSize", 0);
 
         int maxStocks = PreferencesActivity.MAX_STOCKS;
 
+        // Storage for backup file.
         ArrayList<String> backupStocks = new ArrayList<>();
 
+        // Header for backup, where widgetsize is stored as identifier for widgets.
         String tmp = "Widgetsize: " + widgetSize + "\n";
 
         backupStocks.add(tmp);
         int i = 0;
 
+        // Create backup file with symbols from internal storage.
         while (i < maxStocks) {
             i++;
 
@@ -540,23 +592,34 @@ public class PortfolioStockRepository {
 
         }
 
+        // Write backup to external storage.
         UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups");
     }
 
+    /**
+     * Read external storage and parse backup file.
+     * Problems can occur, if backup file has not same format like backup file or
+     * same problems happen, if someone played with backup file.
+     *
+     * @param context needed for dialog. Display feedback for User.
+     * @param fileName Name of backup, that should be restored.
+     */
 
     public void restoreWidget(Context context, String fileName) {
+
         int widgetsize = this.mAppStorage.getInt("widgetSize", 0);
 
         String rawJson = UserData.readExternalStorage(context, fileName, "widgetbackups");
 
+        // Parse backup file and transform into an array.
         String delims = "[:\n]+";
-
         String[] tokens = null;
+
         try {
             tokens = rawJson.split(delims);
         } catch (NullPointerException ignored){}
 
-        // Check for correct widgetsize, else print error
+        // Check for correct widgetsize, else print error.
         if (tokens != null && tokens[1].trim().equals(String.valueOf(widgetsize))) {
 
             // Remove all stocks from widget.
@@ -576,13 +639,15 @@ public class PortfolioStockRepository {
                 // put all backup stocks into internal storage.
                 for(int j = 3; j < tokens.length; j += 2) {
 
-
+                    // Write symbols to current widget.
                     this.mAppStorage.putString("Stock" + i, tokens[j]).apply();
                     this.mAppStorage.putString("Stock" + i + "_summary", getBackupDescription(tokens[j])).apply();
                     i++;
                 }
             DialogTools.showSimpleDialog(context, "Restore widget successful", "This widget has been successfully restored!");
-        } else DialogTools.showSimpleDialog(context, "Restore widget failed", "This widget has the wrong size for this backup!");
+        }
+        else
+            DialogTools.showSimpleDialog(context, "Restore widget failed", "This widget has the wrong size for this backup!");
 
     }
 }
