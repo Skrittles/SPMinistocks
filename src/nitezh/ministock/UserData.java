@@ -31,7 +31,6 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,7 +42,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import nitezh.ministock.domain.AndroidWidgetRepository;
 import nitezh.ministock.domain.PortfolioStockRepository;
@@ -141,6 +139,7 @@ public class UserData {
         activity.startActivity(intent);
     }
 
+    /*
     public static CharSequence[] getWidgetBackupNames(Context context) {
         try {
             String rawJson = readInternalStorage(context, PortfolioStockRepository.WIDGET_JSON);
@@ -161,23 +160,46 @@ public class UserData {
 
         return null;
     }
+    */
 
+
+    /**
+     * Read all file names from an internal directory of folder ministocks in external storage.
+     * Could be an SD-Card or part of the formatted internal storage.
+     * Just read file names, if permission with synchronized.
+     * Created similar to getWidgetBackupNames(...).
+     *
+     *  @param context is not used, could be helpful, if you want to use JSonObjects.
+     *  @param internalDirectory specifies the direcory where file names should be read.
+     *
+     *   @return Array of file names from internal directory (could be empty).
+     *
+     */
 
     public static CharSequence[] readFileNames(Context context, String internalDirectory) {
 
         File root = Environment.getExternalStorageDirectory();
         File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
-        File[] files = dir.listFiles();
+        // Create missing directories, if missing
+        if(!dir.exists())
+            dir.mkdirs();
 
-        ArrayList<String> fileNames = new ArrayList<>();
 
-        for(int i = 0; i < files.length; i++) {
-            if(files[i].isFile())
-                fileNames.add(files[i].getName());
+        synchronized (UserData.sFileBackupLock) {
+            File[] files = dir.listFiles();
+
+            ArrayList<String> fileNames = new ArrayList<>();
+
+            // list every file names in a list
+            for (int i = 0; i < files.length; i++) {
+                if (files[i].isFile())
+                    fileNames.add(files[i].getName());
+            }
+
+            return fileNames.toArray(new String[fileNames.size()]);
+
         }
-
-        return fileNames.toArray(new String[fileNames.size()]);
     }
 
 
@@ -197,6 +219,7 @@ public class UserData {
     public static String readInternalStorage(Context context, String filename) {
         try {
             StringBuffer fileContent = new StringBuffer();
+
             synchronized (UserData.sFileBackupLock) {
                 FileInputStream fis;
                 fis = context.openFileInput(filename);
@@ -212,17 +235,35 @@ public class UserData {
 
         return null;
     }
-    
+
+
+    /**
+     *  read a specific file from external Storage with FileInputStream.
+     *  Specific folder name inside of externalStorage/ministocks/
+     *  external Storage could be on SD-card or on formatted internal storage.
+     *
+     * @param context not used, because method was created similar to readInternalStorage(...)
+     * @param fileName specifies the file name which should be read.
+     * @param internalDirectory specifies the directory in ministocks from which a file should be read
+     * @return file content as String.
+     */
+
     public static String readExternalStorage(Context context, String fileName, String internalDirectory) {
 
         File root = Environment.getExternalStorageDirectory();
         File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
+
+        // Create missing directories, if required.
+        if(!dir.exists())
+            dir.mkdirs();
 
         File file = new File(dir, fileName);
 
         try {
             StringBuffer fileContent = new StringBuffer();
             String tmp;
+
+            // lock file for other operations.
             synchronized (UserData.sFileBackupLock) {
                 FileInputStream fis = new FileInputStream(file);
                 InputStreamReader inputStreamReader = new InputStreamReader(fis);
@@ -245,11 +286,21 @@ public class UserData {
             e.printStackTrace();
         }
 
+        // return null, if file was not found, or other errors happend.
         return null;
     }
-    
-    
-        // Write to external storage
+
+    /**
+     *  Create a new directory and a new file inside of externalStorage/ministocks/ , where
+     *  your data will be written inside of a new file.
+     *  If external Storage is not available, print a message for User.
+     *
+     * @param context Print an error for user if external Storage is not available.
+     * @param data String, that should be written to your file.
+     * @param fileName names the file you will write to in externalStorage/ministocks/internalDirectory/
+     * @param internalDirectory names directory inside of ministocks/
+     */
+
     public static void writeExternalStorage(Context context, String data, String fileName, String internalDirectory) {
 
         String state = Environment.getExternalStorageState();
@@ -259,8 +310,9 @@ public class UserData {
             File root = Environment.getExternalStorageDirectory();
             File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
+            // Create missing directories, if required.
             if(!dir.exists()) {
-                if (dir.mkdir()) {
+                if (dir.mkdirs()) {
                     Log.d("Fcreate","Folder created" +"\n" + dir);
                 } else {
                     Log.d("Ffailed","Creating folder failed\n" + dir);
@@ -272,7 +324,6 @@ public class UserData {
             new File(dir, fileName).delete();
 
             File file = new File(dir, fileName);
-
 
 
             try {
