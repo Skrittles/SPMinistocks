@@ -175,8 +175,8 @@ public class UserData {
 
         ArrayList<String> fileNames = new ArrayList<>();
 
-        for(int i = 0; i < files.length; i++) {
-            if(files[i].isFile())
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile())
                 fileNames.add(files[i].getName());
         }
 
@@ -215,7 +215,7 @@ public class UserData {
 
         return null;
     }
-    
+
     public static String readExternalStorage(Context context, String fileName, String internalDirectory) {
 
         File root = Environment.getExternalStorageDirectory();
@@ -234,7 +234,7 @@ public class UserData {
                 InputStreamReader inputStreamReader = new InputStreamReader(fis);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-                while ((tmp = bufferedReader.readLine())!= null) {
+                while ((tmp = bufferedReader.readLine()) != null) {
                     fileContent.append(tmp + "\n");
                 }
             }
@@ -253,9 +253,9 @@ public class UserData {
 
         return null;
     }
-    
-    
-        // Write to external storage
+
+
+    // Write to external storage
     public static boolean writeExternalStorage(Context context, String data, String fileName, String internalDirectory) {
 
         String state = Environment.getExternalStorageState();
@@ -265,14 +265,14 @@ public class UserData {
             File root = Environment.getExternalStorageDirectory();
             File dir = new File(root.getAbsolutePath() + "/ministocks/" + internalDirectory);
 
-            if(!dir.exists()) {
+            if (!dir.exists()) {
                 if (dir.mkdirs()) {
-                    Log.d("Fcreate","Folder created\n" + dir);
+                    Log.d("Fcreate", "Folder created\n" + dir);
                 } else {
-                    Log.d("Ffailed","Creating folder failed\n" + dir);
+                    Log.d("Ffailed", "Creating folder failed\n" + dir);
                 }
-            }else {
-                Log.d("Fexists",dir + " already exists");
+            } else {
+                Log.d("Fexists", dir + " already exists");
             }
 
             if (new File(dir, fileName).exists()) {

@@ -52,7 +52,9 @@ public class MockWidget implements Widget {
         return false;
     }
 
-    public boolean isVisual() {return false;}
+    public boolean isVisual() {
+        return false;
+    }
 
     @Override
     public String getStock(int i) {
