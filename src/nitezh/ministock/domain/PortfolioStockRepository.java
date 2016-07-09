@@ -351,7 +351,7 @@ public class PortfolioStockRepository {
 
     /**
      * Part from method getStocks()
-     * Modified for transformation from JsonObject to HashMap<>.
+     * Modified for transformation from JsonObject to HashMap.
      *
      * @param json JSonObject with information about stocks and portfolio.
      * @return HashMap with Portfolio and Stocks information created from json.

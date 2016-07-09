@@ -24,7 +24,7 @@ import nitezh.ministock.utils.ReflectionTools;
 
 /**
  * Created by Tim Greiner on 30.05.2016.
- * <p/>
+ * 
  * This class handles the behaviour of every individual stock preference
  * It is different to how preferences are handled elsewhere.
  * Instead of controlling the behaviour of a preference in PreferenceActivity,
