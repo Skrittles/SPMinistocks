@@ -37,7 +37,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,13 +65,11 @@ import nitezh.ministock.DialogTools;
 import nitezh.ministock.PreferenceStorage;
 import nitezh.ministock.R;
 import nitezh.ministock.Storage;
-import nitezh.ministock.SymbolProvider;
 import nitezh.ministock.UserData;
 import nitezh.ministock.activities.widget.WidgetProviderBase;
 import nitezh.ministock.domain.AndroidWidgetRepository;
 import nitezh.ministock.domain.PortfolioStockRepository;
 import nitezh.ministock.domain.WidgetRepository;
-import nitezh.ministock.utils.Cache;
 import nitezh.ministock.utils.DateTools;
 import nitezh.ministock.utils.StorageCache;
 import nitezh.ministock.utils.VersionTools;
@@ -317,6 +314,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         updateSummaries(sharedPreferences, key);
     }
 
+    /**
+     * Updates stock values if any changes occur
+     * Updating the UI is handled in StockPreference
+     *
+     * @param sharedPreferences this widgets shared preferences
+     * @param key the stock that has to be updated
+     */
     void updateStockValue(SharedPreferences sharedPreferences, String key) {
         // Unregister the listener whenever a key changes
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
@@ -328,9 +332,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.apply();
-
-
-        //Updating the UI is handled in StockPreference
 
         // Set up a listener whenever a key changes
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
@@ -382,7 +383,20 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     void showDisclaimer() {
         String title = "License";
-        String body = "The MIT License (MIT)<br/><br/>Copyright © 2013 Nitesh Patel<br/><br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:<br /><br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.<br/><br/>THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
+        String body = "The MIT License (MIT)<br/><br/>" +
+                " Copyright © 2013 Nitesh Patel<br/><br/>" +
+                "Permission is hereby granted, free of charge, to any person obtaining a copy of" +
+                " this software and associated documentation files (the \"Software\"), to deal in" +
+                " the Software without restriction, including without limitation the rights to use," +
+                " copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software," +
+                " and to permit persons to whom the Software is furnished to do so, subject to the following conditions:<br/><br/>" +
+                "The above copyright notice and this permission notice shall be included in all copies" +
+                " or substantial portions of the Software.<br/><br/>" +
+                "THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED," +
+                " INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT." +
+                " IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY," +
+                " WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE" +
+                " OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.";
         DialogTools.showSimpleDialog(this, title, body);
     }
 
@@ -400,27 +414,42 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     void showHelpPrices() {
         String title = "Updating prices";
-        String body = "You can set how often, and when the widget updates in the Advanced settings menu.  The setting applies globally to all the widgets.<br /><br />Stock price information is provided by Yahoo Finance, and there may be a delay (from real-time prices, to up to 30 minutes) for some exchanges.<br /><br />Note that the time in the lower-left of the widget is the time that the data was retrieved from Yahoo, not the time of the live price.<br /><br />If an internet connection is not present when an update occurs, the widget will just use the last shown data, and the time for that data.<br /><br /><b>Update prices now feature</b><br /><br />This will update the prices in all your widgets, if there is an internet connection available.";
+        String body = "You can set how often, and when the widget updates in the Advanced settings menu." +
+                "  The setting applies globally to all the widgets.<br/><br/>" +
+                "Stock price information is provided by Yahoo Finance, and there may be a delay " +
+                "(from real-time prices, to up to 30 minutes) for some exchanges.<br/><br/>" +
+                "Note that the time in the lower-left of the widget is the time that the data was retrieved from Yahoo," +
+                " not the time of the live price.<br/><br/>" +
+                "If an internet connection is not present when an update occurs, the widget will just use the last shown data," +
+                " and the time for that data.<br/><br/>" +
+                "<b>Update prices now feature</b><br/><br/>" +
+                "This will update the prices in all your widgets, if there is an internet connection available.";
         DialogTools.showSimpleDialog(this, title, body);
     }
+
 
     void showHelpVisualStockboard() {
         String title = "Visual Stockboard";
         String body = "The Visual Stockboard option changes the layout of the widget and some setting options.<br />" +
-                "Each Stock is represented by a Panel.<br />" +
-                "<br /> <b>Panel Colour </b> <br /><br />" +
-                "The change is represented in the panel colour. <br />" +
-                "positive = green, <br /> negative = red, <br /> neutral = grey<br />" +
-                "The transparency of the colour represents the value of the change.<br />" +
-                "Less transparency stands for smaller change.<br />" +
+                "Each Stock is represented by a Panel.<br/>" +
+                "<br/> <b>Panel Colour </b> <br/><br/>" +
+                "The change is represented in the panel colour. <br/>" +
+                "positive = green, <br/> negative = red, <br/> neutral = grey<br/>" +
+                "The transparency of the colour represents the value of the change.<br/>" +
+                "Less transparency stands for smaller change.<br/>" +
                 "Depending on the setting it will use the numeric change (price change) or the percentage change to calculate the panel colour.<br />" +
-                "<br /><br />Each Panel shows:<br /><br /> " +
-                "<b>Top row</b><br /> " +
-                "On the left side the Stock Symbol and on the right side the stock price.<br /><br /> " +
-                "<b>Middle row</b> <br />" +
-                "Shows the change of the currently selected view. The view can be changed by tapping on the right side of the widget.<br />" +
-                " Supported views are <br />  daily change % (D%), <br />  total change % (PF T%), <br />  P/L total change (P/L T%),<br />  P/L total change AER (P/L AER). <br /> <br /> " +
-                "<b>Bottom row</b> <br />" +
+                "<br/><br/>Each Panel shows:<br/><br/> " +
+                "<b>Top row</b><br/> " +
+                "On the left side the Stock Symbol and on the right side the stock price.<br/><br/> " +
+                "<b>Middle row</b><br/>" +
+                "Shows the change of the currently selected view." +
+                " The view can be changed by tapping on the right side of the widget.<br/>" +
+                " Supported views are <br/>  " +
+                "daily change % (D%), <br/>  " +
+                "total change % (PF T%), <br/>  " +
+                "P/L total change (P/L T%),<br/>  " +
+                "P/L total change AER (P/L AER). <br/> <br/> " +
+                "<b>Bottom row</b> <br/>" +
                 "Shows the daily change in percent on the left and on the right the daily price change.";
         DialogTools.showSimpleDialog(this, title, body);
 
@@ -478,6 +507,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     }
 
 
+    /**
+     * Set text of a stock preference to stock symbol and summary
+     *
+     * @param key the stock preference key (e.g. "Stock1")
+     * @param value contains a stock symbol eventually a prefix ("Use"/"ISIN") or suffix ("and close")
+     * @param summary the summary of the stock
+     */
     void setPreference(String key, String value, String summary) {
         // Return if no key
         if (key.equals("")) {
@@ -494,7 +530,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         } else if (value.startsWith("ISIN ")) {
             try {
                 String[] resultISIN;
-                resultISIN = new getIsin().execute(value.replace("ISIN ", "")).get();
+                resultISIN = new getISIN().execute(value.replace("ISIN ", "")).get();
                 value = resultISIN[0];
                 summary = resultISIN[1];
             } catch (Exception e) {
@@ -514,11 +550,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     }
 
 
-    //Async task for isin search
-    //input string[0] = symbol
-    //input string[1] = summary
-    //return string symbol
-    private class getIsin extends AsyncTask<String, Void , String[]>{
+    /**
+     * Async task for ISIN search
+     */
+    private class getISIN extends AsyncTask<String, Void , String[]>{
+        /**
+         * Main function that returns an array containing the symbol and summary of a stock
+         *
+         * @param ISIN String[0] = symbol
+         *             String[1] = summary
+         * @return String symbol
+         */
         protected String[] doInBackground(String ... ISIN){
             //builds query link for isin search
             String[] Symbol = new String[2];
@@ -531,12 +573,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
                 DocumentBuilder builder = factory.newDocumentBuilder();
 
-                //fetch xml from url
+                //fetch XML from URL
                 Document retrievedXML = builder.parse(new InputSource(query.openStream()));
 
                 retrievedXML.getDocumentElement().normalize();
 
-                //get symbol from isin by parsing xml
+                //get symbol from ISIN by parsing xml
                 NodeList nodeList = retrievedXML.getElementsByTagName("Isin");
                 Symbol[0] = getElementValue(nodeList.item(0));
                 Symbol[1] = SymbolProvider.getDescription(Symbol[0]);
@@ -549,8 +591,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
     }
 
-
-    //gets last element of node
+    /**
+     * Gets last child of Node
+     *
+     * @param elem a Node in a NodeList
+     * @return the last child of the Node or "Not found"
+     */
     private String getElementValue( Node elem ) {
         Node child;
         if (elem != null) {
@@ -897,7 +943,15 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });
     }
 
+    /**
+     * Set summaries for all changeable preferences
+     *
+     * @param sharedPreferences this widgets shared preferences
+     * @param key the key of the preference which needs an updated summary
+     */
     void updateSummaries(SharedPreferences sharedPreferences, String key) {
+        if(findPreference(key) == null)
+            return;
         // Initialise the Stock summaries
         if (key.startsWith("Stock") && !key.endsWith("_summary")) {
             // Update the summary based on the stock value
@@ -1001,13 +1055,45 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     private void showHelpUsage() {
         String title = "Selecting widget views";
-        String body = "The widget has multiple views that display different information.<br /><br />These views can be turned on from the AppWidgetProvider views menu in settings.<br /><br />Once selected, the views can be changed on your home screen by touching the right-side of the widget.<br /><br />If a stock does not have information for a particular view, then the daily percentage change will instead be displayed for that stock in blue.<br /><br /><b>Daily change %</b><br /><br />Shows the current stock price with the daily percentage change.<br /><br /><b>Daily change (DA)</b><br /><br />Shows the current stock price with the daily price change.<br /><br /><b>Total change % (PF T%)</b><br /><br />Shows the current stock price with the total percentage change from the buy price in the portfolio.<br /><br /><b>Total change (PF TA)</b><br /><br />Shows the current stock price with the total price change from the buy price in the portfolio.<br /><br /><b>Total change AER % (PF AER)</b><br /><br />Shows the current stock price with the annualised percentage change using the buy price in the portfolio.<br /><br /><b>P/L daily change % (P/L D%)</b><br /><br />Shows your current holding value with the daily percentage change.<br /><br /><b>P/L daily change (P/L DA)</b><br /><br />Shows your current holding value with the daily price change.<br /><br /><b>P/L total change % (P/L T%)</b><br /><br />Shows your current holding value with the total percentage change from the buy cost in the portfolio.<br /><br /><b>P/L total change (P/L TA)</b><br /><br />Shows your current holding value with the total value change from the buy cost in the portfolio.<br /><br /><b>P/L total change AER (P/L AER)</b><br /><br />Shows your current holding value with the annualised percentage change using the buy cost in the portfolio.";
+        String body = "The widget has multiple views that display different information.<br/><br/>" +
+                "These views can be turned on from the AppWidgetProvider views menu in settings.<br/><br/>" +
+                "Once selected, the views can be changed on your home screen by touching the right-side of the widget.<br/><br/>" +
+                "If a stock does not have information for a particular view, " +
+                "then the daily percentage change will instead be displayed for that stock in blue.<br/><br/>" +
+                "<b>Daily change %</b><br/><br/>" +
+                "Shows the current stock price with the daily percentage change.<br/><br/>" +
+                "<b>Daily change (DA)</b><br/><br/>" +
+                "Shows the current stock price with the daily price change.<br/><br/>" +
+                "<b>Total change % (PF T%)</b><br/><br/>" +
+                "Shows the current stock price with the total percentage change from the buy price in the portfolio.<br/><br>" +
+                "<b>Total change (PF TA)</b><br/><br/>" +
+                "Shows the current stock price with the total price change from the buy price in the portfolio.<br/><br/>" +
+                "<b>Total change AER % (PF AER)</b><br/><br/>" +
+                "Shows the current stock price with the annualised percentage change using the buy price in the portfolio.<br/><br/>" +
+                "<b>P/L daily change % (P/L D%)</b><br/><br/>" +
+                "Shows your current holding value with the daily percentage change.<br/><br/>" +
+                "<b>P/L daily change (P/L DA)</b><br/><br/>" +
+                "Shows your current holding value with the daily price change.<br/><br/>" +
+                "<b>P/L total change % (P/L T%)</b><br/><br/>" +
+                "Shows your current holding value with the total percentage change from the buy cost in the portfolio.<br/><br/>" +
+                "<b>P/L total change (P/L TA)</b><br/><br/>" +
+                "Shows your current holding value with the total value change from the buy cost in the portfolio.<br/><br/>" +
+                "<b>P/L total change AER (P/L AER)</b><br/><br/>" +
+                "Shows your current holding value with the annualised percentage change using the buy cost in the portfolio.";
         DialogTools.showSimpleDialog(this, title, body);
     }
 
     private void showHelpPortfolio() {
         String title = "Using the portfolio";
-        String body = "On the portfolio screen you will see all the stocks that you have entered in your widgets in one list.<br /><br />You can touch an item to enter your stock purchase details.<br /><br /><b>Entering purchase details</b><br /><br />Enter the price that you bought the stock for, this will then be used for the PortfolioActivity and Profit and loss widget views.<br /><br />The Date is optional, and will be used for the AER rate on the portfolio AER and profit and loss AER views.<br /><br />The Quantity is optional, and will be used to calculate your holdings for the profit and loss views.  You may use negative values to simulate a short position.<br /><br />The High price limit and Low price limit are optional.  When the current price hits these limits, the price color will change in the widget.<br /><br /><b>Removing purchase details</b><br /><br />To remove purchase and alert details, long press the portfolio item and then choose the Clear details option.";
+        String body = "On the portfolio screen you will see all the stocks that you have entered in your widgets in one list.<br/><br/>" +
+                "You can touch an item to enter your stock purchase details.<br/><br/>" +
+                "<b>Entering purchase details</b><br/><br/>" +
+                "Enter the price that you bought the stock for, this will then be used for the PortfolioActivity and Profit and loss widget views.<br/><br/>" +
+                "The Date is optional, and will be used for the AER rate on the portfolio AER and profit and loss AER views.<br/><br/>" +
+                "The Quantity is optional, and will be used to calculate your holdings for the profit and loss views.  You may use negative values to simulate a short position.<br/><br/>" +
+                "The High price limit and Low price limit are optional.  When the current price hits these limits, the price color will change in the widget.<br/><br/>" +
+                "<b>Removing purchase details</b><br/><br/>" +
+                "To remove purchase and alert details, long press the portfolio item and then choose the Clear details option.";
         DialogTools.showSimpleDialog(this, title, body);
     }
 
@@ -1036,7 +1122,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         };
         DialogTools.alertWithCallback(this, "Rate MinistocksActivity",
-                "Please support MinistocksActivity by giving the application a 5 star rating in the android market.<br /><br />Motivation to continue to improve the product and add new features comes from positive feedback and ratings.",
+                "Please support MinistocksActivity by giving the application a 5 star rating in the android market.<br/><br/>" +
+                        "Motivation to continue to improve the product and add new features comes from positive feedback and ratings.",
                 "Rate it!", "Close", callable, null);
     }
 }

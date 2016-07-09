@@ -324,7 +324,6 @@ public class UserData {
 
             if (new File(dir, fileName).exists()) {
                 DialogTools.showSimpleDialog(context, "Warning", "Choose a diffrent name for your backup. This one already exists");
-                return false;
             }
             new File(dir, fileName).delete();
 
@@ -345,13 +344,11 @@ public class UserData {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return true;
         } else {
 
             DialogTools.showSimpleDialog(context, "External Storage not available",
                     "Your external Storage is nor available for this application ");
 
-            return false;
         }
     }
 }

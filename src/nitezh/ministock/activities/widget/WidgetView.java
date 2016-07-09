@@ -96,6 +96,13 @@ public class WidgetView {
         this.enabledViews = this.calculateEnabledViews(this.widget);
     }
 
+    /**
+     * Returns the remote views for this widget
+     *
+     * @param widget the current widget
+     * @param packageName the name of this application's package
+     * @return RemoteViews of this widget
+     */
     private RemoteViews getBlankRemoteViews(Widget widget, String packageName) {
         String backgroundStyle = widget.getBackgroundStyle();
         boolean useLargeFont = widget.useLargeFont();
@@ -164,8 +171,14 @@ public class WidgetView {
         return views;
     }
 
-    //Load widget background depending on whether font size and visual stockboard are enabled
-    private int getImageViewSrcId(String backgroundStyle, Boolean useLargeFont) {
+    /**
+     * Load widget background depending on whether font size and visual stockboard are enabled
+     *
+     * @param backgroundStyle one of the three backgounds styles you can select in the preferences menu
+     * @param useLargeFont boolean that determines if the widget uses a larger font
+     * @return id of the source image
+     */
+    private int getImageViewSrcId(String backgroundStyle, boolean useLargeFont) {
         Integer imageViewSrcId;
         switch (backgroundStyle) {
             case "transparent":
@@ -193,7 +206,12 @@ public class WidgetView {
         return imageViewSrcId;
     }
 
-    // Global formatter so we can perform global text formatting in one place
+    /**
+     * Global formatter so we can perform global text formatting in one place
+     *
+     * @param s the String you want to format
+     * @return a SpannableString that contains the new format
+     */
     private SpannableString applyFormatting(String s) {
         SpannableString span = new SpannableString(s);
         String font = this.widget.getVsFont();
@@ -276,6 +294,13 @@ public class WidgetView {
         }
     }
 
+    /**
+     * Returns the information in a row/panel
+     *
+     * @param symbol the symbol for which information should be returned
+     * @param widgetView the ViewType of the widget
+     * @return a WidgetRow which contains information of the stock
+     */
     private WidgetRow getRowInfo(String symbol, ViewType widgetView) {
         WidgetRow widgetRow = new WidgetRow(this.widget);
         widgetRow.setSymbol(symbol);
@@ -599,6 +624,12 @@ public class WidgetView {
     }
 
 
+    /**
+     * Returns the color for the text in a row as int
+     *
+     * @param value the text you want to color (equivalent to change)
+     * @return int that represents a color
+     */
     private int getColourForChange(String value) {
         double parsedValue = NumberTools.parseDouble(value, 0d);
         int colour;
@@ -628,8 +659,13 @@ public class WidgetView {
         }
     }
 
-    // Set visibility for unused Stocks
-    // Makes every Stock invisible, then makes only used stocks visible again
+    /**
+     * Set visibility for unused Stocks
+     * Makes every Stock invisible, then makes only used stocks visible again
+     *
+     * @param views RemoteViews of this widget
+     * @param count the amount of used stocks in this widget
+     */
     private void hideUnusedStocks(RemoteViews views, int count) {
         for (int i = 0; i <= MAX_STOCKS; i++) {
             int viewId;
@@ -705,6 +741,10 @@ public class WidgetView {
         this.remoteViews.setTextColor(ReflectionTools.getFieldId("text" + row + col), color);
     }
 
+    /**
+     * Called if there are changes for this widget
+     * Rebuilds this widget with new updated values
+     */
     public void applyPendingChanges() {
         int widgetDisplay = this.getNextView(this.updateMode);
         this.clear();
@@ -830,6 +870,11 @@ public class WidgetView {
     }
 
 
+    /**
+     * Returns the color of this widgets footer
+     *
+     * @return int that represents the color of the footer text
+     */
     public int getFooterColor() {
         String colorType;
         if (widget.getStorage().getBoolean("visual_stockboard", false))

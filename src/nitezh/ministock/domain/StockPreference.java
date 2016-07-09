@@ -108,6 +108,11 @@ public class StockPreference extends EditTextPreference {
     }
 
 
+    /**
+     * Returns this preferences view
+     *
+     * @return view of this preference
+     */
     public View getView() {
         return VIEW;
     }
