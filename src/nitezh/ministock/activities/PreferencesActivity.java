@@ -37,6 +37,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,6 @@ import nitezh.ministock.utils.VersionTools;
 import static android.content.SharedPreferences.Editor;
 import static android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
-
 public class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
     // Constants
@@ -91,7 +91,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     // Private
     private static boolean mPendingUpdate = false;
     public static String mSymbolSearchKey = "";
-    private final String CHANGE_LOG = "• Experimental Backup and Restore option added.<br /><br /><i>If you appreciate this app please rate it 5 stars in the Android market!</i>";
+    private final String CHANGE_LOG = "• Backup and Restore option added.<br />• Visual Stockboard view added.<br />• ISIN support added<br /><br /><i>If you appreciate this app please rate it 5 stars in the Android market!</i>";
     private static final String ISIN_URL = "http://query.yahooapis.com:80/v1/public/yql?q=select+*+from+yahoo.finance.isin+where+symbol+in+(\"ISIN\")&env=store://datatables.org/alltableswithkeys";
     // Fields for time pickers
     private TimePickerDialog.OnTimeSetListener mTimeSetListener;
@@ -102,7 +102,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     public static final int MAX_STOCKS = 16;
 
     Storage storage = null;
-
 
 
     String getChangeLog() {
@@ -197,24 +196,24 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
         // Remove extra stocks
         PreferenceScreen stock_setup = (PreferenceScreen) findPreference("stock_setup");
-        if(!storage.getBoolean("visual_stockboard",false)) {
+        if (!storage.getBoolean("visual_stockboard", false)) {
             // Normal view
-            if (widgetSize == 0 || widgetSize == 1)  {
+            if (widgetSize == 0 || widgetSize == 1) {
                 for (int i = 5; i <= MAX_STOCKS; i++)
                     removePref(stock_setup, "Stock" + i);
-            }else if (widgetSize == 2 || widgetSize == 3) {
+            } else if (widgetSize == 2 || widgetSize == 3) {
                 for (int i = 11; i <= MAX_STOCKS; i++)
                     removePref(stock_setup, "Stock" + i);
             }
         } else {
             // Visual Stockboard view
-            if(widgetSize == 0) {
+            if (widgetSize == 0) {
                 for (int i = 5; i <= MAX_STOCKS; i++)
                     removePref(stock_setup, "Stock" + i);
-            }else if(widgetSize == 1) {
+            } else if (widgetSize == 1) {
                 for (int i = 9; i <= MAX_STOCKS; i++)
                     removePref(stock_setup, "Stock" + i);
-            }else if(widgetSize == 2) {
+            } else if (widgetSize == 2) {
                 for (int i = 9; i <= MAX_STOCKS; i++)
                     removePref(stock_setup, "Stock" + i);
             }
@@ -232,22 +231,26 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
         // Remove unused settings for visual Stockboard
         PreferenceScreen appearance = (PreferenceScreen) findPreference("appearance");
-        if(storage.getBoolean("visual_stockboard",false)) {
-            PreferenceScreen settings = (PreferenceScreen) findPreference("advanced");
-            removePref(settings,"widget_views");
-            removePref(appearance,"large_font");
-            removePref(appearance,"colours_on_prices");
-            removePref(appearance,"background");
-            removePref(appearance,"updated_display");
-            removePref(appearance,"updated_colour");
-            removePref(appearance,"short_time");
-            removePref(appearance,"text_style");
-        }else if(!storage.getBoolean("visual_stockboard",false)) {
-            removePref(appearance,"vs_background");
-            removePref(appearance,"vs_updated_display");
-            removePref(appearance,"vs_updated_colour");
-            removePref(appearance,"vs_short_time");
-            removePref(appearance,"vs_text_style");
+        PreferenceScreen settings = (PreferenceScreen) findPreference("advanced");
+        if (storage.getBoolean("visual_stockboard", false)) {
+            removePref(settings, "widget_views");
+            removePref(appearance, "large_font");
+            removePref(appearance, "colours_on_prices");
+            removePref(appearance, "background");
+            removePref(appearance, "updated_display");
+            removePref(appearance, "updated_colour");
+            removePref(appearance, "short_time");
+            removePref(appearance, "text_style");
+        } else if (!storage.getBoolean("visual_stockboard", false)) {
+            removePref(appearance, "vs_color_calculation");
+            removePref(appearance, "vs_background");
+            removePref(appearance, "vs_updated_display");
+            removePref(appearance, "vs_updated_colour");
+            removePref(appearance, "vs_short_time");
+            removePref(appearance, "vs_text_style");
+            removePref(appearance, "vs_fonts");
+            removePref(appearance, "vs_large_font");
+
         }
 
         // Hide Feedback option if not relevant
@@ -256,27 +259,19 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             removePref("about_menu", "rate_app");
 
         // Initialise the summaries when the preferences screen loads
-        Map<String, ?> map = new ConcurrentHashMap<String,Object>(sharedPreferences.getAll());
-        //map = sharedPreferences.getAll();
-        map.remove("background_vs");
+        Map<String, ?> map = new ConcurrentHashMap<String, Object>(sharedPreferences.getAll());
 
-        if(storage.getBoolean("visual_stockboard",false)) {
+        //Only updates summaries of preferences that are currently visible
+        if (storage.getBoolean("visual_stockboard", false)) {
             for (String key : map.keySet()) {
-                if (!key.startsWith("vs_") && !key.startsWith("Stock"))
-                    map.remove(key);
-                else
+                if (key.startsWith("vs_") || key.startsWith("Stock"))
                     updateSummaries(sharedPreferences, key);
             }
-        }
-        else
+        } else
             for (String key : map.keySet()) {
-                    if (key.startsWith("vs_")) {
-                        map.remove(key);
-                    }
-                else
+                if (!key.startsWith("vs_"))
                     updateSummaries(sharedPreferences, key);
-                }
-
+            }
 
 
         // Update version number
@@ -393,7 +388,13 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
     void showHelp() {
         String title = "Entering stocks";
-        String body = "<b>Entering stock symbols</b><br/><br />Stock symbols must be in the Yahoo format, which you can look up on the Yahoo Finance website.";
+        String body = "<b>Entering stock symbols</b><br/>" +
+                "<br /> Stocks can be entered by using the stock symbol which must be in the Yahoo format, which you can look up on the Yahoo Finance website.<br /> " +
+                "A stock can also be entered by using the correct ISIN of the stock and by then selecting the ISIN option showing up under the search bar.<br />" +
+                " Either way a stock must be contained in the Yahoo Finance database." +
+                "<br /><br /> <b>Rearrange Stocks</b><br/><br /> " +
+                "The Stocks can be rearranged by a Drag'n'Drop function which starts automatically when holding a stock.<br /> " +
+                "If the Visual Stockboard is enabled a view will pop up to show where the stock will be arranged in the widget";
         DialogTools.showSimpleDialog(this, title, body);
     }
 
@@ -401,6 +402,47 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         String title = "Updating prices";
         String body = "You can set how often, and when the widget updates in the Advanced settings menu.  The setting applies globally to all the widgets.<br /><br />Stock price information is provided by Yahoo Finance, and there may be a delay (from real-time prices, to up to 30 minutes) for some exchanges.<br /><br />Note that the time in the lower-left of the widget is the time that the data was retrieved from Yahoo, not the time of the live price.<br /><br />If an internet connection is not present when an update occurs, the widget will just use the last shown data, and the time for that data.<br /><br /><b>Update prices now feature</b><br /><br />This will update the prices in all your widgets, if there is an internet connection available.";
         DialogTools.showSimpleDialog(this, title, body);
+    }
+
+    void showHelpVisualStockboard() {
+        String title = "Visual Stockboard";
+        String body = "The Visual Stockboard option changes the layout of the widget and some setting options.<br />" +
+                "Each Stock is represented by a Panel.<br />" +
+                "<br /> <b>Panel Colour </b> <br /><br />" +
+                "The change is represented in the panel colour. <br />" +
+                "positive = green, <br /> negative = red, <br /> neutral = grey<br />" +
+                "The transparency of the colour represents the value of the change.<br />" +
+                "Less transparency stands for smaller change.<br />" +
+                "Depending on the setting it will use the numeric change (price change) or the percentage change to calculate the panel colour.<br />" +
+                "<br /><br />Each Panel shows:<br /><br /> " +
+                "<b>Top row</b><br /> " +
+                "On the left side the Stock Symbol and on the right side the stock price.<br /><br /> " +
+                "<b>Middle row</b> <br />" +
+                "Shows the change of the currently selected view. The view can be changed by tapping on the right side of the widget.<br />" +
+                " Supported views are <br />  daily change % (D%), <br />  total change % (PF T%), <br />  P/L total change (P/L T%),<br />  P/L total change AER (P/L AER). <br /> <br /> " +
+                "<b>Bottom row</b> <br />" +
+                "Shows the daily change in percent on the left and on the right the daily price change.";
+        DialogTools.showSimpleDialog(this, title, body);
+
+    }
+
+    void showHelpBackupRestore() {
+        String title = "Backup/Restore";
+        String body = "You can create a backups of your portfolio entries and your widget specific stock setup and restore them. <br/> " +
+                "The backups will be stored into the folder 'ministocks' on the external storage of your device. <br/>" +
+                "<br /> <b> Portfolio backup/restore</b><br/>" +
+                "<br /> The portfolio backup saves your current portfolio entries into <br/>" +
+                " 'ministocks/portfoliobackups/'. <br/> " +
+                "If you restore a portfolio backup your current portfolio will be expanded with the data of the chosen backup. <br/>" +
+                " If your portfolio already contains a stock, the stock information will be overwritten with the information from the backup. <br/>" +
+                " Stocks which are not part of the backup will stay in your portfolio. <br/>" +
+                "<br/><b>Widget backup/restore</b><br/>" +
+                "<br /> The widget backup saves your current stocksetup into" +
+                " <br/> 'ministocks/widgetbackups/'. <br/>" +
+                " If you restore a widget backup, your current stocksetup will be deleted and exchanged with the stocks stored in the chosen widget backup. <br/>" +
+                " You can only restore widget backups into widgets of the same size. <br/>";
+        DialogTools.showSimpleDialog(this, title, body);
+
     }
 
     void showTimePickerDialog(Preference preference, String defaultValue) {
@@ -450,17 +492,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         } else if (value.startsWith("Use ")) {
             value = value.replace("Use ", "");
         } else if (value.startsWith("ISIN ")) {
-            try{
-                String[] resultISIN = new String[2];
-                resultISIN= new getIsin().execute(value.replace("ISIN ", "")).get();
+            try {
+                String[] resultISIN;
+                resultISIN = new getIsin().execute(value.replace("ISIN ", "")).get();
                 value = resultISIN[0];
-                summary= resultISIN[1];
-            }
-            catch(Exception e){value = "Not found";
+                summary = resultISIN[1];
+            } catch (Exception e) {
+                value = "Not found";
             }
         }
-        if ( value.equals("Not found")){
-            DialogTools.showSimpleDialogOk(this,"Error", "ISIN not found, please try again.");
+        if (value.equals("Not found")) {
+            DialogTools.showSimpleDialogOk(this, "Error", "ISIN not found, please try again.");
             value = "";
         }
         // Set dirty
@@ -471,37 +513,50 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         editor.apply();
     }
 
+
+    //Async task for isin search
+    //input string[0] = symbol
+    //input string[1] = summary
+    //return string symbol
     private class getIsin extends AsyncTask<String, Void , String[]>{
         protected String[] doInBackground(String ... ISIN){
+            //builds query link for isin search
             String[] Symbol = new String[2];
             String apiLink = ISIN_URL.replace("ISIN",ISIN[0]);
+
             try{
+                //Document builder setup
                 URL query = new URL(apiLink);
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
                 DocumentBuilder builder = factory.newDocumentBuilder();
 
+                //fetch xml from url
                 Document retrievedXML = builder.parse(new InputSource(query.openStream()));
 
                 retrievedXML.getDocumentElement().normalize();
+
+                //get symbol from isin by parsing xml
                 NodeList nodeList = retrievedXML.getElementsByTagName("Isin");
-                Symbol[0] =getElementValue(nodeList.item(0));
-                Symbol[1]= SymbolProvider.getDescription(Symbol[0]);
-            }
-            catch(Exception e){
+                Symbol[0] = getElementValue(nodeList.item(0));
+                Symbol[1] = SymbolProvider.getDescription(Symbol[0]);
+            } catch (Exception e) {
                 Symbol[0] = "Not found";
                 Symbol[1] = "";
-                return Symbol;}
+                return Symbol;
+            }
             return Symbol;
         }
     }
 
+
+    //gets last element of node
     private String getElementValue( Node elem ) {
         Node child;
-        if( elem != null){
-            if (elem.hasChildNodes()){
-                for( child = elem.getFirstChild(); child != null; child = child.getNextSibling() ){
-                    if( child.getNodeType() == Node.TEXT_NODE  ){
+        if (elem != null) {
+            if (elem.hasChildNodes()) {
+                for (child = elem.getFirstChild(); child != null; child = child.getNextSibling()) {
+                    if (child.getNodeType() == Node.TEXT_NODE) {
                         return child.getNodeValue();
                     }
                 }
@@ -523,9 +578,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             @Override
             public boolean onPreferenceClick(Preference preference) {
                 Dialog dialog = stocks.getDialog();
-                View v = stocks.getDialog().getLayoutInflater().inflate(R.layout.drag_layout,null);
+                View v = stocks.getDialog().getLayoutInflater().inflate(R.layout.drag_layout, null);
                 dialog.addContentView(v,
-                        new ViewGroup.LayoutParams( ViewGroup.LayoutParams.MATCH_PARENT , ViewGroup.LayoutParams.MATCH_PARENT ));
+                        new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
                 return false;
 
             }
@@ -580,6 +635,26 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             }
         });
 
+        // Hook the Help preference to the Help activity
+        Preference help_visual_stockboard = findPreference("help_visual_stockboard");
+        help_visual_stockboard.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showHelpVisualStockboard();
+                return true;
+            }
+        });
+
+        // Hook the Help preference to the Help activity
+        Preference help_backup_restore = findPreference("help_backup_restore");
+        help_backup_restore.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                showHelpBackupRestore();
+                return true;
+            }
+        });
+
         // Hook the Update preference to the Help activity
         Preference updateNow = findPreference("update_now");
         updateNow.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -612,17 +687,17 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         backup_portfolio.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference preference) {
-                    DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
-                        @Override
-                        public Object call() throws Exception {
-                            Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
-                            Cache cache = new StorageCache(storage);
-                            WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
-                            new PortfolioStockRepository(storage, cache, widgetRepository).backupPortfolio(PreferencesActivity.this, this.getInputValue());
-                            return new Object();
-                        }
-                    };
-                    DialogTools.inputWithCallback(PreferencesActivity.this, "Backup this portfolio", "Please enter a name for this backup:", "OK", "Cancel", "Portfolio_backup" + DateTools.getDateAsString(), callable);
+                DialogTools.InputAlertCallable callable = new DialogTools.InputAlertCallable() {
+                    @Override
+                    public Object call() throws Exception {
+                        Storage storage = PreferenceStorage.getInstance(PreferencesActivity.this);
+                        Cache cache = new StorageCache(storage);
+                        WidgetRepository widgetRepository = new AndroidWidgetRepository(PreferencesActivity.this);
+                        new PortfolioStockRepository(storage, cache, widgetRepository).backupPortfolio(PreferencesActivity.this, this.getInputValue());
+                        return new Object();
+                    }
+                };
+                DialogTools.inputWithCallback(PreferencesActivity.this, "Backup this portfolio", "Please enter a name for this backup:", "OK", "Cancel", "Portfolio_backup" + DateTools.getDateAsString(), callable);
 
                 return true;
             }
@@ -637,7 +712,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
 
                 CharSequence[] backupNames = UserData.readFileNames(PreferencesActivity.this, "portfoliobackups");
                 // If there are no backups show an appropriate dialog
-                if (backupNames.length == 0) {
+                if (backupNames == null) {
                     DialogTools.showSimpleDialog(PreferencesActivity.this, "No backups available", "There were no portfolio backups to restore.");
                     return true;
                 }
@@ -653,7 +728,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                         return new Object();
                     }
                 };
-                    DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a portfolio backup to restore", "Cancel", backupNames, callable);
+                DialogTools.choiceWithCallback(PreferencesActivity.this, "Select a portfolio backup to restore", "Cancel", backupNames, callable);
                 return true;
             }
         });
@@ -709,7 +784,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         });
 
 
-
         // Hook Rate MinistocksActivity preference to the market link
         Preference rate_app = findPreference("rate_app");
         rate_app.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -726,11 +800,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         visual_stockboard.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
-                if(visual_stockboard.isChecked()) {
+                if (visual_stockboard.isChecked()) {
                     visual_stockboard.setChecked(false);
                     storage.putBoolean("visual_stockboard", false);
-                }
-                else {
+                } else {
                     visual_stockboard.setChecked(true);
                     storage.putBoolean("visual_stockboard", true);
                 }
@@ -847,21 +920,23 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 findPreference(key).setTitle(value);
                 findPreference(key).setSummary(summary);
 
-            }catch (Exception e){e.printStackTrace();}
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         }
 
         // Initialise the ListPreference summaries
-        else if ((key.startsWith("background") || key.startsWith("vs_background") ||
+        else if (key.startsWith("background") || key.startsWith("vs_background") ||
                 key.startsWith("updated_colour") || key.startsWith("vs_updated_colour") ||
-                key.startsWith("updated_display") || key.startsWith("vs_updated_display")||
-                key.startsWith("text_style") || key.startsWith("vs_text_style"))) {
+                key.startsWith("updated_display") || key.startsWith("vs_updated_display") ||
+                key.startsWith("text_style") || key.startsWith("vs_text_style") ||
+                key.startsWith("vs_fonts") || key.startsWith("vs_color_calculation")) {
 
             String value = sharedPreferences.getString(key, "");
             findPreference(key).setSummary("Selected: " + value.substring(0, 1).toUpperCase() + value.substring(1));
         }
-
 
         // Initialise the Update interval
         else if (key.startsWith("update_interval")) {
@@ -904,25 +979,8 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             updateFromGlobal(sharedPreferences, key, CHECKBOX_TYPE);
         }
 
-        // Set whether percentage or numeric change is used for the calculation of the panel color
-        // if boolean usePercentage is false numeric is used
-        else if(key.equals("color_calculation")) {
-            String value = sharedPreferences.getString(key, "");
-
-            if (value. equals( "numeric")){
-                storage.putBoolean("usePercentage",false);
-                storage.apply();
-
-            } else {
-                storage.putBoolean("usePercentage",true);
-                storage.apply();
-            }
-        }
     }
 
-    void updatePreference(SharedPreferences sharedPreferences, String key){
-
-    }
 
     @Override
     protected void onStop() {

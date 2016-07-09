@@ -49,11 +49,15 @@ public interface Widget {
 
     boolean useLargeFont();
 
+    boolean useVsLargeFont();
+
     boolean getHideSuffix();
 
     boolean getTextStyle();
 
     boolean getVsTextStyle();
+
+    String getVsFont();
 
     boolean getColorsOnPrices();
 
@@ -68,6 +72,8 @@ public interface Widget {
     boolean showShortTime();
 
     boolean showVsShortTime();
+
+    String getVsColorCalculation();
 
     boolean hasDailyChangeView();
 
@@ -90,7 +96,5 @@ public interface Widget {
     boolean hasTotalPlPercentAerView();
 
     boolean isVisual();
-
-
 
 }

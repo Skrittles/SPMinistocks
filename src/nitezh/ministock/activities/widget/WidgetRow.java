@@ -165,11 +165,13 @@ public class WidgetRow {
         this.stockInfoExtra = stockInfoExtra;
     }
 
-    public  void setStockInfoExtra2(String stockInfoExtra2) {
+    public void setStockInfoExtra2(String stockInfoExtra2) {
         this.stockInfoExtra2 = stockInfoExtra2;
     }
 
-    public String getStockInfoExtra2(){return this.stockInfoExtra2;}
+    public String getStockInfoExtra2() {
+        return this.stockInfoExtra2;
+    }
 
 
     public int getStockInfoExtra2Color() {

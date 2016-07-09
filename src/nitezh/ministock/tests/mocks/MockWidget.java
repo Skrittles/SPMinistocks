@@ -52,7 +52,9 @@ public class MockWidget implements Widget {
         return false;
     }
 
-    public boolean isVisual() {return false;}
+    public boolean isVisual() {
+        return false;
+    }
 
     @Override
     public String getStock(int i) {
@@ -95,6 +97,11 @@ public class MockWidget implements Widget {
     }
 
     @Override
+    public boolean useVsLargeFont() {
+        return false;
+    }
+
+    @Override
     public boolean getHideSuffix() {
         return false;
     }
@@ -109,6 +116,10 @@ public class MockWidget implements Widget {
         return false;
     }
 
+    @Override
+    public String getVsFont() {
+        return null;
+    }
 
     @Override
     public boolean getColorsOnPrices() {
@@ -143,6 +154,11 @@ public class MockWidget implements Widget {
     @Override
     public boolean showVsShortTime() {
         return false;
+    }
+
+    @Override
+    public String getVsColorCalculation() {
+        return null;
     }
 
     @Override

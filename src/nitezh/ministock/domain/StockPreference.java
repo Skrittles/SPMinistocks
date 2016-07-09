@@ -24,7 +24,7 @@ import nitezh.ministock.utils.ReflectionTools;
 
 /**
  * Created by Tim Greiner on 30.05.2016.
- *
+ * <p/>
  * This class handles the behaviour of every individual stock preference
  * It is different to how preferences are handled elsewhere.
  * Instead of controlling the behaviour of a preference in PreferenceActivity,
@@ -35,26 +35,27 @@ public class StockPreference extends EditTextPreference {
     //Instead of just widget size, we use a letter code to avoid duplicate names for png files
     String size;
     boolean isVisual;
+
     public StockPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
         Storage storage = PreferenceStorage.getInstance(getContext());
-        isVisual = storage.getBoolean("visual_stockboard",false);
-        widgetSize = storage.getInt("widgetSize",0);
-        switch (widgetSize){
+        isVisual = storage.getBoolean("visual_stockboard", false);
+        widgetSize = storage.getInt("widgetSize", 0);
+        switch (widgetSize) {
             case 0:
-                size="a";
+                size = "a";
                 break;
             case 1:
-                size="b";
+                size = "b";
                 break;
             case 2:
-                size="c";
+                size = "c";
                 break;
             case 3:
-                size="d";
+                size = "d";
                 break;
             default:
-                size="a";
+                size = "a";
                 break;
         }
     }
@@ -73,13 +74,17 @@ public class StockPreference extends EditTextPreference {
     String mSymbolSearchKey = "";
 
 
-    //Overrides the default onCreateView to set listeners for the preferences
+    /**
+     * Overrides the default onCreateView to set listeners to preferences
+     *
+     * @param parent parent ViewGroup of the preference
+     * @return the view of the preference
+     */
     @Override
-    protected View onCreateView(final ViewGroup parent )
-    {
+    protected View onCreateView(final ViewGroup parent) {
         super.onCreateView(parent);
-        LayoutInflater li = (LayoutInflater)getContext().getSystemService( Context.LAYOUT_INFLATER_SERVICE );
-        View view =  li.inflate( R.layout.preferences_layout, parent, false);
+        LayoutInflater li = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = li.inflate(R.layout.preferences_layout, parent, false);
 
         view.setTag(getKey());
 
@@ -89,7 +94,7 @@ public class StockPreference extends EditTextPreference {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PREFERENCE_ACTIVITY.mSymbolSearchKey = getKey();
+                PreferencesActivity.mSymbolSearchKey = getKey();
 
                 // Start search with current value as query
                 String query = getSharedPreferences().getString(mSymbolSearchKey, "");
@@ -103,7 +108,7 @@ public class StockPreference extends EditTextPreference {
     }
 
 
-    public View getView(){
+    public View getView() {
         return VIEW;
     }
 
@@ -121,21 +126,23 @@ public class StockPreference extends EditTextPreference {
     };
 
     //Implements the "drop" of drag and drop
-    View.OnDragListener dragListen = new View.OnDragListener(){
+    View.OnDragListener dragListen = new View.OnDragListener() {
         @Override
-        public boolean onDrag(View v, DragEvent event){
+        public boolean onDrag(View v, DragEvent event) {
             ImageView screen = (ImageView) getView().getRootView().findViewById(R.id.screen);
             int dragEvent = event.getAction();
 
-            switch (dragEvent){
+            switch (dragEvent) {
+                // Shows preview of the widget
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    if(isVisual) {
+                    if (isVisual) {
                         screen.setVisibility(View.VISIBLE);
                         screen.setImageResource(ReflectionTools.getFieldDrawable((getKey()).toLowerCase() + size));
                     }
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     break;
+                // Hides preview if nothing is dragged
                 case DragEvent.ACTION_DRAG_ENDED:
                     screen.setVisibility(View.GONE);
                     break;
@@ -152,12 +159,12 @@ public class StockPreference extends EditTextPreference {
                     String droppedSummaryKey = dropped + "_summary";
 
                     //Gets the summary of the stocks currently in the preferences
-                    String targetSummary = preferences.getString(targetSummaryKey,"");
-                    String droppedSummary = preferences.getString(droppedSummaryKey,"");
+                    String targetSummary = preferences.getString(targetSummaryKey, "");
+                    String droppedSummary = preferences.getString(droppedSummaryKey, "");
 
                     //Gets the values of the stocks currently in the preferences
-                    String targetValue = preferences.getString(target,"");
-                    String droppedValue = preferences.getString(dropped,"");
+                    String targetValue = preferences.getString(target, "");
+                    String droppedValue = preferences.getString(dropped, "");
 
 
                     //Swaps preference values
@@ -174,7 +181,7 @@ public class StockPreference extends EditTextPreference {
 
 
     // Draws the Object that is created when "dragging" a Preference
-    private class DragShadow extends View.DragShadowBuilder{
+    private class DragShadow extends View.DragShadowBuilder {
         //Grey Boy: The object which will be drawn
         ColorDrawable greyBox;
 
@@ -185,30 +192,42 @@ public class StockPreference extends EditTextPreference {
         }
 
         /**
-         * Sets up the metrics of the box
+         * Sets up the metrics of the box that is dragged
+         * <p/>
+         * From android documentation:
          *
-         * @param shadowSize
-         * @param shadowTouchPoint
+         * @param shadowSize       A {@link android.graphics.Point} containing the width and height
+         *                         of the shadow image. Your application must set {@link android.graphics.Point#x} to the
+         *                         desired width and must set {@link android.graphics.Point#y} to the desired height of the
+         *                         image.
+         * @param shadowTouchPoint A {@link android.graphics.Point} for the position within the
+         *                         shadow image that should be underneath the touch point during the drag and drop
+         *                         operation. Your application must set {@link android.graphics.Point#x} to the
+         *                         X coordinate and {@link android.graphics.Point#y} to the Y coordinate of this position.
          */
         @Override
         public void onProvideShadowMetrics(Point shadowSize, Point shadowTouchPoint) {
             View v = getView();
 
-            int height = v.getHeight()/2;
-            int width = v.getWidth()/2;
+            int height = v.getHeight() / 2;
+            int width = v.getWidth() / 2;
 
             //Sets the size of the grey box
-            greyBox.setBounds(0,0,width,height);
+            greyBox.setBounds(0, 0, width, height);
             shadowSize.set(width, height);
 
             //This is the TouchPoint
             //At this point in the box will the cursor be when dragging
-            shadowTouchPoint.set(width/2,height/2);
+            shadowTouchPoint.set(width / 2, height / 2);
 
 
         }
 
-        //Draws the object on the canvas
+        /**
+         * Draws the object on a canvas
+         *
+         * @param canvas the canvas where the object should be drawn
+         */
         @Override
         public void onDrawShadow(Canvas canvas) {
             greyBox.draw(canvas);

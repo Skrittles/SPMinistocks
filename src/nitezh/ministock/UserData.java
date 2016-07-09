@@ -53,6 +53,7 @@ public class UserData {
 
     // Object for intrinsic lock
     public static final Object sFileBackupLock = new Object();
+    private boolean OVERWRITE_BACKUP = false;
 
     public static void cleanupPreferenceFiles(Context context) {
         ArrayList<String> preferencesPathsInUse = getPreferencesPathsInUse(context);
@@ -189,12 +190,13 @@ public class UserData {
         synchronized (UserData.sFileBackupLock) {
             File[] files = dir.listFiles();
 
+
             ArrayList<String> fileNames = new ArrayList<>();
 
             // list every file names in a list
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isFile())
-                    fileNames.add(files[i].getName());
+            for (File file : files) {
+                if (file.isFile())
+                    fileNames.add(file.getName());
             }
 
             return fileNames.toArray(new String[fileNames.size()]);
@@ -247,7 +249,6 @@ public class UserData {
      * @param internalDirectory specifies the directory in ministocks from which a file should be read
      * @return file content as String.
      */
-
     public static String readExternalStorage(Context context, String fileName, String internalDirectory) {
 
         File root = Environment.getExternalStorageDirectory();
@@ -269,7 +270,7 @@ public class UserData {
                 InputStreamReader inputStreamReader = new InputStreamReader(fis);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
-                while ((tmp = bufferedReader.readLine())!= null) {
+                while ((tmp = bufferedReader.readLine()) != null) {
                     fileContent.append(tmp + "\n");
                 }
             }
@@ -315,12 +316,16 @@ public class UserData {
                 if (dir.mkdirs()) {
                     Log.d("Fcreate","Folder created" +"\n" + dir);
                 } else {
-                    Log.d("Ffailed","Creating folder failed\n" + dir);
+                    Log.d("Ffailed", "Creating folder failed\n" + dir);
                 }
-            }else {
-                Log.d("Fexists",dir + " already exists");
+            } else {
+                Log.d("Fexists", dir + " already exists");
             }
 
+            if (new File(dir, fileName).exists()) {
+                DialogTools.showSimpleDialog(context, "Warning", "Choose a diffrent name for your backup. This one already exists");
+                return false;
+            }
             new File(dir, fileName).delete();
 
             File file = new File(dir, fileName);
@@ -340,11 +345,13 @@ public class UserData {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            return true;
         } else {
 
             DialogTools.showSimpleDialog(context, "External Storage not available",
                     "Your external Storage is nor available for this application ");
 
+            return false;
         }
     }
 }

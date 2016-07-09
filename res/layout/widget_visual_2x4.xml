@@ -1,4 +1,3 @@
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -13,7 +12,7 @@
         android:orientation="horizontal"
         android:adjustViewBounds="false"
         android:scaleType="fitXY"
-        android:src="@+drawable/ministock_bg_transparent68_large"/>
+        android:src="@+drawable/ministock_bg_transparent68_large" />
 
     <LinearLayout
         android:layout_width="fill_parent"

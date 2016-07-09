@@ -32,6 +32,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -100,71 +101,77 @@ public class WidgetView {
         boolean useLargeFont = widget.useLargeFont();
         RemoteViews views;
 
-        if(widget.getStorage().getBoolean("visual_stockboard",false))
-             backgroundStyle = widget.getVsBackgroundStyle();
-
-        if (widget.getSize() == 1) {
-            if (useLargeFont) {
-                if(widget.isVisual())
+        //Load layout depending on whether visual stockboard and uselargefont are enabled
+        if (widget.isVisual()) {
+            backgroundStyle = widget.getVsBackgroundStyle();
+            useLargeFont = widget.useVsLargeFont();
+            if (widget.getSize() == 1) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x4_large);
-            } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x4);
-            }
-        } else if (widget.getSize() == 2) {
-            if (useLargeFont) {
-                if(widget.isVisual())
+                }
+            } else if (widget.getSize() == 2) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x2_large);
-            } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x2);
-            }
-        } else if (widget.getSize() == 3) {
-            if (useLargeFont) {
-                if(widget.isVisual())
+                }
+            } else if (widget.getSize() == 3) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x4_large);
-
-                //Loads graphic overlay if "Visual Stockboard" is activated in the options
+                }
             } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_2x4);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_2x4);
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
+                }
             }
         } else {
-            if (useLargeFont) {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
-                else
-                    views = new RemoteViews(packageName, R.layout.widget_1x2_large);
+            if (widget.getSize() == 1) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_1x4_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_1x4);
+                }
+            } else if (widget.getSize() == 2) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_2x2_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_2x2);
+                }
+            } else if (widget.getSize() == 3) {
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_2x4_large);
+                } else {
+                    views = new RemoteViews(packageName, R.layout.widget_2x4);
+                }
             } else {
-                if(widget.isVisual())
-                    views = new RemoteViews(packageName, R.layout.widget_visual_1x2);
-                else
+                if (useLargeFont) {
+                    views = new RemoteViews(packageName, R.layout.widget_1x2_large);
+                } else {
                     views = new RemoteViews(packageName, R.layout.widget_1x2);
+                }
             }
         }
+
         views.setImageViewResource(R.id.widget_bg,
                 getImageViewSrcId(backgroundStyle, useLargeFont));
         this.hideUnusedStocks(views, widget.getSymbolCount());
         return views;
     }
 
+    //Load widget background depending on whether font size and visual stockboard are enabled
     private int getImageViewSrcId(String backgroundStyle, Boolean useLargeFont) {
         Integer imageViewSrcId;
         switch (backgroundStyle) {
             case "transparent":
-                if (useLargeFont) {
+                if (widget.isVisual()) {
+                    imageViewSrcId = R.drawable.ministock_bg_transparent68;
+                } else if (useLargeFont) {
                     imageViewSrcId = R.drawable.ministock_bg_transparent68_large;
                 } else {
                     imageViewSrcId = R.drawable.ministock_bg_transparent68;
@@ -174,7 +181,9 @@ public class WidgetView {
                 imageViewSrcId = R.drawable.blank;
                 break;
             default:
-                if (useLargeFont) {
+                if (widget.isVisual()) {
+                    imageViewSrcId = R.drawable.ministock_bg;
+                } else if (useLargeFont) {
                     imageViewSrcId = R.drawable.ministock_bg_large;
                 } else {
                     imageViewSrcId = R.drawable.ministock_bg;
@@ -187,14 +196,24 @@ public class WidgetView {
     // Global formatter so we can perform global text formatting in one place
     private SpannableString applyFormatting(String s) {
         SpannableString span = new SpannableString(s);
-        if (widget.getStorage().getBoolean("visual_stockboard",false)) {
+        String font = this.widget.getVsFont();
+        if (widget.isVisual()) {
+            //change font for Visual Stockboard
+            if (font.equals("light")) {
+                span.setSpan(new TypefaceSpan("sans-serif-light"), 0, s.length(), 0);
+            } else if (font.equals("condensed")) {
+                span.setSpan(new TypefaceSpan("sans-serif-light"), 0, s.length(), 0);
+            } else {
+                span.setSpan(new TypefaceSpan("sans-serif"), 0, s.length(), 0);
+            }
+            //change text style for Visual Stockboard
             if (this.widget.getVsTextStyle()) {
                 span.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
             } else {
                 span.setSpan(new StyleSpan(Typeface.NORMAL), 0, s.length(), 0);
             }
-        } else
-        if (this.widget.getTextStyle()) {
+            //change text style in standard view
+        } else if (this.widget.getTextStyle()) {
             span.setSpan(new StyleSpan(Typeface.BOLD), 0, s.length(), 0);
         } else {
             span.setSpan(new StyleSpan(Typeface.NORMAL), 0, s.length(), 0);
@@ -220,20 +239,27 @@ public class WidgetView {
         return this.enabledViews;
     }
 
+
+    /**
+     * Returns a HashMap whith all views and a boolean that indicates if they are activated
+     *
+     * @param widget the widget that has the enabled views
+     * @return the HashMap with the enabled views
+     */
     public HashMap<ViewType, Boolean> calculateEnabledViews(Widget widget) {
-        if (widget.isVisual()){
-            HashMap<WidgetProviderBase.ViewType, Boolean> alwaysOn = new HashMap<>();
-            alwaysOn.put(ViewType.VIEW_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_DAILY_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT, this.hasPortfolioData);
-            alwaysOn.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
-            alwaysOn.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
-            alwaysOn.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, false);
-            return alwaysOn;
+        if (widget.isVisual()) {
+            HashMap<WidgetProviderBase.ViewType, Boolean> enabledViewsVs = new HashMap<>();
+            enabledViewsVs.put(ViewType.VIEW_DAILY_PERCENT, true);
+            enabledViewsVs.put(ViewType.VIEW_DAILY_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_DAILY_CHANGE, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PL_PERCENT, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_DAILY_PERCENT, false);
+            enabledViewsVs.put(ViewType.VIEW_PL_PERCENT_AER, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_CHANGE, false);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT, this.hasPortfolioData);
+            enabledViewsVs.put(ViewType.VIEW_PORTFOLIO_PERCENT_AER, this.hasPortfolioData);
+            return enabledViewsVs;
         } else {
             HashMap<WidgetProviderBase.ViewType, Boolean> enabledViews = new HashMap<>();
             enabledViews.put(ViewType.VIEW_DAILY_PERCENT, widget.hasDailyPercentView());
@@ -274,29 +300,29 @@ public class WidgetView {
                 widgetRow.setStockInfo("data");
                 widgetRow.setStockInfoColor(Color.GRAY);
             }
-                return widgetRow;
+            return widgetRow;
         }
 
-            // Set default values
-            PortfolioStock portfolioStock = this.portfolioStocks.get(symbol);
-            WidgetStock widgetStock = new WidgetStock(quote, portfolioStock);
-            widgetRow.setPrice(widgetStock.getPrice());
-            widgetRow.setStockInfo(widgetStock.getDailyPercent());
-            widgetRow.setStockInfoColor(WidgetColors.NA);
-            if (!widget.isNarrow() && !widget.isVisual()) {
-                widgetRow.setSymbol(widgetStock.getDisplayName());
-                widgetRow.setVolume(widgetStock.getVolume());
-                widgetRow.setVolumeColor(WidgetColors.VOLUME);
-                widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
-                widgetRow.setStockInfoExtraColor(WidgetColors.NA);
-            }
-            if (widget.isVisual()) {
-                widgetRow.setVolume(widgetStock.getVolume());
-                widgetRow.setVolumeColor(WidgetColors.VOLUME);
-                widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
-                widgetRow.setStockInfoExtraColor(WidgetColors.NA);
-                widgetRow.setStockInfoExtra2(widgetStock.getPlTotalChange());
-            }
+        // Set default values
+        PortfolioStock portfolioStock = this.portfolioStocks.get(symbol);
+        WidgetStock widgetStock = new WidgetStock(quote, portfolioStock);
+        widgetRow.setPrice(widgetStock.getPrice());
+        widgetRow.setStockInfo(widgetStock.getDailyPercent());
+        widgetRow.setStockInfoColor(WidgetColors.NA);
+        if (!widget.isNarrow() && !widget.isVisual()) {
+            widgetRow.setSymbol(widgetStock.getDisplayName());
+            widgetRow.setVolume(widgetStock.getVolume());
+            widgetRow.setVolumeColor(WidgetColors.VOLUME);
+            widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
+            widgetRow.setStockInfoExtraColor(WidgetColors.NA);
+        }
+        if (widget.isVisual()) {
+            widgetRow.setVolume(widgetStock.getVolume());
+            widgetRow.setVolumeColor(WidgetColors.VOLUME);
+            widgetRow.setStockInfoExtra(widgetStock.getDailyChange());
+            widgetRow.setStockInfoExtraColor(WidgetColors.NA);
+            widgetRow.setStockInfoExtra2(widgetStock.getPlTotalChange());
+        }
 
         Boolean plView = false;
         Boolean plChange = false;
@@ -306,10 +332,11 @@ public class WidgetView {
         String stockInfoExtra2 = null;
         String stockInfoExtra3 = null;
 
+        // Set information of the text in the row/panel
         switch (widgetView) {
             case VIEW_DAILY_PERCENT:
-                    stockInfo = widgetStock.getDailyPercent();
-                    stockInfoExtra = widgetStock.getDailyChange();
+                stockInfo = widgetStock.getDailyPercent();
+                stockInfoExtra = widgetStock.getDailyChange();
                 break;
 
             case VIEW_DAILY_CHANGE:
@@ -357,7 +384,7 @@ public class WidgetView {
             case VIEW_PL_DAILY_CHANGE:
                 plView = true;
                 plChange = true;
-                if(!widget.isVisual()) {
+                if (!widget.isVisual()) {
                     priceColumn = widgetStock.getPlHolding();
                     stockInfo = widgetStock.getPlDailyChange();
                 } else {
@@ -387,8 +414,8 @@ public class WidgetView {
             case VIEW_PL_PERCENT_AER:
                 plView = true;
                 plChange = true;
-                priceColumn = widgetStock.getPlHolding();
                 if (!widget.isVisual()) {
+                    priceColumn = widgetStock.getPlHolding();
                     stockInfo = widgetStock.getTotalPercentAer();
                     stockInfoExtra = widgetStock.getPlTotalChangeAer();
                 } else {
@@ -412,19 +439,17 @@ public class WidgetView {
 
         // Set the price column to the holding value and colour
         // the column blue if we have no holdings
-        if (plView && priceColumn == null) {
+        if (plView && priceColumn == null && !widget.isVisual()) {
             widgetRow.setPriceColor(WidgetColors.NA);
         }
 
         if (widget.isVisual() && stockInfoExtra2 == null) {
             stockInfoExtra2 = widgetRow.getStockInfo();
-            //widgetRow.setStockInfoExtra2(widgetRow.getStockInfo());
             widgetRow.setStockInfoExtra2Color(WidgetColors.NA);
         }
 
         if (widget.isVisual() && stockInfoExtra3 == null) {
             stockInfoExtra3 = widgetRow.getStockInfoExtra();
-           // widgetRow.setStockInfoExtra3(widgetRow.getStockInfoExtra());
             widgetRow.setStockInfoExtra3Color(WidgetColors.NA);
         }
 
@@ -451,11 +476,7 @@ public class WidgetView {
             // Setup extra entries for the panels in Visual Stockboard
             if (widget.isVisual()) {
                 if (stockInfoExtra2 != null) {
-                    if (plChange) {
-                        widgetRow.setStockInfoExtra2(CurrencyTools.addCurrencyToSymbol(stockInfoExtra2, symbol));
-                    } else {
-                        widgetRow.setStockInfoExtra2(stockInfoExtra2);
-                    }
+                    widgetRow.setStockInfoExtra2(stockInfoExtra2);
                     widgetRow.setStockInfoExtra2Color(getColourForChange(stockInfoExtra2));
                 }
                 if (stockInfoExtra3 != null) {
@@ -467,8 +488,10 @@ public class WidgetView {
                     widgetRow.setStockInfoExtra3Color(getColourForChange(stockInfoExtra3));
                 }
 
+
                 // Set Background colour for each Panel of Viusal Stockboard
-                if (widget.getStorage().getBoolean("usePercentage",true)) {
+                // use percentage or numeric change depending on widget settings
+                if (this.widget.getVsColorCalculation().equals("percentage")) {
                     widgetRow.setVisualColor(getColourForPanelPercent(stockInfoExtra2));
                 } else {
                     widgetRow.setVisualColor(getColourForPanelNumeric(stockInfoExtra3));
@@ -488,6 +511,14 @@ public class WidgetView {
         return widgetRow;
     }
 
+
+    /**
+     * Returns a color normalized for a min/max value
+     * as a String that is used to color the panel in Visual Stockboard view
+     *
+     * @param value the change that determines the color of the panel in numbers
+     * @return a color that indicates the change of the panel
+     */
     private String getColourForPanelNumeric(String value) {
         final double MAX_VALUE = 50;
         final double MIN_VALUE = 0.1;
@@ -500,20 +531,20 @@ public class WidgetView {
         double parsedValue = NumberTools.parseDouble(value, 0d);
 
         // Calculate colour transparency
-        if(parsedValue > MAX_VALUE)
+        if (parsedValue > MAX_VALUE)
             parsedValue = MAX_VALUE;
         else if (parsedValue < -MAX_VALUE)
             parsedValue = -MAX_VALUE;
 
-        double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
+        double normDouble = (Math.abs(parsedValue) - MIN_VALUE) / (MAX_VALUE - MIN_VALUE);
 
         final int MIN = 64;
         final int MAX = 230;
-        int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
+        int normInt = (int) (normDouble * (MAX - MIN) + MIN);
 
         String hex = Integer.toHexString(normInt);
 
-        // Set colour green, red or grey
+        // Set colour green (positive), red (negative) or grey (neutral)
         if (parsedValue > 0)
             colour = "#" + hex + green;
         else if (parsedValue < 0)
@@ -523,7 +554,15 @@ public class WidgetView {
         return colour;
     }
 
-    private String getColourForPanelPercent(String value){
+
+    /**
+     * Returns a color normalized for a min/max value
+     * as a String that is used to color the panel in Visual Stockboard view
+     *
+     * @param value the change that determines the color of the panel in percent
+     * @return a color that indicates the change of the panel
+     */
+    private String getColourForPanelPercent(String value) {
         final double MAX_VALUE = 10;
         final double MIN_VALUE = 0.1;
 
@@ -535,16 +574,16 @@ public class WidgetView {
         double parsedValue = NumberTools.parseDouble(value, 0d);
 
         // Calculate colour transparency
-        if(parsedValue > MAX_VALUE)
+        if (parsedValue > MAX_VALUE)
             parsedValue = MAX_VALUE;
         else if (parsedValue < -MAX_VALUE)
             parsedValue = -MAX_VALUE;
 
-        double normDouble = (Math.abs(parsedValue) - MIN_VALUE)/(MAX_VALUE - MIN_VALUE);
+        double normDouble = (Math.abs(parsedValue) - MIN_VALUE) / (MAX_VALUE - MIN_VALUE);
 
         final int MIN = 64;
         final int MAX = 230;
-        int normInt =  (int) (normDouble*(MAX-MIN) + MIN);
+        int normInt = (int) (normDouble * (MAX - MIN) + MIN);
 
         String hex = Integer.toHexString(normInt);
 
@@ -556,7 +595,7 @@ public class WidgetView {
         else
             colour = neutral;
 
-         return colour;
+        return colour;
     }
 
 
@@ -567,7 +606,7 @@ public class WidgetView {
         if (widget.isVisual()) {
             colour = WidgetColors.SAME;
 
-        // Change colour for default view
+            // Change colour for default view
         } else {
             if (parsedValue < 0) {
                 colour = WidgetColors.LOSS;
@@ -608,7 +647,7 @@ public class WidgetView {
                 //Enable panels for visual view
                 viewId = ReflectionTools.getFieldId("Panel" + i);
                 if (viewId > 0) {
-                    views.setViewVisibility(ReflectionTools.getFieldId("Panel"+ i), View.INVISIBLE);
+                    views.setViewVisibility(ReflectionTools.getFieldId("Panel" + i), View.INVISIBLE);
                 }
 
                 // Find used Symbols
@@ -654,11 +693,12 @@ public class WidgetView {
     }
 
     public void setStockRowItemText(int row, int col, Object text) {
-            try {
-                this.remoteViews.setTextViewText(
-                        ReflectionTools.getFieldId("text" + row + col),
-                        !text.equals("") ? applyFormatting((String) text) : "");
-            }catch (Exception e){}
+        try {
+            this.remoteViews.setTextViewText(
+                    ReflectionTools.getFieldId("text" + row + col),
+                    !text.equals("") ? applyFormatting((String) text) : "");
+        } catch (Exception ignored) {
+        }
     }
 
     public void setStockRowItemColor(int row, int col, int color) {
@@ -699,7 +739,7 @@ public class WidgetView {
                 setStockRowItemText(lineNo, 6, rowInfo.getStockInfoExtra());
             }
 
-            // Colours
+            // Colors
             if (!this.widget.isVisual()) {
                 setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
                 if (!this.widget.getColorsOnPrices()) {
@@ -724,6 +764,7 @@ public class WidgetView {
                     }
                 }
             } else {
+                // Set content and color for a panel
                 setStockRowItemColor(lineNo, 1, rowInfo.getSymbolDisplayColor());
                 setStockRowItemColor(lineNo, 2, rowInfo.getPriceColor());
                 setStockRowItemColor(lineNo, 3, rowInfo.getStockInfoExtra2Color());
@@ -737,56 +778,61 @@ public class WidgetView {
         }
 
         // Set footer display
-       if( widget.getStorage().getBoolean("visual_stockboard",false)) {
+        if (widget.getStorage().getBoolean("visual_stockboard", false)) {
 
             if (this.widget.getVsFooterVisibility().equals("invisible"))
                 remoteViews.setViewVisibility(R.id.text_footer, View.INVISIBLE);
             else {
+                remoteViews.setViewVisibility(R.id.text_footer, View.VISIBLE);
+
+                // Set time stamp
+                int footerColor = this.getFooterColor();
+                try {
+                    remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getVsTimeStamp()));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                remoteViews.setTextColor(R.id.text5, footerColor);
+
+                // Set the view label
+                remoteViews.setTextViewText(R.id.text6, applyFormatting(this.getLabel(widgetDisplay)));
+                remoteViews.setTextColor(R.id.text6, footerColor);
+            }
+        } else {
+
+            switch (this.widget.getFooterVisibility()) {
+                case "remove":
+                    remoteViews.setViewVisibility(R.id.text_footer, View.GONE);
+                    break;
+
+                case "invisible":
+                    remoteViews.setViewVisibility(R.id.text_footer, View.INVISIBLE);
+                    break;
+
+                default:
                     remoteViews.setViewVisibility(R.id.text_footer, View.VISIBLE);
 
                     // Set time stamp
                     int footerColor = this.getFooterColor();
-                    remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getVsTimeStamp()));
+                    try {
+                        remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getTimeStamp()));
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                     remoteViews.setTextColor(R.id.text5, footerColor);
 
                     // Set the view label
                     remoteViews.setTextViewText(R.id.text6, applyFormatting(this.getLabel(widgetDisplay)));
                     remoteViews.setTextColor(R.id.text6, footerColor);
-
+                    break;
             }
-
-            }else{
-
-                switch (this.widget.getFooterVisibility()) {
-                    case "remove":
-                        remoteViews.setViewVisibility(R.id.text_footer, View.GONE);
-                        break;
-
-                    case "invisible":
-                        remoteViews.setViewVisibility(R.id.text_footer, View.INVISIBLE);
-                        break;
-
-                    default:
-                        remoteViews.setViewVisibility(R.id.text_footer, View.VISIBLE);
-
-                        // Set time stamp
-                        int footerColor = this.getFooterColor();
-                        remoteViews.setTextViewText(R.id.text5, applyFormatting(this.getTimeStamp()));
-                        remoteViews.setTextColor(R.id.text5, footerColor);
-
-                        // Set the view label
-                        remoteViews.setTextViewText(R.id.text6, applyFormatting(this.getLabel(widgetDisplay)));
-                        remoteViews.setTextColor(R.id.text6, footerColor);
-                        break;
-
-                }
-           }
+        }
     }
 
 
     public int getFooterColor() {
         String colorType;
-        if( widget.getStorage().getBoolean("visual_stockboard",false))
+        if (widget.getStorage().getBoolean("visual_stockboard", false))
             colorType = this.widget.getVsFooterColor();
         else
             colorType = this.widget.getFooterColor();
@@ -893,7 +939,13 @@ public class WidgetView {
         return label;
     }
 
-    public String getVsTimeStamp() {
+
+    /**
+     * Returns the current date and time as String
+     *
+     * @return the current date
+     */
+    public String getVsTimeStamp() throws ArrayIndexOutOfBoundsException {
         String timeStamp = this.quotesTimeStamp;
         if (!this.widget.showVsShortTime()) {
             String date = new SimpleDateFormat("dd MMM").format(new Date()).toUpperCase();
@@ -911,7 +963,12 @@ public class WidgetView {
         return timeStamp;
     }
 
-    public String getTimeStamp() {
+    /**
+     * Returns the current date and time as String
+     *
+     * @return the current date
+     */
+    public String getTimeStamp() throws ArrayIndexOutOfBoundsException {
         String timeStamp = this.quotesTimeStamp;
         if (!this.widget.showShortTime()) {
             String date = new SimpleDateFormat("dd MMM").format(new Date()).toUpperCase();

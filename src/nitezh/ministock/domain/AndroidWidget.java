@@ -150,8 +150,8 @@ public class AndroidWidget implements Widget {
         return (size == 0 || size == 2);
     }
 
-    public boolean isVisual(){
-        return storage.getBoolean("visual_stockboard",false);
+    public boolean isVisual() {
+        return storage.getBoolean("visual_stockboard", false);
     }
 
     public int _getSize() {
@@ -199,16 +199,16 @@ public class AndroidWidget implements Widget {
     public int getSymbolCount() {
         int size = this.getSize();
         int count = 0;
-        if(!this.isVisual()) {
+        if (!this.isVisual()) {
             if (size == 0 || size == 1) {
                 count = 4;
             } else if (size == 2 || size == 3) {
                 count = 10;
             }
-        }else{
+        } else {
             if (size == 0) {
                 count = 4;
-            }else if (size == 1) {
+            } else if (size == 1) {
                 count = 8;
             } else if (size == 2) {
                 count = 8;
@@ -235,6 +235,11 @@ public class AndroidWidget implements Widget {
     }
 
     @Override
+    public boolean useVsLargeFont() {
+        return this.storage.getBoolean("vs_large_font", false);
+    }
+
+    @Override
     public boolean getHideSuffix() {
         return this.storage.getBoolean("hide_suffix", false);
     }
@@ -247,6 +252,11 @@ public class AndroidWidget implements Widget {
     @Override
     public boolean getVsTextStyle() {
         return this.storage.getString("vs_text_style", "normal").equals("bold");
+    }
+
+    @Override
+    public String getVsFont() {
+        return this.storage.getString("vs_fonts", "standard");
     }
 
     @Override
@@ -282,6 +292,11 @@ public class AndroidWidget implements Widget {
     @Override
     public boolean showVsShortTime() {
         return this.storage.getBoolean("vs_short_time", false);
+    }
+
+    @Override
+    public String getVsColorCalculation() {
+        return this.storage.getString("vs_color_calculation", "percentage");
     }
 
 

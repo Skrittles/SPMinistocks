@@ -79,7 +79,7 @@ public class PortfolioStockRepository {
         this.widgetStocks = widgetsStockSymbols;
     }
 
-    public  PortfolioStockRepository(Context context, Storage appStorage, Cache cache, WidgetRepository widgetRepository){
+    public PortfolioStockRepository(Context context, Storage appStorage, Cache cache, WidgetRepository widgetRepository) {
         this.context = context;
         this.mAppStorage = appStorage;
 
@@ -337,7 +337,7 @@ public class PortfolioStockRepository {
         else
             // Show Dialog for success and which backup has been rerstored.
             DialogTools.showSimpleDialog(context, "PortfolioActivity restored",
-                "Your portfolio settings have been restored from ministocks/portfoliobackups/" + backupName);
+                    "Your portfolio settings have been restored from ministocks/portfoliobackups/" + backupName);
     }
 
     public JSONObject getStocksJson() {
@@ -396,7 +396,6 @@ public class PortfolioStockRepository {
     }
 
 
-
     public HashMap<String, PortfolioStock> getStocks() {
         if (!mDirtyPortfolioStockMap) {
             return mPortfolioStocks;
@@ -446,7 +445,7 @@ public class PortfolioStockRepository {
     public void persist() {
         JSONObject json = new JSONObject();
         for (String symbol : this.portfolioStocksInfo.keySet()) {
-            if(this.portfolioStocksInfo.get(symbol) == null) {
+            if (this.portfolioStocksInfo.get(symbol) == null) {
                 updateStock(symbol);
             }
 
@@ -456,10 +455,6 @@ public class PortfolioStockRepository {
                     json.put(symbol, item.toJson());
                 } catch (JSONException ignored) {
                 }
-            } else {
-                try{
-                    json.put(symbol, item.toNullJson());
-                } catch (JSONException ignored){}
             }
         }
 
@@ -515,7 +510,9 @@ public class PortfolioStockRepository {
                     this.portfolioStocksInfo.remove(symbol);
                 }
             }
-        } catch (ConcurrentModificationException e){e.printStackTrace();}
+        } catch (ConcurrentModificationException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveChanges() {
@@ -528,20 +525,23 @@ public class PortfolioStockRepository {
     }
 
 
-    // TODO: Add description and comments.
-
+    /**
+     * Gets the description for stocks after restoring a backup
+     */
     private class Description extends AsyncTask<String, Void , String> {
         protected String doInBackground(String... query){
             String symbol = query[0];
             try {
                 return SymbolProvider.getDescription(symbol);
-            }catch (Exception e){DialogTools.showSimpleDialog(context,"Sorry","An unexpected error has occurred");}
+            }catch (Exception e){
+                DialogTools.showSimpleDialog(context,"Sorry","An unexpected error has occurred");
+            }
 
             return "";
         }
 
-        protected void onProgressUpdate(Integer... progress){
-            DialogTools.showSimpleDialog(context,"Please Wait","Backup in progress");
+        protected void onProgressUpdate(Integer... progress) {
+            DialogTools.showSimpleDialog(context, "Please Wait", "Backup in progress");
         }
     }
 
@@ -555,7 +555,8 @@ public class PortfolioStockRepository {
     private String getBackupDescription(String symbol){
         try {
             return new Description().execute(symbol).get();
-        } catch (Exception ignored){}
+        } catch (Exception ignored) {
+        }
         return "No description";
     }
 
@@ -587,13 +588,15 @@ public class PortfolioStockRepository {
 
             tmp = this.mAppStorage.getString("Stock" + i, "");
 
-            if(tmp != "")
+            if (tmp != "")
                 backupStocks.add("Stock" + i + ": " + tmp + "\n");
 
         }
 
         // Write backup to external storage.
         UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups");
+            DialogTools.showSimpleDialog(context, "Widget backup successful.",
+                    "Your widget has been backed up to ministocks/widgetbackups/" + backupName);
     }
 
     /**
@@ -617,36 +620,29 @@ public class PortfolioStockRepository {
 
         try {
             tokens = rawJson.split(delims);
-        } catch (NullPointerException ignored){}
+        } catch (NullPointerException ignored) {
+        }
 
         // Check for correct widgetsize, else print error.
         if (tokens != null && tokens[1].trim().equals(String.valueOf(widgetsize))) {
-
             // Remove all stocks from widget.
-            for(int j = 1; j < 16; j++) {
-                 this.mAppStorage.putString("Stock" + j, "").apply();
-                 this.mAppStorage.putString("Stock" + j + "_summary" , "").apply();
+            for (int j = 1; j < 16; j++) {
+                this.mAppStorage.putString("Stock" + j, "").apply();
+                this.mAppStorage.putString("Stock" + j + "_summary", "").apply();
             }
 
-                /*
-            System.out.println(tokens[0]);
-            System.out.println(tokens[1]);
-            System.out.println(tokens[2]);
-               System.out.println(tokens[3]);
-               */
-                int i = 1;
+            int i = 1;
 
-                // put all backup stocks into internal storage.
-                for(int j = 3; j < tokens.length; j += 2) {
+            // Write symbols to current widget.
+            for (int j = 3; j < tokens.length; j += 2) {
 
-                    // Write symbols to current widget.
-                    this.mAppStorage.putString("Stock" + i, tokens[j]).apply();
-                    this.mAppStorage.putString("Stock" + i + "_summary", getBackupDescription(tokens[j])).apply();
-                    i++;
-                }
+
+                this.mAppStorage.putString("Stock" + i, tokens[j]).apply();
+                this.mAppStorage.putString("Stock" + i + "_summary", getBackupDescription(tokens[j])).apply();
+                i++;
+            }
             DialogTools.showSimpleDialog(context, "Restore widget successful", "This widget has been successfully restored!");
-        }
-        else
+        } else
             DialogTools.showSimpleDialog(context, "Restore widget failed", "This widget has the wrong size for this backup!");
 
     }
