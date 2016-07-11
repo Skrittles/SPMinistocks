@@ -248,11 +248,18 @@ public class PortfolioStockRepository {
      */
 
     public void backupPortfolio(Context context, String fileName) {
+        // Restrict filenames to non-special characters
+        if(!fileName.matches("[a-zA-Z0-9_\\- ]*")) {
+            System.out.println(fileName);
+            DialogTools.showSimpleDialogOk(context, "Backup failed",
+                    "Only letters, numbers, whitespaces and _ or - are allowed in file names");
+            return;
+        }
 
-        // Convert current portfolioStockInfo to JSONO-Object
+        // Convert current portfolioStockInfo to JSON-Object
         persist();
 
-        // Write JSONO-Object as String to internal app storage
+        // Write JSON-Object as String to internal app storage
         this.mAppStorage.putString(PORTFOLIO_JSON, getStocksJson().toString()).apply();
 
         String rawJson = this.mAppStorage.getString(PORTFOLIO_JSON, "");
@@ -564,10 +571,16 @@ public class PortfolioStockRepository {
      *  Create a simple backup file, where you just store symbols for backuped stocks.
      *
      * @param context needed for external Storage.
-     * @param backupName define name for your backup.
+     * @param fileName define name for your backup.
      */
-
-    public void backupWidget(Context context, String backupName) {
+    public void backupWidget(Context context, String fileName) {
+        // Restrict filenames to non-special characters
+        if(!fileName.matches("[a-zA-Z0-9_\\- ]*")) {
+            System.out.println(fileName);
+            DialogTools.showSimpleDialogOk(context, "Backup failed",
+                    "Only letters, numbers, whitespaces and _ or - are allowed in file names");
+            return;
+        }
 
         int widgetSize = this.mAppStorage.getInt("widgetSize", 0);
 
@@ -588,15 +601,15 @@ public class PortfolioStockRepository {
 
             tmp = this.mAppStorage.getString("Stock" + i, "");
 
-            if (tmp != "")
+            if (!tmp.equals(""))
                 backupStocks.add("Stock" + i + ": " + tmp + "\n");
 
         }
 
         // Write backup to external storage.
-        UserData.writeExternalStorage(context, backupStocks.toString(), backupName + ".txt", "widgetbackups");
+        UserData.writeExternalStorage(context, backupStocks.toString(), fileName + ".txt", "widgetbackups");
             DialogTools.showSimpleDialog(context, "Widget backup successful.",
-                    "Your widget has been backed up to ministocks/widgetbackups/" + backupName);
+                    "Your widget has been backed up to ministocks/widgetbackups/" + fileName);
     }
 
     /**
@@ -607,7 +620,6 @@ public class PortfolioStockRepository {
      * @param context needed for dialog. Display feedback for User.
      * @param fileName Name of backup, that should be restored.
      */
-
     public void restoreWidget(Context context, String fileName) {
 
         int widgetsize = this.mAppStorage.getInt("widgetSize", 0);
