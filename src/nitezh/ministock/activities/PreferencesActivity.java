@@ -530,7 +530,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         } else if (value.startsWith("ISIN ")) {
             try {
                 String[] resultISIN;
-                resultISIN = new getISIN().execute(value.replace("ISIN ", "")).get();
+                resultISIN = new getIsin().execute(value.replace("ISIN ", "")).get();
                 value = resultISIN[0];
                 summary = resultISIN[1];
             } catch (Exception e) {
@@ -553,7 +553,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     /**
      * Async task for ISIN search
      */
-    private class getISIN extends AsyncTask<String, Void , String[]>{
+    private class getIsin extends AsyncTask<String, Void , String[]>{
         /**
          * Main function that returns an array containing the symbol and summary of a stock
          *
@@ -848,10 +848,16 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 if (visual_stockboard.isChecked()) {
                     visual_stockboard.setChecked(false);
-                    storage.putBoolean("visual_stockboard", false);
+                    storage.putBoolean("visual_stockboard", false).apply();
+
+                    // Restart activity to apply changes
+                    restart();
                 } else {
                     visual_stockboard.setChecked(true);
-                    storage.putBoolean("visual_stockboard", true);
+                    storage.putBoolean("visual_stockboard", true).apply();
+
+                    // Restart activity to apply changes
+                    restart();
                 }
 
                 return false;
@@ -941,6 +947,15 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 return true;
             }
         });
+    }
+
+    /**
+     * Restart the activity without changing to home screen
+     */
+    void restart(){
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
     }
 
     /**
