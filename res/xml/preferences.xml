@@ -309,7 +309,7 @@
             android:summary="Backup and Retsore options"
             android:title="Backup/Restore">
 
-            <PreferenceCategory android:title="Prortfolio">
+            <PreferenceCategory android:title="Portfolio">
                 <Preference
                     android:key="backup_portfolio"
                     android:summary="Backup portfolio to ministocks/portfoliobackups/"
